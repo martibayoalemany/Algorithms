@@ -1,0 +1,22 @@
+{
+  "name": "algorithms",
+  "version": "1.0.0",
+  "description": "Algorithms in node js",
+  "main": "binary_gap.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/martibayoalemany/algorithms.git"
+  },
+  "keywords": [
+    "algorithms"
+  ],
+  "author": "Marti Bayo Alemany",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/martibayoalemany/algorithms#readme",
+  "dependencies": {
+    "mathjs": "^3.14.2"
+  }
+}

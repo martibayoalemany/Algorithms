@@ -12,7 +12,7 @@
     "code-runner.saveFileBeforeRun": true,
     "code-runner.customCommand": "echo workspaceRoot: $workspaceRoot\n echo dir: $dir\n echo dirWithoutTrailingSlash: $dirWithoutTrailingSlash\n echo fullFileName: $fullFileName\n echo fileName: $fileName \n echo fileNameWithoutExt: $fileNameWithoutExt\n",    
     "git.ignoreLimitWarning": true,
-    /*"files.exclude": {
+    "files.exclude": {
         ".java_8_src": true
-    }*/
+    }
 }

@@ -25,3 +25,4 @@ CMakeFiles/*
 src/main/c/CMakeFiles/Makefile2
 src/main/c/Makefile
 src/main/c/BinaryGapp
+node_modules

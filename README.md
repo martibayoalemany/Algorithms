@@ -67,6 +67,22 @@ mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato
 gradle getRequirements
 ```
 
+### Java ArrayList vs LinkedList
+####  ArrayList
+```
+initialization [46,717,000 ns]
+Removing 10,000 elements 10,000 -> 20,000  [661,835,000 ns]
+Removing 10,000 elements 100,000 -> 110,000  [39,749,000 ns]
+Removing 10,000 elements 200,000 -> 210,000  [658,547,000 ns]
+```
+#### LinkedList
+```
+initialization [122,772,000 ns]
+Removing 10,000 elements 10,000 -> 20,000  [351,818,000 ns]
+Removing 10,000 elements 100,000 -> 110,000  [139,877,000 ns]
+Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
+```
+
 ### Books
 
 * Java 9 Data Structures and Algorithms - Debasish Ray Chawdhuri

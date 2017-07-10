@@ -4,10 +4,11 @@ public class BinaryGap {
 
     public static void main(String[] args) {
         Instant start = Instant.now();
-        int result = new BinaryGap().execute(2323);
+        int value = 654345;
+        int result = new BinaryGap().execute(value);
         Instant end = Instant.now();
         long duration = Duration.between(start, end).getNano();
-        System.out.printf("Binary Gap: %d [%d ns]", result, duration);
+        System.out.printf("Binary Gap: %d -> %d [%d ns]", value, result, duration);
     }
 
     public Integer execute(Integer value) {

@@ -26,7 +26,7 @@ public class Algorithms  {
     }
 
     public long execute() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();        
         {
             start("initialization");            
             IntStream range = IntStream.rangeClosed(1, 520_000);
@@ -56,7 +56,12 @@ public class Algorithms  {
             Arrays.sort(array);
         }
         snapshot(array); 
-        shuffle(array);                
+        /*
+        shuffle(array);  
+        snapshot(array);               
+        try(Timing t = new Timing("sort an array of size " + array.length)) {
+            
+        }*/
 
         return list.size();
     }
@@ -82,7 +87,7 @@ public class Algorithms  {
         }
     }
 
-    private void snapshot(LinkedList<Integer> list, int start_idx, int elements) {
+    private void snapshot(List<Integer> list, int start_idx, int elements) {
         int end_idx = start_idx + elements;     
         try(Timing t = new Timing("Snapshot 50 elements")) {
             for(int i=start_idx; i < end_idx; i++)

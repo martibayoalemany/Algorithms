@@ -12,7 +12,7 @@ int execute(int value);
 
 int main(int argc, char *argv[])
 {
-    int value = 2323;
+    int value = 654345;
     clock_t start = clock();
     int result = execute(value);
     clock_t end = clock();
