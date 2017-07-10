@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+echo \$0: $0
+echo BASH_SOURCE: $(realpath $BASH_SOURCE)
+SCRIPT_PATH=$(realpath $(dirname $BASH_SOURCE))
+ROOT_PATH=$(realpath $SCRIPT_PATH/..)
+DEPENDENCIES_PATH=$ROOT_PATH/requirements_java
+echo  Script: $SCRIPT_PATH 
+echo Root: $ROOT_PATH  
+echo Dependencies: $DEPENDENCIES_PATH 
+
+function idem() {
+  echo $1
+}
+
+function grape_init() {    
+    cat $ROOT_PATH/requirements_java.txt  | awk -F':' '{print $1 " " $2}' | xargs -n2 grape install
+}
+
+function mvn_copy_dependencies() {        
+    if ! which mvn > /dev/null; then
+        sudo apt install maven -y
+    fi
+    [ ! -e $target ] && mkdir  $DEPENDENCIES_PATH || echo  Script: $SCRIPT_PATH Root: $ROOT_PATH Dependencies: $DEPENDENCIES_PATH
+    DEP_MVN_TXT=$ROOT_PATH/requirements_java.txt    
+    echo cat $DEV_MVN_TXT | egrep -v "^#" | xargs -I{} mvn dependency:copy -DoutputDirectory=$DEPENDENCIES_PATH -Dartifact={}:jar:sources
+}
+
+function pip_ins_free() {
+    [ $(python --version | cut -d' ' -f2 | sed -e 's/.*\(3\.5\).*/\1/g')='3.5' ] && requirements='requirements_3_5.txt' || requirements='requirements.txt'
+    echo $1
+    touch $requirements
+    pip install $1    
+    [ $?=0 ] && (pip freeze | grep $1 | tee -a $ROOT_PATH/$requirements) || echo installation of $1 failed
+    echo $requirements
+}
+
+function git_log() {
+   git log --graph --pretty=format:'%C(Red) %h %C(Yellow) %s'
+}
+
+function find_no_ext() {
+    pushd .
+    cd $ROOT_PATH
+    find `pwd` src -type f ! -name '*.*' | grep -v ".git"
+    popd
+}
+
+function gitignore_untracked() {
+    for an_arg in "$@" ; do
+      echo "${an_arg}"
+     done
+    git status  | sed '1,/Untracked/d' | grep -v '(use' | sed -e 's/\W\(.*\)/\1/g' | tee -a .gitignore
+}
+
+function pip_cache_wheels() {
+   mkdir wheels-cache
+   cat requirements.txt | xargs -n1 pip wheel --wheel-dir=wheels-cache
+}
+
+function pip_install_from_wheels() {
+    cat requirements.txt | xargs -n1 pip install --use-wheel --no-index --find-links=./wheels-cache
+}
+
