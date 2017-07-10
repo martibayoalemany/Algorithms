@@ -44,8 +44,7 @@ sudo apt-get install dotnet-dev-1.0.4
 
 ### Creates a new app
 ```
-dotnet new console -o Algorithms
-cd Algorithms
+dotnet new console -o src/main/cs
 dotnet restore
 dotnet run
 ```
@@ -82,6 +81,14 @@ Removing 10,000 elements 10,000 -> 20,000  [351,818,000 ns]
 Removing 10,000 elements 100,000 -> 110,000  [139,877,000 ns]
 Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
 ```
+
+### Binary gap stats 
+real 0:00.06    user 0.06        sys 0.00               npm
+real 0:00.07    user 0.06        sys 0.00               java
+real 0:00.00    user 0.00        sys 0.00               c
+real 0:00.04    user 0.03        sys 0.01               c_sharp
+real 0:00.00    user 0.00        sys 0.00               perl
+real 0:00.07    user 0.03        sys 0.00               python
 
 ### Books
 

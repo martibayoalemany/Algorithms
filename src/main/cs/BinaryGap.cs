@@ -3,15 +3,15 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Algorithms
+namespace cs
 {
-    public class BinayGap
+    public class BinaryGap
     {
 
-        static void Main(string[] args)
+        public static void Main2(string[] args)
         {            
             Stopwatch stopwatch = Stopwatch.StartNew(); 
-            int result = execute(2323);
+            int result = execute(654345);
             stopwatch.Stop();
             String msg = $"Binary Gap: {result} [{stopwatch.ElapsedMilliseconds} ms]";
             Console.WriteLine(msg);

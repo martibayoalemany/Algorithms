@@ -3,12 +3,13 @@ import java.time.*;
 public class BinaryGap {
 
     public static void main(String[] args) {
-        Instant start = Instant.now();
+        //Instant start = Instant.now();
         int value = 654345;
         int result = new BinaryGap().execute(value);
-        Instant end = Instant.now();
-        long duration = Duration.between(start, end).getNano();
-        System.out.printf("Binary Gap: %d -> %d [%d ns]", value, result, duration);
+        //Instant end = Instant.now();
+        //long duration = Duration.between(start, end).getNano(); 
+        //System.out.printf("Binary Gap: %d -> %d [%d ns]\n", value, result, duration);
+        System.out.printf("Binary Gap: %d -> %d \n", value, result);
     }
 
     public Integer execute(Integer value) {
