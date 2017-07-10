@@ -3,9 +3,9 @@
 ```
 ext install code-runner
 ```
-ctrl-alt-n - run
-ctrl-alt-m - stop execution
-ctrl-alt-k - run custom command
+ctrl-alt-n - run 
+ctrl-alt-m - stop execution 
+ctrl-alt-k - run custom command 
 
 
 ### Code navigation
