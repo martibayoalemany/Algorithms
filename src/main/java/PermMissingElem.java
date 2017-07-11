@@ -4,7 +4,7 @@ import java.util.Set;
 class PermMissingElem {
 
     public static void main(String[] args) {
-    {
+    
 
     }
 
@@ -18,5 +18,6 @@ class PermMissingElem {
             A[tmp] = tmp;
             A[i] = tmp2;
         }
+        return -1;
     }
 }
