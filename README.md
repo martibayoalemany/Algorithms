@@ -86,6 +86,7 @@ Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
 ```
 scripts/stats_binary_search.sh
 ```
+```
 real 0:00.07    user 0.06        sys 0.01       java 
 real 0:00.25    user 0.26        sys 0.01       nodejs 
 real 0:00.00    user 0.00        sys 0.00       c
@@ -94,7 +95,7 @@ real 0:00.00    user 0.00        sys 0.00       perl
 real 0:00.21    user 0.13        sys 0.07       perl6 
 real 0:00.03    user 0.02        sys 0.01       python 
 real 0:00.14    user 0.16        sys 0.28       matlab/octave 
-
+```
 ### Books
 
 * Java 9 Data Structures and Algorithms - Debasish Ray Chawdhuri
