@@ -11,11 +11,11 @@ function result = execute(value)
         remainder = floor(mod(value,2)) 
         if remainder == 0
             currentGap++
-        elseif currentGap != 0
+        elseif currentGap ~= 0
             maxGap = max(currentGap,maxGap)
             currentGap = 0;
         end
-        value=value / 2; 
+        value = value / 2; 
     end
     result = maxGap
 end

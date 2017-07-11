@@ -51,7 +51,8 @@ dotnet restore 1>/dev/null
 dotnet run 1>/dev/null
 
 execute_with_perf "src/main/java" "java" "java BinaryGap"
-execute_with_perf "src/main/nodejs" "nodejs" "node binary_gap_slow"
+execute_with_perf "src/main/nodejs" "nodejs_slow" "node binary_gap_slow"
+execute_with_perf "src/main/nodejs" "nodejs" "node binary_gap"
 execute_with_perf "src/main/c" "c" "./BinaryGap"
 execute_with_perf "src/main/cs" "c_sharp" "dotnet bin/Debug/netcoreapp2.0/cs.dll"
 execute_with_perf "src/main/pl" "perl" "perl binary_gap.pl"
