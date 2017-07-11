@@ -13,9 +13,9 @@
     "code-runner.saveFileBeforeRun": true,
     "code-runner.customCommand": "echo workspaceRoot: $workspaceRoot\n echo dir: $dir\n echo dirWithoutTrailingSlash: $dirWithoutTrailingSlash\n echo fullFileName: $fullFileName\n echo fileName: $fileName \n echo fileNameWithoutExt: $fileNameWithoutExt\n echo generic_cp: $workspaceRoot/src/main/java/generic\n",    
     "git.ignoreLimitWarning": true,
-    "files.exclude": {
+    /*"files.exclude": {
         ".java_8_src": true
-    },
+    },*/
     "EndOfLineFormatting": {
     "regexpPattern" : "\\\\r\\\\n",
     "replaceChar" : "\n"

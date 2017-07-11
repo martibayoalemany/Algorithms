@@ -1,4 +1,4 @@
-package generic;
+package basics;
 
 import java.time.*;
 import java.util.*;
@@ -22,7 +22,11 @@ public class Timing implements AutoCloseable {
             this.end = Instant.now();
             this.lend = System.currentTimeMillis();                
             java.time.Duration dura = Duration.between(start, end);                
-            System.out.printf("--- %-55s ---\t [%,d s / %,d ns / %,d ms]\n", message, dura.getSeconds(), dura.getNano(), (lend -lstart));
+            System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", 
+                            message, 
+                            dura.getSeconds(), 
+                            dura.getNano(), 
+                            (lend -lstart));
         }
         catch(Exception e) {
             e.printStackTrace();

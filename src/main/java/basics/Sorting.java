@@ -1,16 +1,13 @@
-//package generic;
-
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 import java.util.concurrent.*;
 
 
-public class Algorithms  {
+public class Sorting  {
     
     public static void main(String[] args) {        
-        //long result = new Algorithms().execute();                
-        new Algorithms().execute_sorting();                
+        new Sorting().execute_sorting();                
     }
 
     public void execute_sorting() {
@@ -31,58 +28,55 @@ public class Algorithms  {
         }
         assert_sorted(array,80);
 
-        shuffle(array);       
-        try(Timing t = new Timing("Custom insertion sort 1 of size "  + array.length)) {    
-            insertion_sort(array);
+        for(int i = 0; i < 3; i++) {
+            shuffle(array);       
+            try(Timing t = new Timing("Insertion sort " + i + " of size "  + array.length)) {    
+                insertion_sort(array);
+            }
+            assert_sorted(array,80);
         }
-        assert_sorted(array,80);
-        
-        shuffle(array);       
-        try(Timing t = new Timing("Custom insertion sort 2 of size "  + array.length)) {                
-            insertion_sort(array);
-        }
-        assert_sorted(array,80);
-
-        shuffle(array);       
-        try(Timing t = new Timing("Custom insertion sort 3 of size "  + array.length)) {                
-            insertion_sort(array);
-        }
-        assert_sorted(array,80);
-        
+                
         // Full selection
         shuffle(array);
-        custom_selection_sort(array, "full");                
-        assert_sorted(array,80);
-
-        // Full bubble
-        shuffle(array);
-        custom_bubble_sort(array, "full");        
-        assert_sorted(array,80);
-
-        // Partial and bubble
-        partial_shuffle(array);
-        custom_bubble_sort(array, "partial");        
+        try(Timing t = new Timing("Selection sort of size "  + array.length + " - full")) {    
+            selection_sort(array);
+        }
         assert_sorted(array,80);
 
         // Partial and selection
         partial_shuffle(array);
-        custom_selection_sort(array, "partial");
+        try(Timing t = new Timing("Selection sort of size "  + array.length + " - partial")) {    
+            selection_sort(array);
+        }
         assert_sorted(array,80);
 
-        // Shell sort partial
+        // Full bubble
+        shuffle(array);
+        try(Timing t = new Timing("Bubble sort of size "  + array.length + " -  full")) {    
+            bubble_sort(array);        
+        }
+        assert_sorted(array,80);
+
+        // Partial bubble
+        partial_shuffle(array);
+        try(Timing t = new Timing("Bubble sort of size "  + array.length + " -  partial")) {    
+            bubble_sort(array);        
+        }
+        assert_sorted(array,80);
+
+        // Full Shell sort
+        shuffle(array);
+        try(Timing t = new Timing("Shell sort "  + array.length + " - full")) {    
+            shell_sort(array);
+        }
+        assert_sorted(array,80);       
+        
+        // Partial Shell sort 
         partial_shuffle(array);
         try(Timing t = new Timing("Shell sort "  + array.length + " - partial")) {    
             shell_sort(array);
         }
         assert_sorted(array,80);
-
-        // Shell sort full
-        shuffle(array);
-        try(Timing t = new Timing("Shell sort "  + array.length + " - full")) {    
-            shell_sort(array);
-        }
-        assert_sorted(array,80);
-        
     }   
 
     private void shell_sort(Integer[] array) {
@@ -122,42 +116,36 @@ public class Algorithms  {
         }
         return array;
     }
-    private Integer[] bubble_sort(Integer[] array, String msg) {
-        try(Timing t = new Timing("Custom bubble sort of size "  + array.length + " - " + msg)) {    
-                    
-            int n = array.length;                                 
-            for(int i = 0; i < n; i ++ ){
-                boolean swapped = false;
-                for(int j = i+1; j < n; j++) {
-                    if(array[j] < array[i]) {
-                        Integer tmp = array[i];
-                        array[i] = array[j];
-                        array[j] = tmp;
-                        swapped = true;
-                    }
+
+    private void bubble_sort(Integer[] array) {
+        int n = array.length;                                 
+        for(int i = 0; i < n; i ++ ){
+            boolean swapped = false;
+            for(int j = i+1; j < n; j++) {
+                if(array[j] < array[i]) {
+                    Integer tmp = array[i];
+                    array[i] = array[j];
+                    array[j] = tmp;
+                    swapped = true;
                 }
-                if(!swapped)
-                    break;
             }
+            if(!swapped)
+                break;
         }
-        return array;
     }
 
-    private Integer[] custom_selection_sort(Integer[] array, String msg) {
-        try(Timing t = new Timing("Custom selection sort of size "  + array.length + " - " + msg)) {    
-            int n = array.length;                     
-            for(int i = 0; i < n; i ++ ){
-                int k = i;
-                for(int j = i + 1; j < n; j++) {
-                    if(array[j] < array[k])
-                        k = j;                        
-                }
-                Integer tmp = array[i];
-                array[i] = array[k];
-                array[k] = tmp;
-            }   
-        }
-        return array;
+    private void selection_sort(Integer[] array) {
+        int n = array.length;                     
+        for(int i = 0; i < n; i ++ ){
+            int k = i;
+            for(int j = i + 1; j < n; j++) {
+                if(array[j] < array[k])
+                    k = j;                        
+            }
+            Integer tmp = array[i];
+            array[i] = array[k];
+            array[k] = tmp;
+        }   
     }
 
     public long execute() {
@@ -290,7 +278,11 @@ public class Algorithms  {
                 this.end = Instant.now();
                 this.lend = System.currentTimeMillis();                
                 java.time.Duration dura = Duration.between(start, end);                
-                System.out.printf("--- %-55s ---\t [%,d s / %,d ns / %,d ms]\n", message, dura.getSeconds(), dura.getNano(), (lend -lstart));
+                System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", 
+                                    message, 
+                                    dura.getSeconds(), 
+                                    dura.getNano(), (
+                                        lend -lstart));
             }
             catch(Exception e) {
                 e.printStackTrace();

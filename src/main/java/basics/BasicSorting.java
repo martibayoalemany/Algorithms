@@ -4,7 +4,7 @@ import java.util.stream.*;
 import java.util.concurrent.*;
 
 
-public class SortingAlgorithms  {       
+public class BasicSorting  {       
 
     public static void main(String[] args) {        
         long result = new SortingAlgorithms().execute();                
@@ -31,21 +31,8 @@ public class SortingAlgorithms  {
         shuffle_snapshot(array);
         try(Timing t = new Timing("sort an array of size " + array.length)) {
             Arrays.sort(array);
-        }
+        }                
 
-        /*
-        shuffle_snapshot(array);           
-        Integer[] target = null;
-        try(Timing t = new Timing("sort an array of size " + array.length)) {                    
-            int size = array.length;
-            target = new Integer[size];
-            System.out.println(target.length);
-            System.out.println(array.length);
-            Arrays.mergeSort(array.mapToObject(Object::new), target.mapToObject(Object::new), 0, size -1, -1);            
-        }
-        snapshot(target);
-        */
-        
         return list.size();
     }
 
@@ -65,7 +52,7 @@ public class SortingAlgorithms  {
             }
         }
     }
-
+    
     private void snapshot(Integer[] array) {
         try(Timing t = new Timing("Snapshot 50 elements")) {
             int size = array.length;
