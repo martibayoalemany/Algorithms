@@ -10,12 +10,9 @@ namespace cs
 
         public static void Main2(string[] args)
         {            
-            //Stopwatch stopwatch = Stopwatch.StartNew(); 
+            
             int result = execute(654345);
-            //stopwatch.Stop();
-            //String msg = $"Binary Gap: {result} [{stopwatch.ElapsedMilliseconds} ms]";
-            String msg = $"Binary Gap: {result}";
-            Console.WriteLine(msg);
+            Console.WriteLine($"Binary Gap: {result}");
 
         }
 

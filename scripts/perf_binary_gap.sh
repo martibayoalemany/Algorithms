@@ -15,10 +15,23 @@ if  ! which node > /dev/null; then
     export PATH=$PATH:~/.local/share/umake/nodejs/nodejs-lang/bin
 fi
 
+if  ! which perl6 > /dev/null; then
+    sudo apt install perl6
+fi
+
+if ! which go > /dev/null; then
+    umake go
+    export GOROOT=/home/username/.local/share/umake/go/go-lang
+    export PATH=/home/username/.local/share/umake/go/go-lang/bin:$PATH
+fi
+
+if ! which octave-cli > /dev/null; then
+    sudo apt install octave-cli
+fi
+
 execute_with_perf() {
     cd $ROOT_PATH/$1
-    time -f "real %E\tuser %U\t sys %S\t$2" $3
-    
+    time -f "real %E\tuser %U\t sys %S\t$2" $3   
 }
 
 cd $ROOT_PATH/src/main/java
@@ -42,4 +55,6 @@ execute_with_perf "src/main/nodejs" "nodejs" "node binary_gap_slow"
 execute_with_perf "src/main/c" "c" "./BinaryGap"
 execute_with_perf "src/main/cs" "c_sharp" "dotnet bin/Debug/netcoreapp2.0/cs.dll"
 execute_with_perf "src/main/pl" "perl" "perl binary_gap.pl"
+execute_with_perf "src/main/pl6" "perl6" "perl6 binary_gap.pl"
 execute_with_perf "src/main/py" "python" "python3 binary_gap.py"
+execute_with_perf "src/main/matlab" "matlab" "./binary_gap.m"
