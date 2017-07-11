@@ -23,99 +23,106 @@ public class Algorithms  {
         Integer[] array = null;        
         try(Timing t = new Timing("Convert to array")) {            
             array = list.toArray(new Integer[1]);            
-        }                 
+        }                         
         
         shuffle(array);
         try(Timing t = new Timing("Java Arrays.sort of size " + array.length)) {
             Arrays.sort(array);
         }
+        assert_sorted(array,80);
 
         shuffle(array);       
-        try(Timing t = new Timing("Custom insertion sort of size "  + array.length)) {    
-            int n = array.length;
-            for(int i = 2; i < n; i ++ ){
-                for(int k = i; k > 1 && array[k] < array[k-1]; k--) {
-                    Integer tmp = array[k];
-                    array[k] = array [k-1];
-                    array[k-1] = tmp;
-                }
-            }
+        try(Timing t = new Timing("Custom insertion sort 1 of size "  + array.length)) {    
+            insertion_sort(array);
         }
+        assert_sorted(array,80);
         
-        shuffle(array);       
-        try(Timing t = new Timing("Custom insertion sort 1 of size "  + array.length)) {                
-            int end = array.length;
-            for(int i = 2; i < end; i ++ ){
-                for(int k = i; k > 1 && array[k] < array[k-1]; k--) {
-                    Integer tmp = array[k];
-                    array[k] = array [k-1];
-                    array[k-1] = tmp;
-                }
-            }
-        }
-
         shuffle(array);       
         try(Timing t = new Timing("Custom insertion sort 2 of size "  + array.length)) {                
             insertion_sort(array);
         }
+        assert_sorted(array,80);
+
+        shuffle(array);       
+        try(Timing t = new Timing("Custom insertion sort 3 of size "  + array.length)) {                
+            insertion_sort(array);
+        }
+        assert_sorted(array,80);
         
         // Full selection
         shuffle(array);
         custom_selection_sort(array, "full");                
+        assert_sorted(array,80);
 
         // Full bubble
         shuffle(array);
         custom_bubble_sort(array, "full");        
+        assert_sorted(array,80);
 
         // Partial and bubble
         partial_shuffle(array);
         custom_bubble_sort(array, "partial");        
+        assert_sorted(array,80);
 
         // Partial and selection
         partial_shuffle(array);
         custom_selection_sort(array, "partial");
+        assert_sorted(array,80);
 
-        // Shell sort
+        // Shell sort partial
         partial_shuffle(array);
         try(Timing t = new Timing("Shell sort "  + array.length + " - partial")) {    
-            int n = array.length;
-            int h = 1;
-            while(h < n) h = 3 * h + 1;
-            while(h > 0) {
-                h = h / 3;                
-                int k = 0;
-                int iters = 0;
-                while(h != 0 && k + h < n) {                    
-                    insertion_sort(array, k , k + h);
-                    k = k + h;
-                    iters ++;
-                }                
-            }
+            shell_sort(array);
         }
+        assert_sorted(array,80);
+
+        // Shell sort full
+        shuffle(array);
+        try(Timing t = new Timing("Shell sort "  + array.length + " - full")) {    
+            shell_sort(array);
+        }
+        assert_sorted(array,80);
         
     }   
+
+    private void shell_sort(Integer[] array) {
+        int n = array.length;
+        int h = 1;
+        while(h < n) h = 3 * h;
+        while(h > 0) {
+            h = h / 3;                
+            int k = 0;
+            int iters = 0;
+            while(h != 0 && k + h < n) {                    
+                insertion_sort(array, k , k + h);
+                k = k + h;
+                iters ++;
+            }                
+        }
+    }
+
     private void insertion_sort(Integer[] array) {        
         int end = array.length;
-        for(int i = 2; i < end; i ++ ){
-            for(int k = i; k > 1 && array[k] < array[k-1]; k--) {
+        for(int i = 1; i < end; i ++ ){
+            for(int k = i; k >= 1 && array[k] < array[k-1]; k--) {                
                 Integer tmp = array[k];
-                array[k] = array [k-1];
-                array[k-1] = tmp;
+                array[k] = array[k-1];
+                array[k-1] = tmp;                
             }
         }        
     }
 
-    private Integer[] insertion_sort(Integer[] array, int start, int end) {        
-        for(int i = start + 1; i < end; i ++ ){
-            for(int k = i; k > 1 && array[k] < array[k-1]; k--) {
+    private Integer[] insertion_sort(Integer[] array, int start, int end) {                
+        for(int i = start; i <= end; i ++ ){
+            for(int k = i; k >= 1 && array[k] < array[k-1]; k--) {                
                 Integer tmp = array[k];
                 array[k] = array [k-1];
-                array[k-1] = tmp;
+                array[k-1] = tmp;                
             }
         }
         return array;
     }
-    private Integer[] custom_bubble_sort(Integer[] array, String msg) {
+    private Integer[] bubble_sort(Integer[] array, String msg) {
         try(Timing t = new Timing("Custom bubble sort of size "  + array.length + " - " + msg)) {    
                     
             int n = array.length;                                 
@@ -139,9 +146,9 @@ public class Algorithms  {
     private Integer[] custom_selection_sort(Integer[] array, String msg) {
         try(Timing t = new Timing("Custom selection sort of size "  + array.length + " - " + msg)) {    
             int n = array.length;                     
-            for(int i = 1; i < n; i ++ ){
+            for(int i = 0; i < n; i ++ ){
                 int k = i;
-                for(int j = i+1; j < n; j++) {
+                for(int j = i + 1; j < n; j++) {
                     if(array[j] < array[k])
                         k = j;                        
                 }
@@ -237,6 +244,32 @@ public class Algorithms  {
             e.printStackTrace();
         }        
     }
+
+    private void assert_sorted(Integer[] array, int limit) {        
+        boolean sorted = true;
+        int k = 0;
+        for(int i = 0; i < limit; i++) {
+            if(sorted && array[i] > array[i+1]) {
+                System.out.println("Array start not sorted, position " + i);                
+                sorted = false;
+            }            
+            if(!sorted) System.out.printf("%,d \t", array[i]);
+            if(!sorted && k++ > 20) break;
+        }        
+        if(!sorted) System.out.println("\n========================");
+        k = 0;
+        sorted = true;
+        for(int i=array.length -1; i > (array.length-20); i--) {
+            if(sorted && array[i-1] > array[i]) {
+                System.out.println("Array end not sorted, position " + i);                
+                sorted = false;
+            }
+            if(!sorted) System.out.printf("%,d \t", array[i]);
+            if(!sorted && k++ > 20) break;
+        }        
+        if(!sorted) System.out.println("\n========================");
+    }
+
     
     public class Timing implements AutoCloseable {
         private long lstart;

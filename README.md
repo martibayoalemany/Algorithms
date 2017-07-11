@@ -82,6 +82,21 @@ Removing 10,000 elements 100,000 -> 110,000  [139,877,000 ns]
 Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
 ```
 
+#### Sorting
+```
+--- Initialization                                          ---	 [0 s / 264,000,000 ns / 263 ms]
+--- Convert to array                                        ---	 [0 s / 1,000,000 ns / 1 ms]
+--- Java Arrays.sort of size 20000                          ---	 [0 s / 78,000,000 ns / 78 ms]
+--- Custom insertion sort of size 20000                     ---	 [0 s / 926,000,000 ns / 926 ms]
+--- Custom insertion sort 1 of size 20000                   ---	 [0 s / 645,000,000 ns / 645 ms]
+--- Custom insertion sort 2 of size 20000                   ---	 [0 s / 671,000,000 ns / 671 ms]
+--- Custom selection sort of size 20000 - full              ---	 [1 s / 288,000,000 ns / 1,288 ms]
+--- Custom bubble sort of size 20000 - full                 ---	 [2 s / 511,000,000 ns / 2,511 ms]
+--- Custom bubble sort of size 20000 - partial              ---	 [0 s / 212,000,000 ns / 212 ms]
+--- Custom selection sort of size 20000 - partial           ---	 [1 s / 134,000,000 ns / 1,134 ms]
+--- Shell sort 20000 - partial                              ---	 [0 s / 53,000,000 ns / 53 ms]
+```
+
 ### Binary gap stats 
 ```
 scripts/stats_binary_search.sh

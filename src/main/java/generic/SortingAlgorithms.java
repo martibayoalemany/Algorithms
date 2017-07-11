@@ -1,6 +1,3 @@
-package generic;
-
-import generic.Timing;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -36,7 +33,7 @@ public class SortingAlgorithms  {
             Arrays.sort(array);
         }
 
-        //---
+        /*
         shuffle_snapshot(array);           
         Integer[] target = null;
         try(Timing t = new Timing("sort an array of size " + array.length)) {                    
@@ -47,7 +44,7 @@ public class SortingAlgorithms  {
             Arrays.mergeSort(array.mapToObject(Object::new), target.mapToObject(Object::new), 0, size -1, -1);            
         }
         snapshot(target);
-        //---
+        */
         
         return list.size();
     }
@@ -85,5 +82,32 @@ public class SortingAlgorithms  {
                 System.out.printf("%d\t", list.get(i));
             System.out.println("\n");
         }
-    }         
+    }  
+    
+    private class Timing implements AutoCloseable {
+        private long lstart;
+        private long lend;
+        private Instant start;        
+        private Instant end;
+        private String message;
+
+        public Timing(String message) {
+            this.message = message;
+            this.start = Instant.now();            
+            this.lstart = System.currentTimeMillis();
+        }
+
+        @Override
+        public void close() {
+            try {
+                this.end = Instant.now();
+                this.lend = System.currentTimeMillis();                
+                java.time.Duration dura = Duration.between(start, end);                
+                System.out.printf("--- %-55s ---\t [%,d s / %,d ns / %,d ms]\n", message, dura.getSeconds(), dura.getNano(), (lend -lstart));
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }           
 }
