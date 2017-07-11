@@ -83,12 +83,15 @@ Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
 ```
 
 ### Binary gap stats 
-real 0:00.06    user 0.06        sys 0.00               npm
-real 0:00.07    user 0.06        sys 0.00               java
-real 0:00.00    user 0.00        sys 0.00               c
-real 0:00.04    user 0.03        sys 0.01               c_sharp
-real 0:00.00    user 0.00        sys 0.00               perl
-real 0:00.07    user 0.03        sys 0.00               python
+```
+scripts/stats_binary_search.sh
+```
+real 0:00.06    user 0.06        sys 0.00       java
+real 0:00.24    user 0.23        sys 0.03       nodejs
+real 0:00.00    user 0.00        sys 0.00       c
+real 0:00.05    user 0.04        sys 0.00       c_sharp
+real 0:00.00    user 0.00        sys 0.00       perl
+real 0:00.03    user 0.02        sys 0.00       python
 
 ### Books
 
