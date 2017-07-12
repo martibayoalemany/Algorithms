@@ -1,5 +1,54 @@
-# Algorithms project
-### Code runner
+# Algorithms 
+## Results
+
+### Binary gap stats 
+```
+scripts/stats_binary_search.sh
+```
+```
+real 0:00.07    user 0.06        sys 0.01       java 
+real 0:00.25    user 0.26        sys 0.01       nodejs 
+real 0:00.00    user 0.00        sys 0.00       c
+real 0:00.05    user 0.04        sys 0.01       c_sharp 
+real 0:00.00    user 0.00        sys 0.00       perl 
+real 0:00.21    user 0.13        sys 0.07       perl6 
+real 0:00.03    user 0.02        sys 0.01       python 
+real 0:00.14    user 0.16        sys 0.28       matlab/octave 
+```
+
+#### Sorting (Java)
+```
+--- Initialization                                          ---	 [0 s / 264,000,000 ns / 263 ms]
+--- Convert to array                                        ---	 [0 s / 1,000,000 ns / 1 ms]
+--- Java Arrays.sort of size 20000                          ---	 [0 s / 78,000,000 ns / 78 ms]
+--- Custom insertion sort of size 20000                     ---	 [0 s / 926,000,000 ns / 926 ms]
+--- Custom insertion sort 1 of size 20000                   ---	 [0 s / 645,000,000 ns / 645 ms]
+--- Custom insertion sort 2 of size 20000                   ---	 [0 s / 671,000,000 ns / 671 ms]
+--- Custom selection sort of size 20000 - full              ---	 [1 s / 288,000,000 ns / 1,288 ms]
+--- Custom bubble sort of size 20000 - full                 ---	 [2 s / 511,000,000 ns / 2,511 ms]
+--- Custom bubble sort of size 20000 - partial              ---	 [0 s / 212,000,000 ns / 212 ms]
+--- Custom selection sort of size 20000 - partial           ---	 [1 s / 134,000,000 ns / 1,134 ms]
+--- Shell sort 20000 - partial                              ---	 [0 s / 53,000,000 ns / 53 ms]
+```
+
+### ArrayList vs LinkedList (Java)
+####  ArrayList
+```
+initialization [46,717,000 ns]
+Removing 10,000 elements 10,000 -> 20,000  [661,835,000 ns]
+Removing 10,000 elements 100,000 -> 110,000  [39,749,000 ns]
+Removing 10,000 elements 200,000 -> 210,000  [658,547,000 ns]
+```
+
+#### LinkedList
+```
+initialization [122,772,000 ns]
+Removing 10,000 elements 10,000 -> 20,000  [351,818,000 ns]
+Removing 10,000 elements 100,000 -> 110,000  [139,877,000 ns]
+Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
+```
+
+### Code runner (Visual Studio Code)
 ```
 ext install code-runner
 ```
@@ -22,39 +71,41 @@ sudo -s ln -s  /usr/lib/jvm/openjdk-8/src .java_8_src
 
 ### Compile  (C)
 ```
+gcc BinaryGap.c -o BinaryGap -lm
+```
+
+```
 sudo apt install cmake
 cd main/c
 cmake .
 make
-gcc BinaryGap.c -o BinaryGap -lm
 ```
 
-### Setups dotnet core repository
+### Compile (dotnet)
 ```
 sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list'
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
 sudo apt-get update
 ```
-
-### Installs dotnet core
 ```
 sudo apt install dotnet-dev-2.0.0-preview1-005977
-sudo apt-get install dotnet-dev-1.0.4
 ```
 
-### Creates a new app
+### Creates a new app (dotnet)
 ```
 dotnet new console -o src/main/cs
 dotnet restore
 dotnet run
 ```
-### Builds and test the project (java)
+
+### Compile (java / gradle)
 ```
 gradlew build
 gradlew clean test
 ```
-### Gradle and ubuntu 17
 
+### Gradle and ubuntu 17
+There seems to be some issues with tgetent which get solved by installing libnative-jni manually
 ```
 usr/lib/jni/libnative-platform-curses.so: undefined symbol: tgetent
 sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
@@ -66,51 +117,8 @@ mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato
 gradle getRequirements
 ```
 
-### Java ArrayList vs LinkedList
-####  ArrayList
-```
-initialization [46,717,000 ns]
-Removing 10,000 elements 10,000 -> 20,000  [661,835,000 ns]
-Removing 10,000 elements 100,000 -> 110,000  [39,749,000 ns]
-Removing 10,000 elements 200,000 -> 210,000  [658,547,000 ns]
-```
-#### LinkedList
-```
-initialization [122,772,000 ns]
-Removing 10,000 elements 10,000 -> 20,000  [351,818,000 ns]
-Removing 10,000 elements 100,000 -> 110,000  [139,877,000 ns]
-Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
-```
 
-#### Sorting
-```
---- Initialization                                          ---	 [0 s / 264,000,000 ns / 263 ms]
---- Convert to array                                        ---	 [0 s / 1,000,000 ns / 1 ms]
---- Java Arrays.sort of size 20000                          ---	 [0 s / 78,000,000 ns / 78 ms]
---- Custom insertion sort of size 20000                     ---	 [0 s / 926,000,000 ns / 926 ms]
---- Custom insertion sort 1 of size 20000                   ---	 [0 s / 645,000,000 ns / 645 ms]
---- Custom insertion sort 2 of size 20000                   ---	 [0 s / 671,000,000 ns / 671 ms]
---- Custom selection sort of size 20000 - full              ---	 [1 s / 288,000,000 ns / 1,288 ms]
---- Custom bubble sort of size 20000 - full                 ---	 [2 s / 511,000,000 ns / 2,511 ms]
---- Custom bubble sort of size 20000 - partial              ---	 [0 s / 212,000,000 ns / 212 ms]
---- Custom selection sort of size 20000 - partial           ---	 [1 s / 134,000,000 ns / 1,134 ms]
---- Shell sort 20000 - partial                              ---	 [0 s / 53,000,000 ns / 53 ms]
-```
 
-### Binary gap stats 
-```
-scripts/stats_binary_search.sh
-```
-```
-real 0:00.07    user 0.06        sys 0.01       java 
-real 0:00.25    user 0.26        sys 0.01       nodejs 
-real 0:00.00    user 0.00        sys 0.00       c
-real 0:00.05    user 0.04        sys 0.01       c_sharp 
-real 0:00.00    user 0.00        sys 0.00       perl 
-real 0:00.21    user 0.13        sys 0.07       perl6 
-real 0:00.03    user 0.02        sys 0.01       python 
-real 0:00.14    user 0.16        sys 0.28       matlab/octave 
-```
 ### Books
 
 * Java 9 Data Structures and Algorithms - Debasish Ray Chawdhuri
