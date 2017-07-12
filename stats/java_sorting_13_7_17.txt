@@ -1,0 +1,24 @@
+--- insertion  - Full of 20,000 elements                       ---	 [2 s / 494,000,000 ns / 2,494 ms]
+--- bubble  - Full of 20,000 elements                          ---	 [2 s / 274,000,000 ns / 2,274 ms]
+--- shell  - Full of 20,000 elements                           ---	 [0 s / 508,000,000 ns / 508 ms]
+--- merge sort  - Full of 20,000 elements                      ---	 [0 s / 508,000,000 ns / 508 ms]
+--- merge sort 2  - Full of 20,000 elements                    ---	 [0 s / 329,000,000 ns / 329 ms]
+--- Arrays.sort  - Full of 20,000 elements                     ---	 [0 s / 119,000,000 ns / 119 ms]
+--- Arrays.parallelSort  - Full of 20,000 elements             ---	 [0 s / 256,000,000 ns / 256 ms]
+--- Stream + parallel + sort  - Full of 20,000 elements        ---	 [0 s / 67,000,000 ns / 67 ms]
+ 732	 18,455	 19,006	 11,901	 8,708	 17,993	
+======================
+ 8,972	 7,696	 17,941	 19,162	 18,862	 3,378	
+======================
+--- insertion  - Partial of 20,000 elements                    ---	 [0 s / 724,000,000 ns / 724 ms]
+--- bubble  - Partial of 20,000 elements                       ---	 [2 s / 437,000,000 ns / 2,437 ms]
+--- shell  - Partial of 20,000 elements                        ---	 [0 s / 357,000,000 ns / 357 ms]
+--- merge sort  - Partial of 20,000 elements                   ---	 [0 s / 457,000,000 ns / 457 ms]
+--- merge sort 2  - Partial of 20,000 elements                 ---	 [0 s / 708,000,000 ns / 709 ms]
+--- Arrays.sort  - Partial of 20,000 elements                  ---	 [0 s / 85,000,000 ns / 85 ms]
+--- Arrays.parallelSort  - Partial of 20,000 elements          ---	 [0 s / 56,000,000 ns / 56 ms]
+--- Stream + parallel + sort  - Full of 20,000 elements        ---	 [0 s / 54,000,000 ns / 54 ms]
+ 7,546	 18,268	 9,846	 3,180	 1,247	 13,557	
+======================
+ 6,780	 823	 16,568	 15,804	 16,063	 19,761	
+======================

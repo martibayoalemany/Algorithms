@@ -27,3 +27,4 @@ src/main/c/Makefile
 src/main/c/BinaryGapp
 node_modules
 perf.log
+class

@@ -115,10 +115,3 @@ sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
 ```
 mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato.cms.weka:weka-stable:3.8.1:jar:sources
 gradle getRequirements
-```
-
-
-
-### Books
-
-* Java 9 Data Structures and Algorithms - Debasish Ray Chawdhuri
