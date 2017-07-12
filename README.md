@@ -66,7 +66,7 @@ mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato
 gradle getRequirements
 ```
 
-### Java ArrayList vs LinkedList
+### ArrayList vs LinkedList (java)
 ####  ArrayList
 ```
 initialization [46,717,000 ns]
@@ -84,17 +84,26 @@ Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
 
 #### Sorting
 ```
---- Initialization                                          ---	 [0 s / 264,000,000 ns / 263 ms]
---- Convert to array                                        ---	 [0 s / 1,000,000 ns / 1 ms]
---- Java Arrays.sort of size 20000                          ---	 [0 s / 78,000,000 ns / 78 ms]
---- Custom insertion sort of size 20000                     ---	 [0 s / 926,000,000 ns / 926 ms]
---- Custom insertion sort 1 of size 20000                   ---	 [0 s / 645,000,000 ns / 645 ms]
---- Custom insertion sort 2 of size 20000                   ---	 [0 s / 671,000,000 ns / 671 ms]
---- Custom selection sort of size 20000 - full              ---	 [1 s / 288,000,000 ns / 1,288 ms]
---- Custom bubble sort of size 20000 - full                 ---	 [2 s / 511,000,000 ns / 2,511 ms]
---- Custom bubble sort of size 20000 - partial              ---	 [0 s / 212,000,000 ns / 212 ms]
---- Custom selection sort of size 20000 - partial           ---	 [1 s / 134,000,000 ns / 1,134 ms]
---- Shell sort 20000 - partial                              ---	 [0 s / 53,000,000 ns / 53 ms]
+--- Initialization                                             ---	 [0 s / 499,000,000 ns / 498 ms]
+--- Convert to array                                           ---	 [0 s / 1,000,000 ns / 1 ms]
+--- Convert to unboxed array                                   ---	 [0 s / 48,000,000 ns / 48 ms]
+--- Java Arrays.sort of size 20000                             ---	 [0 s / 78,000,000 ns / 78 ms]
+--- Insertion sort 0 of size 20000                             ---	 [1 s / 772,000,000 ns / 1,772 ms]
+--- Insertion sort 1 of size 20000                             ---	 [2 s / 224,000,000 ns / 2,224 ms]
+--- Insertion sort 2 of size 20000                             ---	 [1 s / 354,000,000 ns / 1,355 ms]
+--- Selection sort of size 20000 - full                        ---	 [2 s / 599,000,000 ns / 2,599 ms]
+--- Selection sort of size 20000 - partial                     ---	 [2 s / 184,000,000 ns / 2,184 ms]
+--- Bubble sort of size 20000 -  full                          ---	 [5 s / 246,000,000 ns / 5,246 ms]
+--- Bubble sort of size 20000 -  partial                       ---	 [3 s / 356,000,000 ns / 3,356 ms]
+--- Shell sort 20000 - full                                    ---	 [1 s / 768,000,000 ns / 1,768 ms]
+--- Shell sort 20000 - partial                                 ---	 [0 s / 265,000,000 ns / 265 ms]
+--- Merge sort 1 (copy up to higher) 20000 - full              ---	 [1 s / 606,000,000 ns / 1,606 ms]
+--- Merge sort 2 (copy up to middle) 20000 - full              ---	 [0 s / 480,000,000 ns / 480 ms]
+--- Merge sort 3 (array allocation once) 20,000 - full         ---	 [0 s / 198,000,000 ns / 198 ms]
+--- Merge sort 4 (System.arraycopy) 20,000 - full              ---	 [0 s / 232,000,000 ns / 232 ms]
+--- Merge sort 3 (array allocation once) 200,000 - full        ---	 [30 s / 429,000,000 ns / 30,429 ms]
+--- Merge sort 4 (System.arraycopy) 200,000 - full             ---	 [27 s / 851,000,000 ns / 27,851 ms]
+--- Java Arrays.sort of size 200,000 - full                    ---	 [1 s / 300,000,000 ns / 1,300 ms]
 ```
 
 ### Binary gap stats 
