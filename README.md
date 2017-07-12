@@ -105,7 +105,7 @@ gradlew clean test
 ```
 
 ### Gradle and ubuntu 17
-There seems to be some issues with tgetent which gets solved by installing libnative-jni manually
+There seems to be some issues with tgetent which get solved by installing libnative-jni manually
 ```
 usr/lib/jni/libnative-platform-curses.so: undefined symbol: tgetent
 sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
