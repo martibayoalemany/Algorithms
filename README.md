@@ -1,5 +1,5 @@
 # Algorithms 
-# Results
+## Results
 
 ### Binary gap stats 
 ```
