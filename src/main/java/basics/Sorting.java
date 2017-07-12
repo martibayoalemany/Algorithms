@@ -2,15 +2,13 @@ import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 import java.util.concurrent.*;
-import java.util.concurrent.Executors;
-import java.util.function.Predicate;
-import java.util.function.IntPredicate;
+import java.util.function.*;
 
 public class Sorting {
     private final int PARTIAL_FACTOR = 2;
 
     public static void main(String[] args) {
-        new Sorting().execute_sorting();
+        new Sorting().execute_sorting2();
     }
 
     public Integer[] newIntegerArray(int size) {
@@ -213,11 +211,69 @@ public class Sorting {
             merge_sort_3_parallel(array, 0, array.length);
         }
         assert_sorted(array, 1000);
-        */        
+        */
     }
 
-    private void discarded() {
-        // It does measure stream creation as well as sorting
+    public void execute_sorting2() {
+        final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
+        final List<Integer> sizes = sizess.collect(Collectors.toList());
+        boolean shuffler = false;
+        for (int i = 0; i < 2; i++) {
+            check_sorting("selection ", (s) -> selection_sort(s), sizes, shuffler);
+            check_sorting("insertion ", (s) -> insertion_sort(s), sizes, shuffler);
+            check_sorting("bubble ", (s) -> bubble_sort(s), sizes, shuffler);
+            check_sorting("shell ", (s) -> shell_sort(s), sizes, shuffler);
+            check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), sizes, shuffler);
+            check_sorting("merge sort 2 ", (s) -> merge_sort_2(s, 0, s.length), sizes, shuffler);
+            //check_sorting("merge sort 3 ", (s) -> merge_sort_3(s, 0, s.length), sizes, shuffler);
+            check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), sizes, shuffler);
+            check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), sizes, shuffler);
+            check_sorting_int("Stream + parallel + sort ", (s) -> Arrays.stream(s).parallel().sorted().toArray(), sizes, shuffler);
+
+            shuffler = !shuffler;
+        }
+        
+        
+    }
+
+    private void check_sorting(final String msg, Consumer<Integer[]> consumer, List<Integer> sizes, final boolean fullShuffler) {
+        sizes.stream().forEach((size) -> {
+            Integer[] param = newIntegerArray(size);            
+            String msg2 = "";
+            if(fullShuffler) {
+              msg2 = String.format("%s - %s of %,d elements", msg, "Full", size);
+              shuffle(param);              
+            }
+            else  {
+              msg2 = String.format("%s - %s of %,d elements", msg, "Partial", size);
+              partial_shuffle(param);
+            }
+
+            try (Timing t = new Timing(msg2)) {
+                consumer.accept(param);
+            }
+            assert_sorted(param, 80);            
+        });        
+    }    
+
+    private void check_sorting_int(final String msg, Consumer<int[]> consumer, List<Integer> sizes, final boolean fullShuffler) {
+        sizes.stream().forEach((size) -> {
+            int[] param = newIntArray(size);            
+            String msg2 = "";            
+            msg2 = String.format("%s - %s of %,d elements", msg, "Full", size);
+            shuffle(param);                          
+
+            try (Timing t = new Timing(msg2)) {
+                consumer.accept(param);
+            }
+            assert_sorted(param, 80);            
+        });
+    }    
+
+    /**
+     * <remarks> it measures stream creation and sorting at the same time</remarks>
+     */
+    private void __discarded() {
         // Streaming sorting
         int limit = 200_000;
         String msg = String.format("\"\"\"Streaming + sorting api %,d\"\"\"", limit);
@@ -560,7 +616,7 @@ public class Sorting {
      * Shuffles a number of elements in an :array: of int
      * The number of shuffles is :array.length:
      */
-    private void shuffle(int[] array) {
+    public void shuffle(int[] array) {
         Random rnd = ThreadLocalRandom.current();
         for (int i = array.length - 1; i > 0; i--) {
             int index = rnd.nextInt(i + 1);
@@ -575,7 +631,7 @@ public class Sorting {
      * :PARTIAL_FACTOR: = 1 - The number of shuffles is :array.length:
      * :PARTIAL_FACTOR: = 9 - The number of shuffles is :array.length:/9     
      */
-    private void partial_shuffle(Integer[] array) {
+    public void partial_shuffle(Integer[] array) {
         Random rnd = ThreadLocalRandom.current();
         for (int i = (array.length / PARTIAL_FACTOR) - 1; i > 0; i--) {
             int index = rnd.nextInt(i + 1);
@@ -593,8 +649,8 @@ public class Sorting {
         __assert_sorted(array, array.length - limit, array.length);
     }
 
-    private void __assert_sorted(final Object[] array, int start, int end) {        
-        IntPredicate isNotSorted = i -> ((Comparable)array[i - 1]).compareTo(array[i]) > 0;        
+    private void __assert_sorted(final Object[] array, int start, int end) {
+        IntPredicate isNotSorted = i -> ((Comparable) array[i - 1]).compareTo(array[i]) > 0;
         if (IntStream.range(start, end).anyMatch(isNotSorted)) {
             IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
             System.out.println("\n======================");
@@ -606,13 +662,14 @@ public class Sorting {
         __assert_sorted(array, array.length - limit, array.length);
     }
 
-    private void __assert_sorted(final int[] array, int start, int end) {        
-        IntPredicate isNotSorted = i -> array[i-1] > array[i];        
+    private void __assert_sorted(final int[] array, int start, int end) {
+        IntPredicate isNotSorted = i -> array[i - 1] > array[i];
         if (IntStream.range(start, end).anyMatch(isNotSorted)) {
             IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
             System.out.println("\n======================");
         }
     }
+
     /**
      * Asserts whether the last :limit: elememts and the firsts :limit: elements are sorted
      * @see __assert_sorted for a better implementation
