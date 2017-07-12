@@ -5,7 +5,7 @@ import java.util.concurrent.*;
 
 
 public class Sorting  {
-    
+    private final int PARTIAL_FACTOR = 2;
     public static void main(String[] args) {        
         new Sorting().execute_sorting();                
     }
@@ -20,7 +20,13 @@ public class Sorting  {
         Integer[] array = null;        
         try(Timing t = new Timing("Convert to array")) {            
             array = list.toArray(new Integer[1]);            
-        }                         
+        } 
+        
+        int[] arrayUnboxed = null;
+        try(Timing t = new Timing("Convert to unboxed array")) {            
+            arrayUnboxed = list.stream().mapToInt(Integer::intValue).toArray();
+        }
+                        
         
         shuffle(array);
         try(Timing t = new Timing("Java Arrays.sort of size " + array.length)) {
@@ -76,8 +82,23 @@ public class Sorting  {
         try(Timing t = new Timing("Shell sort "  + array.length + " - partial")) {    
             shell_sort(array);
         }
-        assert_sorted(array,80);
+        assert_sorted(array,80);       
+        
+        // Merge Sort
+        shuffle(arrayUnboxed);
+        for(int i = 0; i < 20; i++)
+            System.out.printf("\t%d\t",arrayUnboxed[i]);
+        
+        try(Timing t = new Timing("Merge sort "  + array.length + " - full")) {    
+            MyMergeSort2 srt = new MyMergeSort2();
+            srt.sort(arrayUnboxed);
+        }
+        for(int i = 0; i < 20; i++)
+            System.out.printf("\t%d\t",arrayUnboxed[i]);
+        
+        
     }   
+    
 
     private void shell_sort(Integer[] array) {
         int n = array.length;
@@ -148,31 +169,6 @@ public class Sorting  {
         }   
     }
 
-    public long execute() {
-        List<Integer> list = new LinkedList<>();        
-        try(Timing t = new Timing("Initialization")) {            
-            IntStream range = IntStream.rangeClosed(1, 520_000);
-            range.forEach(list::add);
-        }
-                
-        remove(list, 10_000, 10_000);
-        remove(list, 100_000, 10_000);
-        remove(list, 200_000, 10_000);
-        snapshot(list,100_000, 50);
-
-        Integer[] array = null;
-        try(Timing t = new Timing("Convert to array")) {            
-            array = list.toArray(new Integer[1]);            
-        }         
-
-        int[] arrayUnboxed = null;
-        try(Timing t = new Timing("Convert to unboxed array")) {            
-            arrayUnboxed = list.stream().mapToInt(Integer::intValue).toArray();
-        }        
-
-        return list.size();
-    }
-
     private void snapshot_shuffle(Integer[] array) {
         snapshot(array);
         shuffle(array);
@@ -189,27 +185,33 @@ public class Sorting  {
     }
 
     private void shuffle(Integer[] array) {
-        //try(Timing t = new Timing("Shuffle array of size " + array.length)) {
-            Random rnd = ThreadLocalRandom.current();
-            for(int i = array.length - 1; i > 0; i--) {
-                int index = rnd.nextInt(i+1);
-                int tmp = array[index];
-                array[index] = array[i];
-                array[i] = tmp;                
-            }
-        //}
+        Random rnd = ThreadLocalRandom.current();
+        for(int i = array.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i+1);
+            int tmp = array[index];
+            array[index] = array[i];
+            array[i] = tmp;                
+        }
     }
 
+    private void shuffle(int[] array) {
+        Random rnd = ThreadLocalRandom.current();
+        for(int i = array.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i+1);
+            int tmp = array[index];
+            array[index] = array[i];
+            array[i] = tmp;                
+        }
+    }
+    
     private void partial_shuffle(Integer[] array) {
-        //try(Timing t = new Timing("Partial shuffle array of size " + array.length)) {
-            Random rnd = ThreadLocalRandom.current();
-            for(int i = (array.length / 8) - 1; i > 0; i--) {
-                int index = rnd.nextInt(i+1);
-                int tmp = array[index];
-                array[index] = array[i];
-                array[i] = tmp;                
-            }
-        //}
+        Random rnd = ThreadLocalRandom.current();
+        for(int i = (array.length / PARTIAL_FACTOR) - 1; i > 0; i--) {
+            int index = rnd.nextInt(i+1);
+            int tmp = array[index];
+            array[index] = array[i];
+            array[i] = tmp;                
+        }
     }
 
 
@@ -222,17 +224,10 @@ public class Sorting  {
         }
     }
 
-    private void remove(List<Integer> list, int start_idx, int elements) {                               
-        int end_idx = start_idx + elements;             
-        try(Timing t = new Timing(String.format("Removing %,d elements %,d -> %,d ", elements, start_idx, end_idx))) {                            
-            for(int i=start_idx; i < end_idx; i++)
-                list.remove(i);                
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }        
-    }
 
+    /**
+     * Asserts whether the last :limit: elememts and the firsts :limit: elements are sorted
+     */
     private void assert_sorted(Integer[] array, int limit) {        
         boolean sorted = true;
         int k = 0;
@@ -281,12 +276,108 @@ public class Sorting  {
                 System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", 
                                     message, 
                                     dura.getSeconds(), 
-                                    dura.getNano(), (
-                                        lend -lstart));
+                                    dura.getNano(), 
+                                    (lend -lstart));
             }
             catch(Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+     
+    public class MyMergeSort2 {
+        
+        private int[] array;
+        private int[] tempMergArr;
+        private int length;
+        
+        public void sort(int inputArr[]) {
+            this.array = inputArr;
+            this.length = inputArr.length;
+            this.tempMergArr = new int[length];
+            doMergeSort(0, length - 1);
+        }
+    
+        private void doMergeSort(int lowerIndex, int higherIndex) {
+            
+            if (lowerIndex < higherIndex) {
+                int middle = lowerIndex + (higherIndex - lowerIndex) / 2;
+                // Below step sorts the left side of the array
+                doMergeSort(lowerIndex, middle);
+                // Below step sorts the right side of the array
+                doMergeSort(middle + 1, higherIndex);
+                // // Now merge both sides
+                // for (int i = lowerIndex; i <= higherIndex; i++) {
+                //     tempMergArr[i] = array[i];
+                // }
+                System.arraycopy(array, 0, tempMergArr, 0, higherIndex - lowerIndex);
+                for(int i=0; i < 8; i++) {
+                    System.out.printf(tempMergArr[i]+"\t");
+                }
+                int i = lowerIndex;
+                int j = middle + 1;
+                int k = lowerIndex;
+                while (i <= middle && j <= higherIndex) 
+                    array[k++] = (tempMergArr[i] <= tempMergArr[j])? tempMergArr[i++] : tempMergArr[j++];
+                while (i <= middle) 
+                    array[k++] = tempMergArr[i++];
+            }
+        }
+    
+    }    
+     
+    public class MyMergeSort {
+        
+        private int[] array;
+        private int[] tempMergArr;
+        private int length;
+        
+        public void sort(int inputArr[]) {
+            this.array = inputArr;
+            this.length = inputArr.length;
+            this.tempMergArr = new int[length];
+            doMergeSort(0, length - 1);
+        }
+    
+        private void doMergeSort(int lowerIndex, int higherIndex) {
+            
+            if (lowerIndex < higherIndex) {
+                int middle = lowerIndex + (higherIndex - lowerIndex) / 2;
+                // Below step sorts the left side of the array
+                doMergeSort(lowerIndex, middle);
+                // Below step sorts the right side of the array
+                doMergeSort(middle + 1, higherIndex);
+                // Now merge both sides
+                mergeParts(lowerIndex, middle, higherIndex);
+            }
+        }
+    
+        private void mergeParts(int lowerIndex, int middle, int higherIndex) {
+    
+            for (int i = lowerIndex; i <= higherIndex; i++) {
+                tempMergArr[i] = array[i];
+            }
+            int i = lowerIndex;
+            int j = middle + 1;
+            int k = lowerIndex;
+            while (i <= middle && j <= higherIndex) {
+                if (tempMergArr[i] <= tempMergArr[j]) {
+                    array[k] = tempMergArr[i];
+                    i++;
+                } else {
+                    array[k] = tempMergArr[j];
+                    j++;
+                }
+                k++;
+            }
+            while (i <= middle) {
+                array[k] = tempMergArr[i];
+                k++;
+                i++;
+            }
+    
         }
     }    
 }
