@@ -2,6 +2,9 @@ import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.function.Predicate;
+import java.util.function.IntPredicate;
 
 public class Sorting {
     private final int PARTIAL_FACTOR = 2;
@@ -10,10 +13,21 @@ public class Sorting {
         new Sorting().execute_sorting();
     }
 
-    public Integer[] newRangeArray(int size) {
+    public Integer[] newIntegerArray(int size) {
         LinkedList<Integer> list = new LinkedList<>();
         IntStream.iterate(1, n -> n + 1).limit(size).forEach(list::add);
         return list.toArray(new Integer[1]);
+    }
+
+    public Object[] newObjectArray(int size) {
+        return Arrays.stream(IntStream.iterate(1, n -> n + 1).limit(size).toArray()).boxed().toArray();
+    }
+
+    public int[] newIntArray(int size) {
+        // int[] result = new int[size];
+        // IntStream.iterate(0, n -> n + 1).limit(size).forEach(i -> result[i] = i);
+        // return result;
+        return Arrays.stream(IntStream.iterate(1, n -> n + 1).limit(size).toArray()).toArray();
     }
 
     public void execute_sorting() {
@@ -121,7 +135,7 @@ public class Sorting {
         assert_sorted(array, 80);
 
         // Merge Sort 3 (200_000)
-        array = newRangeArray(200_000);
+        array = newIntegerArray(200_000);
         shuffle(array);
         msg = String.format("Merge sort 3 (array allocation once) %,d - full", array.length);
         try (Timing t = new Timing(msg)) {
@@ -138,6 +152,23 @@ public class Sorting {
         }
         assert_sorted(array, 1000);
 
+        // Java paralell sort (200_000)       
+        int[] intArray = newIntArray(200_000);
+        shuffle(intArray);
+        msg = String.format("Java Arrays.parallelSort of size %,d - full", array.length);
+        try (Timing t = new Timing(msg)) {
+            Arrays.parallelSort(intArray);
+        }
+        assert_sorted(intArray, 80);
+
+        // Java streams + parallel + sort (200_000)               
+        shuffle(intArray);
+        msg = String.format("Stream + parallel + sort of size %,d - full", intArray.length);
+        try (Timing t = new Timing(msg)) {
+            intArray = Arrays.stream(intArray).parallel().sorted().toArray();
+        }
+        assert_sorted(intArray, 80);
+
         // Java sort (200_000)       
         shuffle(array);
         msg = String.format("Java Arrays.sort of size %,d - full", array.length);
@@ -146,25 +177,64 @@ public class Sorting {
         }
         assert_sorted(array, 80);
 
-        // Java sort (20_000)       
-        array = newRangeArray(20_000);
+        // Java parallel sort (20_000)       
+        array = newIntegerArray(20_000);
         shuffle(array);
-        msg = String.format("Java Arrays.sort of size %,d - full", array.length);
+        msg = String.format("Java Arrays.parallelsort of size and Integer %,d - full", array.length);
         try (Timing t = new Timing(msg)) {
-            Arrays.sort(array);
+            Arrays.parallelSort(array);
         }
         assert_sorted(array, 80);
 
-        
+        // Java parallel sort (200_000)
+        array = newIntegerArray(200_000);
+        shuffle(array);
+        msg = String.format("Java Arrays.parallelsort of size and Integer %,d - full", array.length);
+        try (Timing t = new Timing(msg)) {
+            Arrays.parallelSort(array);
+        }
+        assert_sorted(array, 80);
+
+        // Java streams + parallel + sort (2_000_000)               
+        intArray = newIntArray(20_000_000);
+        shuffle(intArray);
+        msg = String.format("Stream + parallel + sort of size %,d - full", intArray.length);
+        try (Timing t = new Timing(msg)) {
+            intArray = Arrays.stream(intArray).parallel().sorted().toArray();
+        }
+        assert_sorted(intArray, 80);
+
         // Merge sort 3 parallel
-        array = newRangeArray(200_000);
+        /*
+        array = newIntegerArray(200_000);
         shuffle(array);
         msg = String.format("Merge sort 3 parallel) %,d - full", array.length);
         try (Timing t = new Timing(msg)) {
             merge_sort_3_parallel(array, 0, array.length);
         }
         assert_sorted(array, 1000);
+        */        
+    }
 
+    private void discarded() {
+        // It does measure stream creation as well as sorting
+        // Streaming sorting
+        int limit = 200_000;
+        String msg = String.format("\"\"\"Streaming + sorting api %,d\"\"\"", limit);
+        Object[] result = null;
+        Stream stream = Stream.iterate(1, n -> Math.abs(ThreadLocalRandom.current().nextInt())).limit(limit);
+        try (Timing t = new Timing(msg)) {
+            result = stream.sorted().toArray();
+        }
+        assert_sorted(result, 80);
+
+        // Streaming parallel sorting        
+        msg = String.format("\"\"\"Streaming + Parallel + sorting api %,d\"\"\"", limit);
+        stream = Stream.iterate(1, n -> Math.abs(ThreadLocalRandom.current().nextInt())).limit(limit).parallel();
+        try (Timing t = new Timing(msg)) {
+            result = stream.sorted().toArray();
+        }
+        assert_sorted(result, 80);
     }
 
     private void merge_sort(Integer[] array, int lowerIndex, int higherIndex) {
@@ -237,22 +307,19 @@ public class Sorting {
 
     }
 
-    import java.util.concurrent.Executors;
-
-    private final ExecutorsService executors = Executors.newCachedThreadPool();
+    private final ExecutorService executors = Executors.newCachedThreadPool();
 
     private void merge_sort_3_parallel(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
             return;
 
         int middle = (lowerIndex + higherIndex) / 2;
-        Future<> f1 = executors.submit( () -> merge_sort_3(array, lowerIndex, middle));        
-        Future<> f2 = executors.submit(() -> merge_sort_3(array, middle + 1, higherIndex));
+        Future f1 = executors.submit(() -> merge_sort_3(array, lowerIndex, middle));
+        Future f2 = executors.submit(() -> merge_sort_3(array, middle + 1, higherIndex));
         try {
             f1.get();
             f2.get();
-        }
-        catch(InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             ex.printStackTrace();
             return;
         }
@@ -271,27 +338,29 @@ public class Sorting {
 
     }
 
-    private final ForkJoin forkJoin = new ForkJoinPool();
+    private final ForkJoinPool forkJoin = new ForkJoinPool();
 
-    public class MergeSort3Recursive implements RecursiveAction {
-        protected static int sThreshold = 100_000;
+    public class MergeSort3Recursive extends RecursiveAction {
+        protected final int sThreshold = 100_000;
         private int mLength = 200_000;
         private Integer[] array;
-        private int startIndex;
-        private int endIndex;
+        private Integer[] tmp_array;
+        private int lowerIndex;
+        private int higherIndex;
 
         private MergeSort3Recursive() {
 
         }
 
-        public MergeSort3Recursive(Integer[] array, int startIndex, int endIndex) {
+        public MergeSort3Recursive(Integer[] array, int lowerIndex, int higherIndex) {
             this.array = array;
-            this.startIndex = startIndex;
-            this.endIndex = endIndex;
+            this.tmp_array = new Integer[array.length];
+            this.lowerIndex = lowerIndex;
+            this.higherIndex = higherIndex;
         }
 
         private void computeDirectly() {
-            merge_sort(startIndex, endIndex);
+            merge_sort(lowerIndex, higherIndex);
         }
 
         private void merge_sort(int lowerIndex, int higherIndex) {
@@ -519,6 +588,35 @@ public class Sorting {
     /**
      * Asserts whether the last :limit: elememts and the firsts :limit: elements are sorted
      */
+    private void assert_sorted(final Object[] array, int limit) {
+        __assert_sorted(array, 1, limit);
+        __assert_sorted(array, array.length - limit, array.length);
+    }
+
+    private void __assert_sorted(final Object[] array, int start, int end) {        
+        IntPredicate isNotSorted = i -> ((Comparable)array[i - 1]).compareTo(array[i]) > 0;        
+        if (IntStream.range(start, end).anyMatch(isNotSorted)) {
+            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
+            System.out.println("\n======================");
+        }
+    }
+
+    private void assert_sorted(final int[] array, int limit) {
+        __assert_sorted(array, 1, limit);
+        __assert_sorted(array, array.length - limit, array.length);
+    }
+
+    private void __assert_sorted(final int[] array, int start, int end) {        
+        IntPredicate isNotSorted = i -> array[i-1] > array[i];        
+        if (IntStream.range(start, end).anyMatch(isNotSorted)) {
+            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
+            System.out.println("\n======================");
+        }
+    }
+    /**
+     * Asserts whether the last :limit: elememts and the firsts :limit: elements are sorted
+     * @see __assert_sorted for a better implementation
+     */
     private void assert_sorted(Integer[] array, int limit) {
         boolean sorted = true;
         int k = 0;
@@ -536,14 +634,14 @@ public class Sorting {
             System.out.println("\n========================");
         k = 0;
         sorted = true;
-        for (int i = array.length - 1; i > (array.length - 20); i--) {
+        for (int i = array.length - 1; i > (array.length - limit); i--) {
             if (sorted && array[i - 1] > array[i]) {
                 System.out.println("Array end not sorted, position " + i);
                 sorted = false;
             }
             if (!sorted)
                 System.out.printf("%,d \t", array[i]);
-            if (!sorted && k++ > 20)
+            if (!sorted && k++ > limit)
                 break;
         }
         if (!sorted)
