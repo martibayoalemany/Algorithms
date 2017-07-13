@@ -29,6 +29,11 @@ if ! which octave-cli > /dev/null; then
     sudo apt install octave-cli
 fi
 
+if ! which php > /dev/null; then
+    sudo apt install php7.0-cli
+fi
+
+
 execute_with_perf() {
     cd $ROOT_PATH/$1
     time -f "real %E\tuser %U\t sys %S\t$2" $3   
@@ -59,3 +64,4 @@ execute_with_perf "src/main/pl" "perl" "perl binary_gap.pl"
 execute_with_perf "src/main/pl6" "perl6" "perl6 binary_gap.pl"
 execute_with_perf "src/main/py" "python" "python3 binary_gap.py"
 execute_with_perf "src/main/matlab" "matlab" "./binary_gap.m"
+execute_with_perf "src/main/php7" "php7" "./binary_gap.php"
