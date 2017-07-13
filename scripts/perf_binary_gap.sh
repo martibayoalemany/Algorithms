@@ -33,6 +33,10 @@ if ! which php > /dev/null; then
     sudo apt install php7.0-cli
 fi
 
+if ! which ruby > /dev/null; then
+    sudo apt install ruby
+fi
+
 
 execute_with_perf() {
     cd $ROOT_PATH/$1
@@ -65,3 +69,4 @@ execute_with_perf "src/main/pl6" "perl6" "perl6 binary_gap.pl"
 execute_with_perf "src/main/py" "python" "python3 binary_gap.py"
 execute_with_perf "src/main/matlab" "matlab" "./binary_gap.m"
 execute_with_perf "src/main/php7" "php7" "./binary_gap.php"
+execute_with_perf "src/main/ruby" "ruby" "./BinaryGap.rb"
