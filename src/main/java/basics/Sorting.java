@@ -8,7 +8,7 @@ public class Sorting {
     private final int PARTIAL_FACTOR = 2;
 
     public static void main(String[] args) {
-        new Sorting().execute_sorting2();
+        new Sorting().execute_sorting();
     }
 
     public Integer[] newIntegerArray(int size) {
@@ -21,14 +21,11 @@ public class Sorting {
         return Arrays.stream(IntStream.iterate(1, n -> n + 1).limit(size).toArray()).boxed().toArray();
     }
 
-    public int[] newIntArray(int size) {
-        // int[] result = new int[size];
-        // IntStream.iterate(0, n -> n + 1).limit(size).forEach(i -> result[i] = i);
-        // return result;
+    public int[] newIntArray(int size) {        
         return Arrays.stream(IntStream.iterate(1, n -> n + 1).limit(size).toArray()).toArray();
     }
 
-    public void execute_sorting() {
+    public void array_methods() {
         String msg = "";
         List<Integer> list = new LinkedList<>();
         try (Timing t = new Timing("Initialization")) {
@@ -46,202 +43,36 @@ public class Sorting {
         try (Timing t = new Timing("Convert to unboxed array")) {
             arrayUnboxed = list.stream().mapToInt(Integer::intValue).toArray();
         }
-
-        shuffle(array);
-        try (Timing t = new Timing("Java Arrays.sort of size " + array.length)) {
-            Arrays.sort(array);
-        }
-        assert_sorted(array, 80);
-
-        for (int i = 0; i < 3; i++) {
-            shuffle(array);
-            try (Timing t = new Timing("Insertion sort " + i + " of size " + array.length)) {
-                insertion_sort(array);
-            }
-            assert_sorted(array, 80);
-        }
-
-        // Full selection
-        shuffle(array);
-        try (Timing t = new Timing("Selection sort of size " + array.length + " - full")) {
-            selection_sort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Partial and selection
-        partial_shuffle(array);
-        try (Timing t = new Timing("Selection sort of size " + array.length + " - partial")) {
-            selection_sort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Full bubble
-        shuffle(array);
-        try (Timing t = new Timing("Bubble sort of size " + array.length + " -  full")) {
-            bubble_sort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Partial bubble
-        partial_shuffle(array);
-        try (Timing t = new Timing("Bubble sort of size " + array.length + " -  partial")) {
-            bubble_sort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Full Shell sort
-        shuffle(array);
-        try (Timing t = new Timing("Shell sort " + array.length + " - full")) {
-            shell_sort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Partial Shell sort 
-        partial_shuffle(array);
-        try (Timing t = new Timing("Shell sort " + array.length + " - partial")) {
-            shell_sort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Merge Sort
-        shuffle(array);
-        try (Timing t = new Timing("Merge sort 1 (copy up to higher) " + array.length + " - full")) {
-            merge_sort(array, 0, array.length);
-        }
-        assert_sorted(array, 80);
-
-        // Merge Sort 2
-        shuffle(array);
-        try (Timing t = new Timing("Merge sort 2 (copy up to middle) " + array.length + " - full")) {
-            merge_sort_2(array, 0, array.length);
-        }
-        assert_sorted(array, 80);
-
-        // Merge Sort 3 (20_0000)        
-        shuffle(array);
-        try (Timing t = new Timing(String.format("Merge sort 3 (array allocation once) %,d - full", array.length))) {
-            merge_sort_3(array, 0, array.length);
-        }
-        assert_sorted(array, 80);
-
-        // Merge Sort 4        
-        shuffle(array);
-        msg = String.format("Merge sort 4 (System.arraycopy) %,d - full", array.length);
-        try (Timing t = new Timing(msg)) {
-            merge_sort_4(array, 0, array.length);
-        }
-        assert_sorted(array, 80);
-
-        // Merge Sort 3 (200_000)
-        array = newIntegerArray(200_000);
-        shuffle(array);
-        msg = String.format("Merge sort 3 (array allocation once) %,d - full", array.length);
-        try (Timing t = new Timing(msg)) {
-            this.tmp_array = new Integer[200_000];
-            merge_sort_3(array, 0, array.length);
-        }
-        assert_sorted(array, 80);
-
-        // Merge Sort 4  (200_000)
-        shuffle(array);
-        msg = String.format("Merge sort 4 (System.arraycopy) %,d - full", array.length);
-        try (Timing t = new Timing(msg)) {
-            merge_sort_4(array, 0, array.length);
-        }
-        assert_sorted(array, 1000);
-
-        // Java paralell sort (200_000)       
-        int[] intArray = newIntArray(200_000);
-        shuffle(intArray);
-        msg = String.format("Java Arrays.parallelSort of size %,d - full", array.length);
-        try (Timing t = new Timing(msg)) {
-            Arrays.parallelSort(intArray);
-        }
-        assert_sorted(intArray, 80);
-
-        // Java streams + parallel + sort (200_000)               
-        shuffle(intArray);
-        msg = String.format("Stream + parallel + sort of size %,d - full", intArray.length);
-        try (Timing t = new Timing(msg)) {
-            intArray = Arrays.stream(intArray).parallel().sorted().toArray();
-        }
-        assert_sorted(intArray, 80);
-
-        // Java sort (200_000)       
-        shuffle(array);
-        msg = String.format("Java Arrays.sort of size %,d - full", array.length);
-        try (Timing t = new Timing(msg)) {
-            Arrays.sort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Java parallel sort (20_000)       
-        array = newIntegerArray(20_000);
-        shuffle(array);
-        msg = String.format("Java Arrays.parallelsort of size and Integer %,d - full", array.length);
-        try (Timing t = new Timing(msg)) {
-            Arrays.parallelSort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Java parallel sort (200_000)
-        array = newIntegerArray(200_000);
-        shuffle(array);
-        msg = String.format("Java Arrays.parallelsort of size and Integer %,d - full", array.length);
-        try (Timing t = new Timing(msg)) {
-            Arrays.parallelSort(array);
-        }
-        assert_sorted(array, 80);
-
-        // Java streams + parallel + sort (2_000_000)               
-        intArray = newIntArray(20_000_000);
-        shuffle(intArray);
-        msg = String.format("Stream + parallel + sort of size %,d - full", intArray.length);
-        try (Timing t = new Timing(msg)) {
-            intArray = Arrays.stream(intArray).parallel().sorted().toArray();
-        }
-        assert_sorted(intArray, 80);
-
-        // Merge sort 3 parallel
-        /*
-        array = newIntegerArray(200_000);
-        shuffle(array);
-        msg = String.format("Merge sort 3 parallel) %,d - full", array.length);
-        try (Timing t = new Timing(msg)) {
-            merge_sort_3_parallel(array, 0, array.length);
-        }
-        assert_sorted(array, 1000);
-        */
     }
 
-    public void execute_sorting2() {
+    public void execute_sorting() {
         final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
             for (int i = 0; i < 2; i++) {
-                    boolean shuffler = (i == 0);
-                    //check_sorting("selection ", (s) -> selection_sort(s), sizes, shuffler);
-                    check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler);
-                    check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler);
-                    check_sorting("shell ", (s) -> shell_sort(s), size, shuffler);
-                    check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler);
-                    check_sorting("merge sort 2 ", (s) -> merge_sort_2(s, 0, s.length), size, shuffler);
-                    //check_sorting("merge sort 3 ", (s) -> merge_sort_3(s, 0, s.length), sizes, shuffler);
-                    check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
-                    check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
-                    check_sorting_int("Stream + parallel + sort ", (s) -> Arrays.stream(s).parallel().sorted().toArray(), size, shuffler);
+                boolean shuffler = (i == 0);
+                //check_sorting("selection ", (s) -> selection_sort(s), sizes, shuffler);
+                check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler);
+                check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler);
+                check_sorting("shell ", (s) -> shell_sort(s), size, shuffler);
+                check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler);
+                check_sorting("merge sort 2 ", (s) -> merge_sort_2(s, 0, s.length), size, shuffler);
+                //check_sorting("merge sort 3 ", (s) -> merge_sort_3(s, 0, s.length), sizes, shuffler);
+                check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
+                check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
+                check_sorting_int("Stream + parallel + sort ", (s) -> Arrays.stream(s).limit(size).parallel().sorted().toArray(), size, shuffler);                 
             }
         });
     }
 
-    private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size, final boolean fullShuffler) {
-        Integer[] param = newIntegerArray(size);            
+    private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size,
+            final boolean fullShuffler) {
+        Integer[] param = newIntegerArray(size);
         String msg2 = "";
-        if(fullShuffler) {
+        if (fullShuffler) {
             msg2 = String.format("%s - %s of %,d elements", msg, "Full", size);
-            shuffle(param);              
-        }
-        else  {
+            shuffle(param);
+        } else {
             msg2 = String.format("%s - %s of %,d elements", msg, "Partial", size);
             partial_shuffle(param);
         }
@@ -249,43 +80,21 @@ public class Sorting {
         try (Timing t = new Timing(msg2)) {
             consumer.accept(param);
         }
-        assert_sorted(param, 80);            
-    }    
-
-    private void check_sorting_int(final String msg, Consumer<int[]> consumer, Integer size, final boolean fullShuffler) {
-            int[] param = newIntArray(size);            
-            String msg2 = "";            
-            msg2 = String.format("%s - %s of %,d elements", msg, "Full", size);
-            shuffle(param);                          
-
-            try (Timing t = new Timing(msg2)) {
-                consumer.accept(param);
-            }
-            assert_sorted(param, 80);            
-    }    
-
-    /**
-     * <remarks> it measures stream creation and sorting at the same time</remarks>
-     */
-    private void __discarded() {
-        // Streaming sorting
-        int limit = 200_000;
-        String msg = String.format("\"\"\"Streaming + sorting api %,d\"\"\"", limit);
-        Object[] result = null;
-        Stream stream = Stream.iterate(1, n -> Math.abs(ThreadLocalRandom.current().nextInt())).limit(limit);
-        try (Timing t = new Timing(msg)) {
-            result = stream.sorted().toArray();
-        }
-        assert_sorted(result, 80);
-
-        // Streaming parallel sorting        
-        msg = String.format("\"\"\"Streaming + Parallel + sorting api %,d\"\"\"", limit);
-        stream = Stream.iterate(1, n -> Math.abs(ThreadLocalRandom.current().nextInt())).limit(limit).parallel();
-        try (Timing t = new Timing(msg)) {
-            result = stream.sorted().toArray();
-        }
-        assert_sorted(result, 80);
+        assert_sorted(param, 80);
     }
+
+    private void check_sorting_int(final String msg, Consumer<int[]> consumer, Integer size,
+            final boolean fullShuffler) {
+        int[] param = newIntArray(size);
+        String msg2 = "";
+        msg2 = String.format("%s - %s of %,d elements", msg, "Full", size);
+        shuffle(param);
+
+        try (Timing t = new Timing(msg2)) {
+            consumer.accept(param);
+        }
+        assert_sorted(param, 80);
+    }   
 
     private void merge_sort(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
