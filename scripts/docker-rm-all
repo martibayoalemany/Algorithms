@@ -1,0 +1,1 @@
+docker ps -a | cut -c1-13 | egrep [0-9a-f]+| xargs docker rm

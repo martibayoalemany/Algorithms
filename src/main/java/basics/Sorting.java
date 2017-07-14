@@ -21,7 +21,7 @@ public class Sorting {
         return Arrays.stream(IntStream.iterate(1, n -> n + 1).limit(size).toArray()).boxed().toArray();
     }
 
-    public int[] newIntArray(int size) {        
+    public int[] newIntArray(int size) {
         return Arrays.stream(IntStream.iterate(1, n -> n + 1).limit(size).toArray()).toArray();
     }
 
@@ -60,7 +60,8 @@ public class Sorting {
                 //check_sorting("merge sort 3 ", (s) -> merge_sort_3(s, 0, s.length), sizes, shuffler);
                 check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
                 check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
-                check_sorting_int("Stream + parallel + sort ", (s) -> Arrays.stream(s).limit(size).parallel().sorted().toArray(), size, shuffler);                 
+                check_sorting_int("Stream + parallel + sort ",
+                        (s) -> Arrays.stream(s).limit(size).parallel().sorted().toArray(), size, shuffler);
             }
         });
     }
@@ -94,7 +95,7 @@ public class Sorting {
             consumer.accept(param);
         }
         assert_sorted(param, 80);
-    }   
+    }
 
     private void merge_sort(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
@@ -168,6 +169,9 @@ public class Sorting {
 
     private final ExecutorService executors = Executors.newCachedThreadPool();
 
+    /**
+     * TODO: Work in progress
+     */
     private void merge_sort_3_parallel(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
             return;
@@ -199,6 +203,9 @@ public class Sorting {
 
     private final ForkJoinPool forkJoin = new ForkJoinPool();
 
+    /**
+     * TODO: Work in progress
+     */
     public class MergeSort3Recursive extends RecursiveAction {
         protected final int sThreshold = 100_000;
         private int mLength = 200_000;

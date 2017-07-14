@@ -1,15 +1,50 @@
 #!/usr/bin/env bash
-echo \$0: $0
+
+export SCRIPT_PATH=$(realpath $(dirname $BASH_SOURCE))
+export ROOT_PATH=$(realpath $SCRIPT_PATH/..)
+export REQUIREMENTS_JAVA_PATH=$ROOT_PATH/requirements_java
+
 echo BASH_SOURCE: $(realpath $BASH_SOURCE)
-SCRIPT_PATH=$(realpath $(dirname $BASH_SOURCE))
-ROOT_PATH=$(realpath $SCRIPT_PATH/..)
-DEPENDENCIES_PATH=$ROOT_PATH/requirements_java
-echo  Script: $SCRIPT_PATH 
-echo Root: $ROOT_PATH  
-echo Dependencies: $DEPENDENCIES_PATH 
+echo \$0\: $(realpath $0)
+echo SCRIPT_PATH: $SCRIPT_PATH 
+echo ROOT_PATH: $ROOT_PATH  
+echo REQUIREMENTS_JAVA_PATH: $REQUIREMENTS_JAVA_PATH
+echo --------------------------
 
 function idem() {
   echo $1
+}
+
+##
+#  Dependencies (pip, grape, mvn)
+####
+function py_init() {
+
+    touch ${ROOT_PATH}/requirements.txt
+    touch ${ROOT_PATH}/requirements_3_5.txt
+
+    if ! which python3 > /dev/null; then
+    sudo apt install python3 -y
+    fi
+
+    if ! which pip > /dev/null; then
+    sudo apt install python-pip -y
+    fi
+
+    cd $ROOT_PATH
+    # python 3
+    python3 -m venv .venv3 
+    source .venv3/bin/activate
+    pip install --upgrade pip
+    pip install -r requirements.txt
+    
+    # python 2.7
+    virtualenv .venv27
+    source .venv27/bin/activate
+    pip install --upgrade pip
+    pip install -r requirements.txt
+
+    ctags -af .tags_py -R .venv3/lib/python3.5/site-packages    
 }
 
 function grape_init() {    
@@ -20,11 +55,45 @@ function mvn_copy_dependencies() {
     if ! which mvn > /dev/null; then
         sudo apt install maven -y
     fi
-    [ ! -e $target ] && mkdir  $DEPENDENCIES_PATH || echo  Script: $SCRIPT_PATH Root: $ROOT_PATH Dependencies: $DEPENDENCIES_PATH
-    DEP_MVN_TXT=$ROOT_PATH/requirements_java.txt    
-    echo cat $DEV_MVN_TXT | egrep -v "^#" | xargs -I{} mvn dependency:copy -DoutputDirectory=$DEPENDENCIES_PATH -Dartifact={}:jar:sources
+    [ ! -e $target ] && mkdir  $REQUIREMENTS_JAVA_PATH || echo  Script: $SCRIPT_PATH Root: $ROOT_PATH Dependencies: $REQUIREMENTS_JAVA_PATH      
+    echo cat $REQUIREMENTS_JAVA_PATH | egrep -v "^#" | xargs -I{} mvn dependency:copy -DoutputDirectory=$REQUIREMENTS_JAVA_PATH -Dartifact={}:jar:sources
 }
 
+##
+#  Git commands
+####
+
+function git_revert() {    
+    # Tries to revert a file using the latest revision in git
+    echo $0 " " $1
+    git checkout $(git rev-list -n 1 HEAD -- $1) -- $1
+}
+
+
+function git_log() {
+   git log --graph --pretty=format:'%C(Red) %h %C(Yellow) %s'
+}
+
+function git_ignore_untracked() {
+    for an_arg in "$@" ; do
+      echo "${an_arg}"
+     done
+    git status  | sed '1,/Untracked/d' | grep -v '(use' | sed -e 's/\W\(.*\)/\1/g' | tee -a .gitignore
+}
+
+##
+#  File commands
+####
+function files_no_ext() {
+    pushd .
+    cd $ROOT_PATH
+    find `pwd` src -type f ! -name '*.*' | grep -v ".git"
+    popd
+}
+
+##
+#  Pip commands
+####
 function pip_ins_free() {
     [ $(python --version | cut -d' ' -f2 | sed -e 's/.*\(3\.5\).*/\1/g')='3.5' ] && requirements='requirements_3_5.txt' || requirements='requirements.txt'
     echo $1
@@ -34,23 +103,6 @@ function pip_ins_free() {
     echo $requirements
 }
 
-function git_log() {
-   git log --graph --pretty=format:'%C(Red) %h %C(Yellow) %s'
-}
-
-function find_no_ext() {
-    pushd .
-    cd $ROOT_PATH
-    find `pwd` src -type f ! -name '*.*' | grep -v ".git"
-    popd
-}
-
-function gitignore_untracked() {
-    for an_arg in "$@" ; do
-      echo "${an_arg}"
-     done
-    git status  | sed '1,/Untracked/d' | grep -v '(use' | sed -e 's/\W\(.*\)/\1/g' | tee -a .gitignore
-}
 
 function pip_cache_wheels() {
    mkdir wheels-cache
@@ -61,3 +113,11 @@ function pip_install_from_wheels() {
     cat requirements.txt | xargs -n1 pip install --use-wheel --no-index --find-links=./wheels-cache
 }
 
+##
+# Funcs
+####
+function functs_ls() {
+    declare -F | cut -d' ' -f3 | egrep --invert-match '^(?_)'
+}
+
+declare -F | cut -d' ' -f3 | egrep --invert-match '^(?_)'

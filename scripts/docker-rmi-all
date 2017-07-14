@@ -1,0 +1,1 @@
+docker images | cut -c41-60 | egrep [0-9a-f]+|xargs docker rmi

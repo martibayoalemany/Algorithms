@@ -7,8 +7,8 @@ import java.util.concurrent.*;
 public class BasicSorting  {       
 
     public static void main(String[] args) {        
-        long result = new SortingAlgorithms().execute();                
-        System.out.printf("%s: %d ", SortingAlgorithms.class.getName(), result);
+        long result = new BasicSorting().execute();                
+        System.out.printf("%s: %d ", BasicSorting.class.getName(), result);
     }
 
     public long execute() {
