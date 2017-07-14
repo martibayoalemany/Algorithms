@@ -121,3 +121,8 @@ sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
 mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato.cms.weka:weka-stable:3.8.1:jar:sources
 gradle getRequirements
 ```
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/martibayoalemany/Algorithms/badge.svg?style=beer-square)](https://beerpay.io/martibayoalemany/Algorithms)  [![Beerpay](https://beerpay.io/martibayoalemany/Algorithms/make-wish.svg?style=flat-square)](https://beerpay.io/martibayoalemany/Algorithms?focus=wish)
