@@ -1,5 +1,4 @@
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai)
-[![Beerpay](https://beerpay.io/martibayoalemany/Algorithms/badge.svg)](https://beerpay.io/martibayoalemany/Algorithms)
 
 # Algorithms 
 ## Results
