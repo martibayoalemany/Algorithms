@@ -16,6 +16,38 @@ function idem() {
 }
 
 ##
+#  Block port
+####
+function ufw_block_out_http() {
+    #ufw_num_rules
+    #sudo -s ufw reset
+    sudo -s ss -p | grep -P "http\s" | perl -ane 'print $F[4],qq(\n)' | perl -ane 'print $F[1],qq( )' -F':'  | uniq | xargs -n 1 ufw deny out 
+    #ufw_num_rules
+}
+
+function ufw_block_out_http_of() {
+   #set interface={1:'network interface needed'}
+   echo "sudo -s ss -p | grep -P 'http\s' | perl -ane 'print $F[4],qq(\n)' | perl -ane 'print $F[1],qq( )' -F':'  | uniq | xargs -n 1 ufw deny out from $interface"
+}
+
+function ls_http_socks() {
+     sudo -s ss -p | grep -P 'http\s' | tr -s ' ' 
+}
+
+function ls_https_socks() {
+     sudo -s ss -p | grep -P 'https\s' | tr -s ' ' 
+}
+
+function ufw_block_in_out_http() {
+     sudo -s ss -p | grep -P 'http\s' | tr -s ' ' | cut -d' ' -f5 | cut -d':' -f2 | uniq | xargs -n1 ufw deny in
+     sudo -s ss -p | grep -P 'http\s' | tr -s ' ' | cut -d' ' -f5 | cut -d':' -f2 | uniq | xargs -n1 ufw deny out
+}
+
+function ufw_num_rules() {
+    sudo -s ufw status numbered | cut -d' ' -f1 | tail -2 | perl -ane '$F[0]=~s/\[(\d+)\]/$1/;print $F[0]'
+}
+
+##
 #  Dependencies (pip, grape, mvn)
 ####
 function py_init() {
@@ -65,6 +97,7 @@ function mvn_copy_dependencies() {
 
 function git_revert() {    
     # Tries to revert a file using the latest revision in git
+    
     echo $0 " " $1
     git checkout $(git rev-list -n 1 HEAD -- $1) -- $1
 }
@@ -103,7 +136,6 @@ function pip_ins_free() {
     echo $requirements
 }
 
-
 function pip_cache_wheels() {
    mkdir wheels-cache
    cat requirements.txt | xargs -n1 pip wheel --wheel-dir=wheels-cache
@@ -117,7 +149,7 @@ function pip_install_from_wheels() {
 # Funcs
 ####
 function functs_ls() {
-    declare -F | cut -d' ' -f3 | egrep --invert-match '^(?_)'
+    declare -F | cut -d' ' -f3 | egrep --invert-match '^(?_)' 
 }
 
 declare -F | cut -d' ' -f3 | egrep --invert-match '^(?_)'

@@ -46,18 +46,19 @@ public class Sorting {
     }
 
     public void execute_sorting() {
-        final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
+        //final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
+        final Stream<Integer> sizess = Stream.of(20_000);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
             for (int i = 0; i < 2; i++) {
                 boolean shuffler = (i == 0);
-                //check_sorting("selection ", (s) -> selection_sort(s), sizes, shuffler);
+                check_sorting("selection ", (s) -> selection_sort(s), size, shuffler);
                 check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler);
                 check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler);
                 check_sorting("shell ", (s) -> shell_sort(s), size, shuffler);
                 check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler);
                 check_sorting("merge sort 2 ", (s) -> merge_sort_2(s, 0, s.length), size, shuffler);
-                //check_sorting("merge sort 3 ", (s) -> merge_sort_3(s, 0, s.length), sizes, shuffler);
+                check_sorting("merge sort 3 ", (s) -> merge_sort_3(s, 0, s.length), size, shuffler);
                 check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
                 check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
                 check_sorting_int("Stream + parallel + sort ",
@@ -69,16 +70,16 @@ public class Sorting {
     private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size,
             final boolean fullShuffler) {
         Integer[] param = newIntegerArray(size);
-        String msg2 = "";
+        String timingMsg = "";
         if (fullShuffler) {
-            msg2 = String.format("%s - %s of %,d elements", msg, "Full", size);
+            timingMsg = String.format("%s - %s of %,d elements", msg, "Full", size);
             shuffle(param);
         } else {
-            msg2 = String.format("%s - %s of %,d elements", msg, "Partial", size);
+            timingMsg = String.format("%s - %s of %,d elements", msg, "Partial", size);
             partial_shuffle(param);
         }
 
-        try (Timing t = new Timing(msg2)) {
+        try (Timing t = new Timing(timingMsg)) {
             consumer.accept(param);
         }
         assert_sorted(param, 80);
@@ -87,11 +88,11 @@ public class Sorting {
     private void check_sorting_int(final String msg, Consumer<int[]> consumer, Integer size,
             final boolean fullShuffler) {
         int[] param = newIntArray(size);
-        String msg2 = "";
-        msg2 = String.format("%s - %s of %,d elements", msg, "Full", size);
+        String timingMsg = "";
+        timingMsg = String.format("%s - %s of %,d elements", msg, "Full", size);
         shuffle(param);
 
-        try (Timing t = new Timing(msg2)) {
+        try (Timing t = new Timing(timingMsg)) {
             consumer.accept(param);
         }
         assert_sorted(param, 80);
@@ -148,6 +149,8 @@ public class Sorting {
     private void merge_sort_3(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
             return;
+        if (tmp_array == null)
+            tmp_array = new Integer[higherIndex - lowerIndex + 1];
 
         int middle = (lowerIndex + higherIndex) / 2;
         merge_sort_3(array, lowerIndex, middle);
