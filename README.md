@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/martibayoalemany/Algorithms.svg?branch=github)](https://travis-ci.org/martibayoalemany/Algorithms)
 
+[![PayPal](https://img.shields.io/badge/PayPal-Donate%20a%20beer-blue.svg)](https://paypal.me/martibayoalemany)
+
+
 # Algorithms 
 ## Results
 
