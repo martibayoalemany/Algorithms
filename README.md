@@ -1,4 +1,4 @@
-[![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai) [![Build Status](https://travis-ci.org/martibayoalemany/Algorithms.svg?branch=github)](https://travis-ci.org/martibayoalemany/Algorithms) [![PayPal](https://img.shields.io/badge/PayPal-Donate%20a%20beer-blue.svg)](https://paypal.me/martibayoalemany)
+[![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai) [![PayPal](https://img.shields.io/badge/PayPal-Donate%20a%20beer-blue.svg)](https://paypal.me/martibayoalemany) [![Build Status](https://travis-ci.org/martibayoalemany/Algorithms.svg?branch=github)](https://travis-ci.org/martibayoalemany/Algorithms)
 
 
 # Algorithms 
