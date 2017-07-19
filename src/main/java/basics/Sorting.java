@@ -3,6 +3,7 @@ import java.util.*;
 import java.util.stream.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Sorting {
     private final int PARTIAL_FACTOR = 2;
@@ -62,40 +63,125 @@ public class Sorting {
                 check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
                 check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
                 check_sorting_int("Stream + parallel + sort ",
-                        (s) -> Arrays.stream(s).limit(size).parallel().sorted().toArray(), size, shuffler);
+                        (s) -> Arrays.stream(s).parallel().sorted().toArray(), size, shuffler);
             }
         });
     }
 
     private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size,
             final boolean fullShuffler) {
-        Integer[] param = newIntegerArray(size);
-        String timingMsg = "";
+        Integer[] array = newIntegerArray(size);        
+        String dataKind = fullShuffler ? "Full" : "Partial";        
+
         if (fullShuffler) {
-            timingMsg = String.format("%s - %s of %,d elements", msg, "Full", size);
-            shuffle(param);
+            shuffle(array);
         } else {
-            timingMsg = String.format("%s - %s of %,d elements", msg, "Partial", size);
-            partial_shuffle(param);
+            partial_shuffle(array);
         }
 
-        try (Timing t = new Timing(timingMsg)) {
-            consumer.accept(param);
+        try (Timing t = new Timing(msg, dataKind, size)) {
+            consumer.accept(array);
         }
-        assert_sorted(param, 80);
+
+        assert_sorted(array, 80);
     }
 
     private void check_sorting_int(final String msg, Consumer<int[]> consumer, Integer size,
             final boolean fullShuffler) {
-        int[] param = newIntArray(size);
-        String timingMsg = "";
-        timingMsg = String.format("%s - %s of %,d elements", msg, "Full", size);
+        int[] param = newIntArray(size);        
+        String dataKind = fullShuffler ? "Full" : "Full";        
         shuffle(param);
 
-        try (Timing t = new Timing(timingMsg)) {
+        try (Timing t = new Timing(msg, dataKind, size)) {
             consumer.accept(param);
         }
+
         assert_sorted(param, 80);
+    }
+
+    /**
+     * It swaps the item with the smallest one in the array, iterating once from 0 to n
+    */
+    private void selection_sort(Integer[] array) {
+        int n = array.length;
+        for (int i = 0; i < n; i++) {
+            int k = i;
+            for (int j = i + 1; j < n; j++)
+                if (array[j] < array[k])
+                    k = j;
+
+            Integer tmp = array[i];
+            array[i] = array[k];
+            array[k] = tmp;
+        }
+    }
+
+    /**
+     * It swaps consecutives items iterating from 1 to end and in each iteration from i to 0 
+     */
+    private void insertion_sort(Integer[] array) {
+        int end = array.length;
+        for (int i = 1; i < end; i++) {
+            for (int k = i; k >= 1 && array[k] < array[k - 1]; k--) {
+                Integer tmp = array[k];
+                array[k] = array[k - 1];
+                array[k - 1] = tmp;
+            }
+        }
+    }
+
+    /**
+     * - It swaps consecutive items iterating end times and in each iteration from i to n
+     * - It stops when no swapped ocurred in a i to n iteration
+     */
+    private void bubble_sort(Integer[] array) {
+        int n = array.length;
+        for (int i = 0; i < n; i++) {
+            boolean swapped = false;
+            for (int j = i + 1; j < n; j++) {
+                if (array[j] < array[i]) {
+                    Integer tmp = array[i];
+                    array[i] = array[j];
+                    array[j] = tmp;
+                    swapped = true;
+                }
+            }
+            if (!swapped)
+                break;
+        }
+    }
+
+    /**
+     * It divides the iteration recursively by 3 and applies insertion sort to every part of the interval
+     */
+    private void shell_sort(Integer[] array) {
+        int n = array.length;
+        int h = 1;
+        while (h < n)
+            h = 3 * h;
+        while (h > 0) {
+            h = h / 3;
+            int k = 0;
+            int iters = 0;
+            while (h != 0 && k + h < n) {
+                insertion_sort(array, k, k + h);
+                k = k + h;
+                iters++;
+            }
+        }
+    }
+
+    /**
+    * It swaps consecutive items iterating from start to end and in each iteration from i to 0 
+    */
+    private void insertion_sort(Integer[] array, int start, int end) {
+        for (int i = start; i <= end; i++) {
+            for (int k = i; k >= 1 && array[k] < array[k - 1]; k--) {
+                Integer tmp = array[k];
+                array[k] = array[k - 1];
+                array[k - 1] = tmp;
+            }
+        }
     }
 
     private void merge_sort(Integer[] array, int lowerIndex, int higherIndex) {
@@ -130,7 +216,8 @@ public class Sorting {
         merge_sort_2(array, middle + 1, higherIndex);
 
         // Copy up tho the middle
-        Integer[] tmp_array = new Integer[array.length];
+        if (tmp_array == null || tmp_array.length < array.length)
+            tmp_array = new Integer[array.length];
         for (int i = lowerIndex, j = 0; i <= middle && i < array.length; i++, j++)
             tmp_array[i] = array[i];
 
@@ -288,96 +375,6 @@ public class Sorting {
     }
 
     /**
-     * - It divides the array length by :3: iteratively
-     * - It applies :insertion_sort: to each of this pieces
-     */
-    private void shell_sort(Integer[] array) {
-        int n = array.length;
-        int h = 1;
-        while (h < n)
-            h = 3 * h;
-        while (h > 0) {
-            h = h / 3;
-            int k = 0;
-            int iters = 0;
-            while (h != 0 && k + h < n) {
-                insertion_sort(array, k, k + h);
-                k = k + h;
-                iters++;
-            }
-        }
-    }
-
-    /**
-     * - It swaps position from index :i: to :0:
-     * - It stops before 0 if the element is in order     
-     */
-    private void insertion_sort(Integer[] array) {
-        int end = array.length;
-        for (int i = 1; i < end; i++) {
-            for (int k = i; k >= 1 && array[k] < array[k - 1]; k--) {
-                Integer tmp = array[k];
-                array[k] = array[k - 1];
-                array[k - 1] = tmp;
-            }
-        }
-    }
-
-    /**
-     * - It swaps position from index :i: to :0:
-     * - It stops before 0 if the element is in order     
-     */
-    private void insertion_sort(Integer[] array, int start, int end) {
-        for (int i = start; i <= end; i++) {
-            for (int k = i; k >= 1 && array[k] < array[k - 1]; k--) {
-                Integer tmp = array[k];
-                array[k] = array[k - 1];
-                array[k - 1] = tmp;
-            }
-        }
-    }
-
-    /**
-     * - It compares :array.length: times. The comparation is from i to :array.length:
-     * - All elements might be swapped pairwise
-     * - The sort stops when no swap happened in a loop
-     */
-    private void bubble_sort(Integer[] array) {
-        int n = array.length;
-        for (int i = 0; i < n; i++) {
-            boolean swapped = false;
-            for (int j = i + 1; j < n; j++) {
-                if (array[j] < array[i]) {
-                    Integer tmp = array[i];
-                    array[i] = array[j];
-                    array[j] = tmp;
-                    swapped = true;
-                }
-            }
-            if (!swapped)
-                break;
-        }
-    }
-
-    /**
-     * - It finds :array.length: times the smaller element in an :array: 
-     * - It swaps the smaller element with the current element :i:
-     */
-    private void selection_sort(Integer[] array) {
-        int n = array.length;
-        for (int i = 0; i < n; i++) {
-            int k = i;
-            for (int j = i + 1; j < n; j++) {
-                if (array[j] < array[k])
-                    k = j;
-            }
-            Integer tmp = array[i];
-            array[i] = array[k];
-            array[k] = tmp;
-        }
-    }
-
-    /**
      * Prints an snapshot of 8 shuffles from :Integer[] array:
      * Shuffles with :array.length: changes and prints an snapshot again
      */
@@ -517,13 +514,21 @@ public class Sorting {
         if (!sorted)
             System.out.println("\n========================");
     }
+    
+    private static AtomicBoolean isFirstMessage;
+    static {
+        isFirstMessage = new AtomicBoolean(false);
+    }
 
     public class Timing implements AutoCloseable {
         private long lstart;
         private long lend;
+        private long elements;
+        private String name;
+        private String dataKind;
+        private String message;
         private Instant start;
         private Instant end;
-        private String message;
 
         public Timing(String message) {
             this.message = message;
@@ -531,17 +536,32 @@ public class Sorting {
             this.lstart = System.currentTimeMillis();
         }
 
+        public Timing(String name, String dataKind, int elements) {
+            this.message = null;
+            this.name = name;
+            this.dataKind = dataKind;
+            this.elements = elements;  
+
+            // Timing
+            this.lstart = System.currentTimeMillis();
+            this.start = Instant.now();            
+            if (isFirstMessage.compareAndSet(false, true))
+                System.out.printf("%-30s,\t%-8s,\t%-12s,\t %-10s\n", "name", "dataKind", "elements","duration (ms)");
+        }
+
         @Override
         public void close() {
-            try {
-                this.end = Instant.now();
-                this.lend = System.currentTimeMillis();
-                java.time.Duration dura = Duration.between(start, end);
+            this.end = Instant.now();
+            this.lend = System.currentTimeMillis();
+            java.time.Duration dura = Duration.between(start, end);
+            if (message == null) {
+                System.out.printf("%-30s,\t%-8s,\t%-12s,\t %,d\n", name, dataKind, elements, (lend - lstart));
+            } else {
                 System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", message, dura.getSeconds(),
                         dura.getNano(), (lend - lstart));
-            } catch (Exception e) {
-                e.printStackTrace();
+
             }
+
         }
     }
 

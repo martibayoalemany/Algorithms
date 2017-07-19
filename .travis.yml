@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 language: c++
 dist: trusty 
 sudo: require
@@ -24,6 +24,10 @@ notifications:
 git:
   submodules: false
   # depth: 3
+addons:
+  apt:
+    packages:
+      - coreutils
 branches:
   except: 
     - gh-pages

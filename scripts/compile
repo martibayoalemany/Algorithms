@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+cd $ROOT_PATH/src/main/java
+#javac -source 1.9 -target 1.9 BinaryGap.java
+javac -source 1.8 -target 1.8 -bootclasspath /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar BinaryGap.java 
+
+cd $ROOT_PATH/src/main/nodejs
+npm install .
+
+cd $ROOT_PATH/src/main/c
+cmake . 1>/dev/null
+make 1>/dev/null
+chmod +x BinaryGap
+
+cd $ROOT_PATH/src/main/cs
+dotnet restore 1>/dev/null
+dotnet run 1>/dev/null
