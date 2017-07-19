@@ -1,7 +1,7 @@
 sudo: true
+language: c++
 dist: trusty 
 sudo: require
-     
 linux: &linux
    os: linux
    sudo: required
@@ -29,7 +29,4 @@ branches:
     - gh-pages
 script:
   - [ -e ./scripts/stats_binary_search.sh ] && ./scripts/stats_binary_search.sh || echo "binary_search not found" 
-  - echo $?
-
-
- 
+  - echo $? 
