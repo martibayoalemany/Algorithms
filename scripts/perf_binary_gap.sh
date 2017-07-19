@@ -1,10 +1,12 @@
 #!/usr/bin/env sh
-#echo SCRIPT PATH: $(realpath $0)
+
+#
+# Installs and executes several development environments
+###
+
 SCRIPT_PATH=$(realpath $(dirname $0))
 ROOT_PATH=$(realpath $SCRIPT_PATH/..)
-#echo ROOT PATH: $ROOT_PATH
 perf=$ROOT_PATH/perf.log
-#echo PERF Log: $perf
 
 if  ! which umake > /dev/null; then
     sudo apt install umake

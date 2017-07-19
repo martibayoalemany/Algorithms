@@ -1,5 +1,7 @@
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai)
 
+[![Build Status](https://travis-ci.org/martibayoalemany/Algorithms.svg?branch=github)](https://travis-ci.org/martibayoalemany/Algorithms)
+
 # Algorithms 
 ## Results
 
