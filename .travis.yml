@@ -28,5 +28,5 @@ branches:
   except: 
     - gh-pages
 script:
-  - [ -e ./scripts/stats_binary_search.sh ] && ./scripts/stats_binary_search.sh || echo "binary_search not found" 
+  - ./scripts/stats_binary_search.sh
   - echo $? 
