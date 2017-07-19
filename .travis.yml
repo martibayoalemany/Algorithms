@@ -23,9 +23,9 @@ notifications:
   email: false  
 git:
   submodules: false
-  # depth: 3
+  depth: 3
 before_install:
- - apt update && apt install coreutils
+ - sudo -s apt update && sudo -s apt install coreutils
 addons:
   apt:
     packages:
