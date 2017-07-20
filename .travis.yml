@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 language: c++
 dist: trusty 
 sudo: require
@@ -23,7 +23,9 @@ notifications:
   email: false  
 git:
   submodules: false
-  # depth: 3
+  depth: 3
+before_install:
+ - sudo -s apt update && sudo -s apt install coreutils
 addons:
   apt:
     packages:
