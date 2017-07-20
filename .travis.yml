@@ -34,5 +34,5 @@ branches:
   except: 
     - gh-pages
 script:
-  - ./scripts/stats_binary_search.sh
+  - ./scripts/stats_algs.sh
   - echo $? 

@@ -44,8 +44,8 @@ public class Sorting {
     @SuppressWarnings("unchecked")
     public void execute_sorting() {
 
-        //final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
-        final Stream<Integer> sizess = Stream.of(20_000);
+        final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
+        //final Stream<Integer> sizess = Stream.of(20_000);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
             for (int i = 0; i < 2; i++) {

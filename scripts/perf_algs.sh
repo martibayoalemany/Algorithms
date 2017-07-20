@@ -1,14 +1,16 @@
 #!/usr/bin/env sh
 
-SCRIPT_PATH=$(realpath $(dirname $0))
-ROOT_PATH=$(realpath $SCRIPT_PATH/..)
-perf=$ROOT_PATH/perf.log
-echo $1
+source activate
 
 execute_with_perf() {
-    cd $ROOT_PATH/$1
-    echo $4
-    [ $4='log' ] && time -f "%E,\t%U,\t%S,\t$2" $3 || time -f "real %E\tuser %U\t sys %S\t$2" $3
+   cd $ROOT_PATH/$1    
+    time -f "%E,\t%U,\t%S,\t$2" $3 
+    #time -f "real %E\tuser %U\t sys %S\t$2" $3
+}
+
+execute() {
+   cd $ROOT_PATH/$1    
+   echo '$2' `$3`    
 }
 
 chmod +x $SCRIPT_PATH/install $SCRIPT_PATH/install
@@ -27,3 +29,4 @@ execute_with_perf "src/main/py" "python" "python3 binary_gap.py"
 execute_with_perf "src/main/matlab" "matlab" "./binary_gap.m"
 execute_with_perf "src/main/php7" "php7" "./binary_gap.php"
 execute_with_perf "src/main/ruby" "ruby" "./BinaryGap.rb"
+execute "src/main/java/basics" "java Sorting" 
