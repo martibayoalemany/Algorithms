@@ -7,19 +7,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Sorting {
     private final int PARTIAL_FACTOR = 2;
+    private Integer[] tmp_array;
 
     public static void main(String[] args) {
         new Sorting().execute_sorting();
     }
 
     public Integer[] newIntegerArray(int size) {
-        LinkedList<Integer> list = new LinkedList<>();
-        IntStream.iterate(1, n -> n + 1).limit(size).forEach(list::add);
-        return list.toArray(new Integer[1]);
-    }
-
-    public Object[] newObjectArray(int size) {
-        return Arrays.stream(IntStream.iterate(1, n -> n + 1).limit(size).toArray()).boxed().toArray();
+        return Stream.iterate(1, n -> n + 1).limit(size).toArray(Integer[]::new);
     }
 
     public int[] newIntArray(int size) {
@@ -46,7 +41,9 @@ public class Sorting {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void execute_sorting() {
+
         //final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
         final Stream<Integer> sizess = Stream.of(20_000);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
@@ -58,20 +55,31 @@ public class Sorting {
                 check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler);
                 check_sorting("shell ", (s) -> shell_sort(s), size, shuffler);
                 check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler);
-                check_sorting("merge sort 2 ", (s) -> merge_sort_2(s, 0, s.length), size, shuffler);
-                check_sorting("merge sort 3 ", (s) -> merge_sort_3(s, 0, s.length), size, shuffler);
                 check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
                 check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
-                check_sorting_int("Stream + parallel + sort ",
-                        (s) -> Arrays.stream(s).parallel().sorted().toArray(), size, shuffler);
+
+                // Stream + parallel + Sort
+                Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
+                    public void accept(Integer[] arrays) {
+                        LinkedList<Integer> list = new LinkedList<>();
+                        Stream.of(arrays).parallel().sorted().forEachOrdered(list::add);
+                        int i = 0;
+                        for (Integer item : list)
+                            arrays[i++] = item;
+                    }
+                };
+                check_sorting("Stream + parallel + sort", stream_parallel_sort, size, shuffler);
+                check_sorting("Bucket sort", (s) -> bucket_sort(s), size, shuffler);
+
             }
+
         });
     }
 
     private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size,
             final boolean fullShuffler) {
-        Integer[] array = newIntegerArray(size);        
-        String dataKind = fullShuffler ? "Full" : "Partial";        
+        Integer[] array = newIntegerArray(size);
+        String dataKind = fullShuffler ? "Full" : "Partial";
 
         if (fullShuffler) {
             shuffle(array);
@@ -88,8 +96,8 @@ public class Sorting {
 
     private void check_sorting_int(final String msg, Consumer<int[]> consumer, Integer size,
             final boolean fullShuffler) {
-        int[] param = newIntArray(size);        
-        String dataKind = fullShuffler ? "Full" : "Full";        
+        int[] param = newIntArray(size);
+        String dataKind = fullShuffler ? "Full" : "Full";
         shuffle(param);
 
         try (Timing t = new Timing(msg, dataKind, size)) {
@@ -187,62 +195,14 @@ public class Sorting {
     private void merge_sort(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
             return;
+        int tmp_size = higherIndex - lowerIndex + 1;
+        if (tmp_size > 0 && (tmp_array == null || tmp_array.length < tmp_size))
+            tmp_array = new Integer[higherIndex - lowerIndex + 1];
 
         int middle = (lowerIndex + higherIndex) / 2;
         merge_sort(array, lowerIndex, middle);
         merge_sort(array, middle + 1, higherIndex);
 
-        // Copy up to higher     
-        Integer[] tmp_array = new Integer[array.length];
-        for (int i = lowerIndex, j = 0; i <= higherIndex && i < array.length; i++, j++)
-            tmp_array[i] = array[i];
-
-        // Compare the copy from 0..length with the elements from m.length and swap accordingly
-        int i = lowerIndex, j = middle + 1, k = lowerIndex;
-        while (i <= middle && j <= higherIndex && j < array.length)
-            array[k++] = tmp_array[i] <= tmp_array[j] ? tmp_array[i++] : tmp_array[j++];
-
-        while (i <= middle)
-            array[k++] = tmp_array[i++];
-
-    }
-
-    private void merge_sort_2(Integer[] array, int lowerIndex, int higherIndex) {
-        if (lowerIndex >= higherIndex)
-            return;
-
-        int middle = (lowerIndex + higherIndex) / 2;
-        merge_sort_2(array, lowerIndex, middle);
-        merge_sort_2(array, middle + 1, higherIndex);
-
-        // Copy up tho the middle
-        if (tmp_array == null || tmp_array.length < array.length)
-            tmp_array = new Integer[array.length];
-        for (int i = lowerIndex, j = 0; i <= middle && i < array.length; i++, j++)
-            tmp_array[i] = array[i];
-
-        // Compare the copy from 0..length with the elements from m.length and swap accordingly
-        int i = lowerIndex, j = middle + 1, k = lowerIndex;
-        while (i <= middle && j <= higherIndex && j < array.length)
-            array[k++] = tmp_array[i] <= array[j] ? tmp_array[i++] : array[j++];
-
-        while (i <= middle)
-            array[k++] = tmp_array[i++];
-
-    }
-
-    private Integer[] tmp_array;
-
-    private void merge_sort_3(Integer[] array, int lowerIndex, int higherIndex) {
-        if (lowerIndex >= higherIndex)
-            return;
-        if (tmp_array == null)
-            tmp_array = new Integer[higherIndex - lowerIndex + 1];
-
-        int middle = (lowerIndex + higherIndex) / 2;
-        merge_sort_3(array, lowerIndex, middle);
-        merge_sort_3(array, middle + 1, higherIndex);
-
         // Copy up tho the middle
         for (int i = lowerIndex, j = 0; i <= middle && i < array.length; i++, j++)
             this.tmp_array[i] = array[i];
@@ -257,121 +217,24 @@ public class Sorting {
 
     }
 
-    private final ExecutorService executors = Executors.newCachedThreadPool();
+    private void bucket_sort(Integer[] array) {
+        LinkedList[] buckets = new LinkedList[array.length + 1];
 
-    /**
-     * TODO: Work in progress
-     */
-    private void merge_sort_3_parallel(Integer[] array, int lowerIndex, int higherIndex) {
-        if (lowerIndex >= higherIndex)
-            return;
-
-        int middle = (lowerIndex + higherIndex) / 2;
-        Future f1 = executors.submit(() -> merge_sort_3(array, lowerIndex, middle));
-        Future f2 = executors.submit(() -> merge_sort_3(array, middle + 1, higherIndex));
-        try {
-            f1.get();
-            f2.get();
-        } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
-            return;
+        for (int i = 0; i < array.length; i++) {
+            int idx = array[i] - 1;
+            int value = array[i];
+            if(buckets[idx] == null)
+                buckets[idx] = new LinkedList<Integer>();
+            buckets[idx].add(value);
         }
 
-        // Copy up tho the middle
-        for (int i = lowerIndex, j = 0; i <= middle && i < array.length; i++, j++)
-            this.tmp_array[i] = array[i];
-
-        // Compare the copy from 0..length with the elements from m.length and swap accordingly
-        int i = lowerIndex, j = middle + 1, k = lowerIndex;
-        while (i <= middle && j <= higherIndex && j < array.length)
-            array[k++] = tmp_array[i] <= array[j] ? tmp_array[i++] : array[j++];
-
-        while (i <= middle)
-            array[k++] = tmp_array[i++];
-
-    }
-
-    private final ForkJoinPool forkJoin = new ForkJoinPool();
-
-    /**
-     * TODO: Work in progress
-     */
-    public class MergeSort3Recursive extends RecursiveAction {
-        protected final int sThreshold = 100_000;
-        private int mLength = 200_000;
-        private Integer[] array;
-        private Integer[] tmp_array;
-        private int lowerIndex;
-        private int higherIndex;
-
-        private MergeSort3Recursive() {
-
+        int i = 0;
+        for (LinkedList<Integer> values : buckets) {
+            if(values == null) continue;
+            Integer value = values.getFirst();
+            for (int j = 0; j < values.size(); j++)
+                array[i++] = value;
         }
-
-        public MergeSort3Recursive(Integer[] array, int lowerIndex, int higherIndex) {
-            this.array = array;
-            this.tmp_array = new Integer[array.length];
-            this.lowerIndex = lowerIndex;
-            this.higherIndex = higherIndex;
-        }
-
-        private void computeDirectly() {
-            merge_sort(lowerIndex, higherIndex);
-        }
-
-        private void merge_sort(int lowerIndex, int higherIndex) {
-            if (lowerIndex >= higherIndex)
-                return;
-
-            int middle = (lowerIndex + higherIndex) / 2;
-            merge_sort(lowerIndex, middle);
-            merge_sort(middle + 1, higherIndex);
-
-            // Copy up tho the middle
-            for (int i = lowerIndex, j = 0; i <= middle && i < array.length; i++, j++)
-                this.tmp_array[i] = array[i];
-
-            // Compare the copy from 0..length with the elements from m.length and swap accordingly
-            int i = lowerIndex, j = middle + 1, k = lowerIndex;
-            while (i <= middle && j <= higherIndex && j < array.length)
-                array[k++] = tmp_array[i] <= array[j] ? tmp_array[i++] : array[j++];
-
-            while (i <= middle)
-                array[k++] = tmp_array[i++];
-        }
-
-        protected void compute() {
-            if (mLength < sThreshold) {
-                computeDirectly();
-                return;
-            }
-
-            int split = mLength / 2;
-
-            invokeAll(new MergeSort3Recursive(array, lowerIndex, split),
-                    new MergeSort3Recursive(array, split + 1, higherIndex));
-        }
-    }
-
-    private void merge_sort_4(Integer[] array, int lowerIndex, int higherIndex) {
-        if (lowerIndex >= higherIndex)
-            return;
-
-        int middle = (lowerIndex + higherIndex) / 2;
-        merge_sort_4(array, lowerIndex, middle);
-        merge_sort_4(array, middle + 1, higherIndex);
-
-        // Copy up tho the middle        
-        System.arraycopy(array, lowerIndex, tmp_array, lowerIndex, (middle - lowerIndex));
-
-        // Compare the copy from 0..length with the elements from m.length and swap accordingly
-        int i = lowerIndex, j = middle + 1, k = lowerIndex;
-        while (i <= middle && j <= higherIndex && j < array.length)
-            array[k++] = tmp_array[i] <= array[j] ? tmp_array[i++] : array[j++];
-
-        while (i <= middle)
-            array[k++] = tmp_array[i++];
-
     }
 
     /**
@@ -480,41 +343,19 @@ public class Sorting {
         }
     }
 
-    /**
-     * Asserts whether the last :limit: elememts and the firsts :limit: elements are sorted
-     * @see __assert_sorted for a better implementation
-     */
-    private void assert_sorted(Integer[] array, int limit) {
-        boolean sorted = true;
-        int k = 0;
-        for (int i = 0; i < limit; i++) {
-            if (sorted && array[i] > array[i + 1]) {
-                System.out.println("Array start not sorted, position " + i);
-                sorted = false;
-            }
-            if (!sorted)
-                System.out.printf("%,d \t", array[i]);
-            if (!sorted && k++ > 20)
-                break;
-        }
-        if (!sorted)
-            System.out.println("\n========================");
-        k = 0;
-        sorted = true;
-        for (int i = array.length - 1; i > (array.length - limit); i--) {
-            if (sorted && array[i - 1] > array[i]) {
-                System.out.println("Array end not sorted, position " + i);
-                sorted = false;
-            }
-            if (!sorted)
-                System.out.printf("%,d \t", array[i]);
-            if (!sorted && k++ > limit)
-                break;
-        }
-        if (!sorted)
-            System.out.println("\n========================");
+    private void assert_sorted(final Integer[] array, int limit) {
+        __assert_sorted(array, 1, limit);
+        __assert_sorted(array, array.length - limit, array.length);
     }
-    
+
+    private void __assert_sorted(final Integer[] array, int start, int end) {
+        IntPredicate isNotSorted = i -> 0 < i - 1 && i < array.length && array[i - 1] > array[i];
+        if (IntStream.range(start, end).anyMatch(isNotSorted)) {
+            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
+            System.out.println("\n======================");
+        }
+    }
+
     private static AtomicBoolean isFirstMessage;
     static {
         isFirstMessage = new AtomicBoolean(false);
@@ -540,13 +381,13 @@ public class Sorting {
             this.message = null;
             this.name = name;
             this.dataKind = dataKind;
-            this.elements = elements;  
+            this.elements = elements;
 
             // Timing
             this.lstart = System.currentTimeMillis();
-            this.start = Instant.now();            
+            this.start = Instant.now();
             if (isFirstMessage.compareAndSet(false, true))
-                System.out.printf("%-30s,\t%-8s,\t%-12s,\t %-10s\n", "name", "dataKind", "elements","duration (ms)");
+                System.out.printf("%-30s,\t%-8s,\t%-12s,\t %-10s\n", "name", "dataKind", "elements", "duration (ms)");
         }
 
         @Override
