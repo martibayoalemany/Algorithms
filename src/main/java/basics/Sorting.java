@@ -6,7 +6,6 @@ import java.util.function.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Sorting {
-    private final int PARTIAL_FACTOR = 2;
     private Integer[] tmp_array;
 
     public static void main(String[] args) {
@@ -17,39 +16,13 @@ public class Sorting {
         return Stream.iterate(1, n -> n + 1).limit(size).toArray(Integer[]::new);
     }
 
-    public int[] newIntArray(int size) {
-        return Arrays.stream(IntStream.iterate(1, n -> n + 1).limit(size).toArray()).toArray();
-    }
-
-    public void array_methods() {
-        String msg = "";
-        List<Integer> list = new LinkedList<>();
-        try (Timing t = new Timing("Initialization")) {
-            IntStream range = IntStream.rangeClosed(1, 20_000);
-            range.forEach(list::add);
-        }
-
-        Integer[] array = null;
-        try (Timing t = new Timing("Convert to array")) {
-            array = list.toArray(new Integer[1]);
-            this.tmp_array = new Integer[array.length];
-        }
-
-        int[] arrayUnboxed = null;
-        try (Timing t = new Timing("Convert to unboxed array")) {
-            arrayUnboxed = list.stream().mapToInt(Integer::intValue).toArray();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     public void execute_sorting() {
 
-        final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
-        //final Stream<Integer> sizess = Stream.of(20_000);
+        //final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
+        final Stream<Integer> sizess = Stream.of(60_000);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
-            for (int i = 0; i < 2; i++) {
-                boolean shuffler = (i == 0);
+            for (int shuffler = 1; shuffler <= 2; shuffler++) {
                 check_sorting("selection ", (s) -> selection_sort(s), size, shuffler);
                 check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler);
                 check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler);
@@ -69,7 +42,8 @@ public class Sorting {
                     }
                 };
                 check_sorting("Stream + parallel + sort", stream_parallel_sort, size, shuffler);
-                check_sorting("Bucket sort", (s) -> bucket_sort(s), size, shuffler);
+                if (size < 80_000)
+                    check_sorting("Bucket sort", (s) -> bucket_sort(s), size, shuffler);
 
             }
 
@@ -77,34 +51,17 @@ public class Sorting {
     }
 
     private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size,
-            final boolean fullShuffler) {
+            final int shuffler_factor) {
         Integer[] array = newIntegerArray(size);
-        String dataKind = fullShuffler ? "Full" : "Partial";
+        String dataKind = String.format("/ %d", shuffler_factor);
 
-        if (fullShuffler) {
-            shuffle(array);
-        } else {
-            partial_shuffle(array);
-        }
+        shuffle(array, shuffler_factor);
 
         try (Timing t = new Timing(msg, dataKind, size)) {
             consumer.accept(array);
         }
 
         assert_sorted(array, 80);
-    }
-
-    private void check_sorting_int(final String msg, Consumer<int[]> consumer, Integer size,
-            final boolean fullShuffler) {
-        int[] param = newIntArray(size);
-        String dataKind = fullShuffler ? "Full" : "Full";
-        shuffle(param);
-
-        try (Timing t = new Timing(msg, dataKind, size)) {
-            consumer.accept(param);
-        }
-
-        assert_sorted(param, 80);
     }
 
     /**
@@ -125,7 +82,7 @@ public class Sorting {
     }
 
     /**
-     * It swaps consecutives items iterating from 1 to end and in each iteration from i to 0 
+     * It iterates from 1 to end if an item is to be swapped, it swaps backwards from i to 1
      */
     private void insertion_sort(Integer[] array) {
         int end = array.length;
@@ -139,8 +96,9 @@ public class Sorting {
     }
 
     /**
-     * - It swaps consecutive items iterating end times and in each iteration from i to n
-     * - It stops when no swapped ocurred in a i to n iteration
+     * - It iterates from 0 to n and per each iteration from i to n
+     * - It swaps consecutive elements pairwise from i to n 
+     * - It stops iteration if no element was swapped
      */
     private void bubble_sort(Integer[] array) {
         int n = array.length;
@@ -192,6 +150,10 @@ public class Sorting {
         }
     }
 
+    /**
+     * - It divides the problem in small arrays
+     * - Each small arrays is divided by left and right and merged in order
+     */
     private void merge_sort(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
             return;
@@ -217,20 +179,26 @@ public class Sorting {
 
     }
 
+    /**
+     * - It creates and array with Integer.MAX_VALUE number of buckets
+     * - It assign every element of the input array to a bucket
+     * - Each bucket of the array is a LinkedList to allow dupplicates      
+     */
     private void bucket_sort(Integer[] array) {
-        LinkedList[] buckets = new LinkedList[array.length + 1];
+        LinkedList[] buckets = new LinkedList[Integer.MAX_VALUE];
 
         for (int i = 0; i < array.length; i++) {
             int idx = array[i] - 1;
             int value = array[i];
-            if(buckets[idx] == null)
+            if (buckets[idx] == null)
                 buckets[idx] = new LinkedList<Integer>();
             buckets[idx].add(value);
         }
 
         int i = 0;
         for (LinkedList<Integer> values : buckets) {
-            if(values == null) continue;
+            if (values == null)
+                continue;
             Integer value = values.getFirst();
             for (int j = 0; j < values.size(); j++)
                 array[i++] = value;
@@ -243,7 +211,7 @@ public class Sorting {
      */
     private void snapshot_shuffle(Integer[] array) {
         snapshot(array);
-        shuffle(array);
+        shuffle(array, 1);
         snapshot(array);
     }
 
@@ -275,71 +243,15 @@ public class Sorting {
      * Shuffles a number of elements in an :array: of Integer
      * The number of shuffles is :array.length:
      */
-    private void shuffle(Integer[] array) {
+    private void shuffle(Integer[] array, int partial_factor) {
+        if (array.length == 0)
+            return;
         Random rnd = ThreadLocalRandom.current();
-        for (int i = array.length - 1; i > 0; i--) {
+        for (int i = (array.length / partial_factor) - 1; i > 0; i--) {
             int index = rnd.nextInt(i + 1);
             int tmp = array[index];
             array[index] = array[i];
             array[i] = tmp;
-        }
-    }
-
-    /**
-     * Shuffles a number of elements in an :array: of int
-     * The number of shuffles is :array.length:
-     */
-    public void shuffle(int[] array) {
-        Random rnd = ThreadLocalRandom.current();
-        for (int i = array.length - 1; i > 0; i--) {
-            int index = rnd.nextInt(i + 1);
-            int tmp = array[index];
-            array[index] = array[i];
-            array[i] = tmp;
-        }
-    }
-
-    /**
-     * Shuffles a number of elements in the :array: depending on :PARTIAL_FACTOR:
-     * :PARTIAL_FACTOR: = 1 - The number of shuffles is :array.length:
-     * :PARTIAL_FACTOR: = 9 - The number of shuffles is :array.length:/9     
-     */
-    public void partial_shuffle(Integer[] array) {
-        Random rnd = ThreadLocalRandom.current();
-        for (int i = (array.length / PARTIAL_FACTOR) - 1; i > 0; i--) {
-            int index = rnd.nextInt(i + 1);
-            int tmp = array[index];
-            array[index] = array[i];
-            array[i] = tmp;
-        }
-    }
-
-    /**
-     * Asserts whether the last :limit: elememts and the firsts :limit: elements are sorted
-     */
-    private void assert_sorted(final Object[] array, int limit) {
-        __assert_sorted(array, 1, limit);
-        __assert_sorted(array, array.length - limit, array.length);
-    }
-
-    private void __assert_sorted(final Object[] array, int start, int end) {
-        IntPredicate isNotSorted = i -> ((Comparable) array[i - 1]).compareTo(array[i]) > 0;
-        if (IntStream.range(start, end).anyMatch(isNotSorted)) {
-            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
-            System.out.println("\n======================");
-        }
-    }
-
-    private void assert_sorted(final int[] array, int limit) {
-        __assert_sorted(array, 1, limit);
-        __assert_sorted(array, array.length - limit, array.length);
-    }
-
-    private void __assert_sorted(final int[] array, int start, int end) {
-        IntPredicate isNotSorted = i -> array[i - 1] > array[i];
-        if (IntStream.range(start, end).anyMatch(isNotSorted)) {
-            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
-            System.out.println("\n======================");
         }
     }
 
@@ -361,6 +273,9 @@ public class Sorting {
         isFirstMessage = new AtomicBoolean(false);
     }
 
+    /**
+     * It provides an AutoCloseable for duration and memory usage logging
+     */
     public class Timing implements AutoCloseable {
         private long lstart;
         private long lend;
@@ -370,6 +285,8 @@ public class Sorting {
         private String message;
         private Instant start;
         private Instant end;
+        private long memUsedBefore;
+        private long memUsedAfter;
 
         public Timing(String message) {
             this.message = message;
@@ -386,8 +303,15 @@ public class Sorting {
             // Timing
             this.lstart = System.currentTimeMillis();
             this.start = Instant.now();
-            if (isFirstMessage.compareAndSet(false, true))
-                System.out.printf("%-30s,\t%-8s,\t%-12s,\t %-10s\n", "name", "dataKind", "elements", "duration (ms)");
+            if (isFirstMessage.compareAndSet(false, true)) {
+                System.out.printf(" %-30s | \t %-8s | \t %-12s | \t %-12s | \t %-10s \n", "name", "shuffle_factor", "elements",
+                        "duration (ms)", "memory");
+                System.out.printf(" %-30s | \t %-8s | \t %-12s | \t %-12s | \t %-10s \n", "-------", "-------", "-------",
+                        "-------", "-------");
+            }
+            // Memory
+            Runtime r = Runtime.getRuntime();
+            long memUsedBefore = r.totalMemory() - r.freeMemory();
         }
 
         @Override
@@ -395,14 +319,17 @@ public class Sorting {
             this.end = Instant.now();
             this.lend = System.currentTimeMillis();
             java.time.Duration dura = Duration.between(start, end);
+            // Memory
+            Runtime r = Runtime.getRuntime();
+            memUsedAfter = r.totalMemory() - r.freeMemory();
             if (message == null) {
-                System.out.printf("%-30s,\t%-8s,\t%-12s,\t %,d\n", name, dataKind, elements, (lend - lstart));
+                System.out.printf(" %-30s | \t %-8s | \t %-,12d | \t %,-12d | \t %,-10d \n", name, dataKind, elements,
+                        (lend - lstart), (memUsedAfter - memUsedBefore));
             } else {
                 System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", message, dura.getSeconds(),
                         dura.getNano(), (lend - lstart));
 
             }
-
         }
     }
 
