@@ -13,12 +13,12 @@ execute() {
    echo '$2' `$3`    
 }
 
-chmod +x $SCRIPT_PATH/install $SCRIPT_PATH/install
+chmod +x $SCRIPT_PATH/install $SCRIPT_PATH/compile
 $SCRIPT_PATH/install
-$SCRIPT_PATH/install
+$SCRIPT_PATH/compile
 
 
-execute_with_perf "src/main/java" "java" "java BinaryGap" $1
+execute_with_perf "src/main/java" "java" "javac BinaryGap && java BinaryGap" $1
 execute_with_perf "src/main/nodejs" "nodejs_slow" "node binary_gap_slow" $1
 execute_with_perf "src/main/nodejs" "nodejs" "node binary_gap"
 execute_with_perf "src/main/c" "c" "./BinaryGap"
