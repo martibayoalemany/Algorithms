@@ -8,8 +8,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * This code contains unfinished code
  */
+@Deprecated
 public class _Sorting {
-  private final ExecutorService executors = Executors.newCachedThreadPool();
+
+    public void array_methods() {
+        String msg = "";
+        List<Integer> list = new LinkedList<>();
+        IntStream range = IntStream.rangeClosed(1, 20_000);
+        range.forEach(list::add);
+
+        // List -> Integer[]
+        Integer[] array = array = list.toArray(new Integer[1]);
+
+        // List -> int[]
+        int[] arrayUnboxed = list.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    private final ExecutorService executors = Executors.newCachedThreadPool();
+
     private void merge_sort_parallel(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
             return;
@@ -39,7 +55,8 @@ public class _Sorting {
 
     }
 
-    private final ForkJoinPool forkJoin = new ForkJoinPool();        
+    private final ForkJoinPool forkJoin = new ForkJoinPool();
+
     public class MergeSortRecursive extends RecursiveAction {
         protected final int sThreshold = 100_000;
         private int mLength = 20_000;
@@ -62,7 +79,7 @@ public class _Sorting {
         private void computeDirectly() {
             merge_sort(lowerIndex, higherIndex);
         }
-        
+
         protected void compute() {
             if (mLength < sThreshold) {
                 computeDirectly();
