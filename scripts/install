@@ -3,9 +3,13 @@
 # Installs and executes several development environments
 ###
 
-SCRIPT_PATH=$(realpath $(dirname $0))
-ROOT_PATH=$(realpath $SCRIPT_PATH/..)
-perf=$ROOT_PATH/perf.log
+if  ! which realpath >/dev/null; then
+    SCRIPT_PATH=$0       
+    ROOT_PATH = $SCRIPT_PATH/..
+else
+    SCRIPT_PATH=$(realpath $(dirname $0))
+    ROOT_PATH=$(realpath $SCRIPT_PATH/..)    
+fi
 
 if  ! which umake > /dev/null; then
     sudo apt install umake

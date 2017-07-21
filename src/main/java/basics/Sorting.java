@@ -9,6 +9,7 @@ public class Sorting {
     private Integer[] tmp_array;
 
     public static void main(String[] args) {
+
         new Sorting().execute_sorting();
     }
 
@@ -17,9 +18,11 @@ public class Sorting {
     }
 
     public void execute_sorting() {
-
+        final Runtime rt = Runtime.getRuntime();
+        System.out.printf("Total Memory: %,d\n Free Memory: %,d\n Max Memory: %,d\n", rt.totalMemory(), rt.freeMemory(),
+                rt.maxMemory());
         //final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
-        final Stream<Integer> sizess = Stream.of(60_000);
+        final Stream<Integer> sizess = Stream.of(20_000);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
             for (int shuffler = 1; shuffler <= 2; shuffler++) {
@@ -30,6 +33,7 @@ public class Sorting {
                 check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler);
                 check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
                 check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
+                check_sorting("Bucket sort", (s) -> bucket_sort(s, size), size, shuffler);
 
                 // Stream + parallel + Sort
                 Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
@@ -41,9 +45,8 @@ public class Sorting {
                             arrays[i++] = item;
                     }
                 };
+
                 check_sorting("Stream + parallel + sort", stream_parallel_sort, size, shuffler);
-                if (size < 80_000)
-                    check_sorting("Bucket sort", (s) -> bucket_sort(s), size, shuffler);
 
             }
 
@@ -176,33 +179,33 @@ public class Sorting {
 
         while (i <= middle)
             array[k++] = tmp_array[i++];
-
     }
 
-    /**
-     * - It creates and array with Integer.MAX_VALUE number of buckets
-     * - It assign every element of the input array to a bucket
-     * - Each bucket of the array is a LinkedList to allow dupplicates      
+    /**     
+     * Bucket sort using a LinkedHashMap
      */
-    private void bucket_sort(Integer[] array) {
-        LinkedList[] buckets = new LinkedList[Integer.MAX_VALUE];
+    private void bucket_sort(Integer[] array, int size) {
 
+        final Map<Integer, Integer> map = new LinkedHashMap<Integer, Integer>();
+
+        int minValue = Integer.MAX_VALUE;
+        int maxValue = Integer.MIN_VALUE;
         for (int i = 0; i < array.length; i++) {
-            int idx = array[i] - 1;
-            int value = array[i];
-            if (buckets[idx] == null)
-                buckets[idx] = new LinkedList<Integer>();
-            buckets[idx].add(value);
+            Integer result = map.computeIfPresent(array[i], (k, v) -> v + 1);
+            if (result == null)
+                map.put(array[i], 1);
+            minValue = minValue > array[i] ? array[i] : minValue;
+            maxValue = maxValue < array[i] ? array[i] : maxValue;
         }
 
-        int i = 0;
-        for (LinkedList<Integer> values : buckets) {
-            if (values == null)
-                continue;
-            Integer value = values.getFirst();
-            for (int j = 0; j < values.size(); j++)
-                array[i++] = value;
+        int idx = 0;
+        for (int i = minValue; i <= maxValue; i++) {
+            Integer value = map.get(i);
+            if (value != null)
+                for (int j = 0; j < value; j++)
+                    array[idx++] = i;
         }
+
     }
 
     /**
@@ -260,10 +263,12 @@ public class Sorting {
         __assert_sorted(array, array.length - limit, array.length);
     }
 
-    private void __assert_sorted(final Integer[] array, int start, int end) {
-        IntPredicate isNotSorted = i -> 0 < i - 1 && i < array.length && array[i - 1] > array[i];
-        if (IntStream.range(start, end).anyMatch(isNotSorted)) {
-            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
+    private void __assert_sorted(final Integer[] array, int start, int end) {        
+        Predicate<Integer> isNotSorted = i -> 0 < i - 1 && i < array.length
+                && ((Integer) array[i - 1]).compareTo((Integer) array[i]) > 0;        
+        if (IntStream.range(start, end).mapToObj(i -> array[i]).anyMatch(isNotSorted)) {            
+            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));         
+            IntStream.range(end - 6, end).forEach(i -> System.out.printf(" %,d\t", array[i]));         
             System.out.println("\n======================");
         }
     }
@@ -274,7 +279,7 @@ public class Sorting {
     }
 
     /**
-     * It provides an AutoCloseable for duration and memory usage logging
+     * It provides an AutoCloseable, to be used with try(new Timing()), for duration and memory usage logging
      */
     public class Timing implements AutoCloseable {
         private long lstart;
@@ -287,6 +292,9 @@ public class Sorting {
         private Instant end;
         private long memUsedBefore;
         private long memUsedAfter;
+        private String formatHeader;
+        private String formatValue;
+        private int[] valuesFormatWidth;
 
         public Timing(String message) {
             this.message = message;
@@ -294,24 +302,49 @@ public class Sorting {
             this.lstart = System.currentTimeMillis();
         }
 
+        private String repeat(int count, String with) {
+            return new String(new char[count]).replace("\0", with);
+        }
+
         public Timing(String name, String dataKind, int elements) {
             this.message = null;
             this.name = name;
             this.dataKind = dataKind;
             this.elements = elements;
+            this.formatHeader = " %-30s | \t %-8s | \t %-12s | \t %-12s | \t %-12s | \t %-12s | \t %-10s \n";
+            this.formatValue = " %-30s | \t %-8s | \t %-,12d | \t %,-12d | \t %,-12d | \t %,-12d | \t %,-10d \n";
+            this.valuesFormatWidth = new int[] { 30, 8, 12, 12, 12, 12, 10 };
 
             // Timing
             this.lstart = System.currentTimeMillis();
             this.start = Instant.now();
-            if (isFirstMessage.compareAndSet(false, true)) {
-                System.out.printf(" %-30s | \t %-8s | \t %-12s | \t %-12s | \t %-10s \n", "name", "shuffle_factor", "elements",
-                        "duration (ms)", "memory");
-                System.out.printf(" %-30s | \t %-8s | \t %-12s | \t %-12s | \t %-10s \n", "-------", "-------", "-------",
-                        "-------", "-------");
-            }
+            if (isFirstMessage.compareAndSet(false, true))
+                printHeader();
+
             // Memory
             Runtime r = Runtime.getRuntime();
             long memUsedBefore = r.totalMemory() - r.freeMemory();
+        }
+
+        private void printHeader() {
+            System.out.printf(formatHeader, "name", "shuffle", "elements", "duration_ms", "p_duration_s",
+                    "p_duration_ns", "memory");
+
+            // initialize            
+            int i = 0;
+            String[] seps = new String[valuesFormatWidth.length];
+            for (int length : valuesFormatWidth)
+                seps[i++] = this.repeat(length, "-");
+
+            i = 0;
+            StringTokenizer st = new StringTokenizer(formatHeader.trim(), "|");
+            System.out.printf(" ");
+            StringBuilder sb = new StringBuilder();
+            sb.append(" ");
+            while (st.hasMoreTokens())
+                sb.append(String.format(st.nextToken() + "|", seps[i++]));
+            sb.append("\n");
+            System.out.printf(sb.toString());
         }
 
         @Override
@@ -323,8 +356,9 @@ public class Sorting {
             Runtime r = Runtime.getRuntime();
             memUsedAfter = r.totalMemory() - r.freeMemory();
             if (message == null) {
-                System.out.printf(" %-30s | \t %-8s | \t %-,12d | \t %,-12d | \t %,-10d \n", name, dataKind, elements,
-                        (lend - lstart), (memUsedAfter - memUsedBefore));
+                Duration dur = Duration.between(this.start, this.end);
+                System.out.printf(this.formatValue, name, dataKind, elements, (lend - lstart), dur.getSeconds(),
+                        dur.getNano(), (memUsedAfter - memUsedBefore));
             } else {
                 System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", message, dura.getSeconds(),
                         dura.getNano(), (lend - lstart));
@@ -332,5 +366,4 @@ public class Sorting {
             }
         }
     }
-
 }

@@ -1,0 +1,40 @@
+name                          ,	dataKind,	elements    ,	 duration (ms)
+selection                     ,	Full    ,	20000       ,	 438
+insertion                     ,	Full    ,	20000       ,	 217
+bubble                        ,	Full    ,	20000       ,	 976
+shell                         ,	Full    ,	20000       ,	 245
+merge sort                    ,	Full    ,	20000       ,	 15
+Arrays.sort                   ,	Full    ,	20000       ,	 20
+Arrays.parallelSort           ,	Full    ,	20000       ,	 35
+Stream + parallel + sort      ,	Full    ,	20000       ,	 42
+Bucket sort                   ,	Full    ,	20000       ,	 15
+
+selection                     ,	Partial ,	20000       ,	 461
+insertion                     ,	Partial ,	20000       ,	 52
+bubble                        ,	Partial ,	20000       ,	 453
+shell                         ,	Partial ,	20000       ,	 51
+merge sort                    ,	Partial ,	20000       ,	 2
+Arrays.sort                   ,	Partial ,	20000       ,	 7
+Arrays.parallelSort           ,	Partial ,	20000       ,	 5
+Stream + parallel + sort      ,	Partial ,	20000       ,	 14
+Bucket sort                   ,	Partial ,	20000       ,	 5
+
+selection                     ,	Full    ,	200000      ,	 43,450
+insertion                     ,	Full    ,	200000      ,	 28,809
+bubble                        ,	Full    ,	200000      ,	 130,939
+shell                         ,	Full    ,	200000      ,	 42,175
+merge sort                    ,	Full    ,	200000      ,	 94
+Arrays.sort                   ,	Full    ,	200000      ,	 344
+Arrays.parallelSort           ,	Full    ,	200000      ,	 283
+Stream + parallel + sort      ,	Full    ,	200000      ,	 211
+Bucket sort                   ,	Full    ,	200000      ,	 79
+
+selection                     ,	Partial ,	200000      ,	 39,171
+insertion                     ,	Partial ,	200000      ,	 13,890
+bubble                        ,	Partial ,	200000      ,	 61,148
+shell                         ,	Partial ,	200000      ,	 6,810
+merge sort                    ,	Partial ,	200000      ,	 23
+Arrays.sort                   ,	Partial ,	200000      ,	 86
+Arrays.parallelSort           ,	Partial ,	200000      ,	 141
+Stream + parallel + sort      ,	Partial ,	200000      ,	 66
+Bucket sort                   ,	Partial ,	200000      ,	 35

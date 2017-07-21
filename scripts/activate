@@ -30,6 +30,24 @@ function idem() {
 }
 
 ##
+# Monitor queues
+###
+
+function system_monitor_queues() {
+   [ ! -e /mnt/mqueue ] && mkdir -p /mnt/mqueue || "/mnt/mqueue already exists"
+   #        type   device path
+   mount -t mqueue none   /mnt/mqueue
+   while inotifywait /mnt/mqueue; do
+	if  which kdialog >/dev/null; then
+	    ipcs | kdialog --textbox -
+	fi
+	if which zenity >/dev/null; then
+	    zenity --notification --listen /dev/stdin <<< "message:mqueues monitoring needs kdialog"
+	fi 
+   done &
+}
+
+##
 #  Block port
 ####
 function ufw_block_out_http() {
