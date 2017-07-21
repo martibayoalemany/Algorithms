@@ -34,5 +34,6 @@ branches:
   except: 
     - gh-pages
 script:
+  - echo `pwd`
   - ./scripts/stats_algs.sh
   - echo $? 
