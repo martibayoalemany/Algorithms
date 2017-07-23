@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-source activate
+. activate
 
 execute_with_perf() {
    cd $ROOT_PATH/$1    
