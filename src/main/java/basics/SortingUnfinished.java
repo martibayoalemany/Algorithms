@@ -8,24 +8,37 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * This code contains unfinished code
  */
-@Deprecated
-public class _Sorting {
+/*
+ @Deprecated
+public class SortingUnfinished {
+    private Integer[] tmp_array;
 
-    public void array_methods() {
-        String msg = "";
-        List<Integer> list = new LinkedList<>();
-        IntStream range = IntStream.rangeClosed(1, 20_000);
-        range.forEach(list::add);
+     private void merge_sort(Integer[] array, int lowerIndex, int higherIndex) {
+        if (lowerIndex >= higherIndex)
+            return;
+        int tmp_size = higherIndex - lowerIndex + 1;
+        if (tmp_size > 0 && (tmp_array == null || tmp_array.length < tmp_size))
+            tmp_array = new Integer[higherIndex - lowerIndex + 1];
 
-        // List -> Integer[]
-        Integer[] array = array = list.toArray(new Integer[1]);
+        int middle = (lowerIndex + higherIndex) / 2;
+        merge_sort(array, lowerIndex, middle);
+        merge_sort(array, middle + 1, higherIndex);
 
-        // List -> int[]
-        int[] arrayUnboxed = list.stream().mapToInt(Integer::intValue).toArray();
+        // Copy up tho the middle
+        for (int i = lowerIndex, j = 0; i <= middle && i < array.length; i++, j++)
+            this.tmp_array[i] = array[i];
+
+        // Compare the copy from 0..length with the elements from m.length and swap accordingly
+        int i = lowerIndex, j = middle + 1, k = lowerIndex;
+        while (i <= middle && j <= higherIndex && j < array.length)
+            array[k++] = tmp_array[i] <= array[j] ? tmp_array[i++] : array[j++];
+
+        while (i <= middle)
+            array[k++] = tmp_array[i++];
     }
 
-    private final ExecutorService executors = Executors.newCachedThreadPool();
 
+    private final ExecutorService executors = Executors.newCachedThreadPool();
     private void merge_sort_parallel(Integer[] array, int lowerIndex, int higherIndex) {
         if (lowerIndex >= higherIndex)
             return;
@@ -109,3 +122,4 @@ public class _Sorting {
         }
     }
 }
+*/

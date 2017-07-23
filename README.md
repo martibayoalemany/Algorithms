@@ -117,6 +117,12 @@ usr/lib/jni/libnative-platform-curses.so: undefined symbol: tgetent
 sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
 ```
 
+### Settins maven (if needed)
+```
+cat ~/.mavenrc
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
+```
+
 ### Dependency management (java)
 ```
 mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato.cms.weka:weka-stable:3.8.1:jar:sources

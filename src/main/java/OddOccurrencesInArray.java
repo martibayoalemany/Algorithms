@@ -20,10 +20,10 @@ class OddOccurrencesInArray {
 
         {
             // Integer.MAX_VALUE 2_147_483_647                        
-            int half_count = 1_000_000;
+            int half_count = 1000000;
             int[] origin = new int[half_count];
             int[] target = new int[2 * half_count + 1];
-            Arrays.setAll(origin, s -> ThreadLocalRandom.current().nextInt(0, 1_000_000_000));
+            Arrays.setAll(origin, s -> ThreadLocalRandom.current().nextInt(0, 1000000000));
             System.arraycopy(origin, 0, target, 0, origin.length);
             System.arraycopy(origin, 0, target, half_count, origin.length);
             target[2 * half_count] = origin[0];

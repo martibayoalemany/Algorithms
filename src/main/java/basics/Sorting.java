@@ -22,7 +22,7 @@ public class Sorting {
         System.out.printf("Total Memory: %,d\n Free Memory: %,d\n Max Memory: %,d\n", rt.totalMemory(), rt.freeMemory(),
                 rt.maxMemory());
         //final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
-        final Stream<Integer> sizess = Stream.of(20_000);
+        final Stream<Integer> sizess = Stream.of(2_000_000);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
             for (int shuffler = 1; shuffler <= 3; shuffler++) {

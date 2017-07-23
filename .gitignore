@@ -30,3 +30,4 @@ src/main/nodejs/node_modules
 .venv27
 .venv3
 .venv35
+target/*
