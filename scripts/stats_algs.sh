@@ -3,8 +3,8 @@
 function set_env() {
     if  ! which realpath >/dev/null; then
         echo  'coreutils is not installed, realpath and dirname are not available'
-        export SCRIPT_PATH=$BASH_SOURCE
-        export ROOT_PATH=$SCRIPT_PATH/..
+        export SCRIPT_PATH=${BASH_SOURCE%/*}
+        export ROOT_PATH=${SCRIPT_PATH%/*}
         export REQUIREMENTS_JAVA_PATH=$ROOT_PATH/requirements_java
 
         echo BASH_SOURCE: $BASH_SOURCE
