@@ -34,5 +34,5 @@ branches:
   except: 
     - gh-pages
 script:
-  - /home/travis/build/martibayoalemany/Algorithms/scripts/stats_algs.sh
+  - /home/travis/build/martibayoalemany/Algorithms/scripts/stats_algs.sh /home/travis/build/martibayoalemany/Algorithms/scripts
   - echo $? 
