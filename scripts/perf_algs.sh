@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-. activate
-
 execute_with_perf() {
    cd $ROOT_PATH/$1    
     time -f "%E,\t%U,\t%S,\t$2" $3 
@@ -10,7 +8,7 @@ execute_with_perf() {
 
 execute() {
    cd $ROOT_PATH/$1    
-   echo '$2' `$3`    
+   `$3`   
 }
 
 chmod +x $SCRIPT_PATH/install $SCRIPT_PATH/compile

@@ -1,32 +1,37 @@
 #!/usr/bin/env bash
-if  ! which realpath >/dev/null; then
-    echo  'coreutils is not installed, realpath and dirname are not available'
-    export SCRIPT_PATH=$BASH_SOURCE
-    export ROOT_PATH=$SCRIPT_PATH/..
-    export REQUIREMENTS_JAVA_PATH=$ROOT_PATH/requirements_java
-
-    echo BASH_SOURCE: $BASH_SOURCE
-    echo \$0\: $0
-    echo SCRIPT_PATH: $SCRIPT_PATH 
-    echo ROOT_PATH: $ROOT_PATH  
-    echo REQUIREMENTS_JAVA_PATH: $REQUIREMENTS_JAVA_PATH
-    echo --------------------------
-else
-    export SCRIPT_PATH=$(realpath $(dirname $BASH_SOURCE))
-    export ROOT_PATH=$(realpath $SCRIPT_PATH/..)
-    export REQUIREMENTS_JAVA_PATH=$ROOT_PATH/requirements_java
-
-    echo BASH_SOURCE: $(realpath $BASH_SOURCE)
-    echo \$0\: $(realpath $0)
-    echo SCRIPT_PATH: $SCRIPT_PATH 
-    echo ROOT_PATH: $ROOT_PATH  
-    echo REQUIREMENTS_JAVA_PATH: $REQUIREMENTS_JAVA_PATH
-    echo --------------------------
-fi
-
 
 function idem() {
   echo $1
+}
+
+#
+# Travis does not has coreutils/realpath
+######
+function set_env() {
+    if  ! which realpath >/dev/null; then
+        echo  'coreutils is not installed, realpath and dirname are not available'
+        export SCRIPT_PATH=$BASH_SOURCE
+        export ROOT_PATH=$SCRIPT_PATH/..
+        export REQUIREMENTS_JAVA_PATH=$ROOT_PATH/requirements_java
+
+        echo BASH_SOURCE: $BASH_SOURCE
+        echo \$0\: $0
+        echo SCRIPT_PATH: $SCRIPT_PATH 
+        echo ROOT_PATH: $ROOT_PATH  
+        echo REQUIREMENTS_JAVA_PATH: $REQUIREMENTS_JAVA_PATH
+        echo --------------------------
+    else
+        export SCRIPT_PATH=$(realpath $(dirname $BASH_SOURCE))
+        export ROOT_PATH=$(realpath $SCRIPT_PATH/..)
+        export REQUIREMENTS_JAVA_PATH=$ROOT_PATH/requirements_java
+
+        echo BASH_SOURCE: $(realpath $BASH_SOURCE)
+        echo \$0\: $(realpath $0)
+        echo SCRIPT_PATH: $SCRIPT_PATH 
+        echo ROOT_PATH: $ROOT_PATH  
+        echo REQUIREMENTS_JAVA_PATH: $REQUIREMENTS_JAVA_PATH
+        echo --------------------------
+    fi
 }
 
 ##
@@ -185,3 +190,4 @@ function functs_ls() {
 }
 
 declare -F | cut -d' ' -f3 | egrep --invert-match '^(?_)'
+set_env

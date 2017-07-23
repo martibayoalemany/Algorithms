@@ -18,6 +18,7 @@ fi
 if  ! which node > /dev/null; then
     umake nodejs
     export PATH=$PATH:~/.local/share/umake/nodejs/nodejs-lang/bin
+    npm i -g npm
 fi
 
 if  ! which perl6 > /dev/null; then

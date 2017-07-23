@@ -25,7 +25,7 @@ public class Sorting {
         final Stream<Integer> sizess = Stream.of(20_000);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
-            for (int shuffler = 1; shuffler <= 2; shuffler++) {
+            for (int shuffler = 1; shuffler <= 3; shuffler++) {
                 check_sorting("selection ", (s) -> selection_sort(s), size, shuffler);
                 check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler);
                 check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler);
@@ -33,7 +33,7 @@ public class Sorting {
                 check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler);
                 check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
                 check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
-                check_sorting("Bucket sort", (s) -> bucket_sort(s, size), size, shuffler);
+                check_sorting("Linked Hashmap", (s) -> linked_hash_map_sort(s), size, shuffler);
 
                 // Stream + parallel + Sort
                 Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
@@ -181,10 +181,11 @@ public class Sorting {
             array[k++] = tmp_array[i++];
     }
 
-    /**     
-     * Bucket sort using a LinkedHashMap
+    /**
+     * It relies on the performance of the LinkedHashMap.get method for the sorting.
+     * Internally the LinkedHashMap splits the data into trees depending on the size of the data.
      */
-    private void bucket_sort(Integer[] array, int size) {
+    private void linked_hash_map_sort(Integer[] array) {
 
         final Map<Integer, Integer> map = new LinkedHashMap<Integer, Integer>();
 
@@ -205,8 +206,7 @@ public class Sorting {
                 for (int j = 0; j < value; j++)
                     array[idx++] = i;
         }
-
-    }
+    }    
 
     /**
      * Prints an snapshot of 8 shuffles from :Integer[] array:
