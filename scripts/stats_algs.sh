@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-cd $1
+[ -e $1 ] && cd $1 || echo "running in travis ?" 
 
 . activate
 
