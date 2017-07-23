@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
-source activate
+. activate
 
 $SCRIPT_PATH/perf_algs.sh  | egrep -e 'user' 
