@@ -46,6 +46,8 @@ if  ! which perl6 > /dev/null; then
     sudo apt install perl6
 fi
 
+echo perl6 -v
+
 if ! which go > /dev/null; then
     umake go
     export GOROOT=/home/username/.local/share/umake/go/go-lang
@@ -60,7 +62,7 @@ if ! which php > /dev/null; then
     sudo apt install php7.0-cli
 fi
 
-if [ $(php --version | head -1 | cut -d' ' -f2 | cut -d'.' -f1) -le 7 ] then;
+if [ $(php --version | head -1 | cut -d' ' -f2 | cut -d'.' -f1) -lt 7 ]; then
     sudo apt install php7.0-cli
 fi
 

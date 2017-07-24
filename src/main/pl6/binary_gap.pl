@@ -1,5 +1,5 @@
 #!/usr/bin/env perl6
-use strict;
+#use strict;
 
 say &binary_gap(654345);
 
