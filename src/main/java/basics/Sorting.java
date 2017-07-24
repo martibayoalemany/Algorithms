@@ -9,20 +9,23 @@ public class Sorting {
     private Integer[] tmp_array;
 
     public static void main(String[] args) {
+        Integer[] sample_sizes = null;
+        if (args != null && args.length > 0)
+            sample_sizes = Stream.of(args).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
 
-        new Sorting().execute_sorting();
+        new Sorting().execute_sorting(sample_sizes);
     }
 
     public Integer[] newIntegerArray(int size) {
         return Stream.iterate(1, n -> n + 1).limit(size).toArray(Integer[]::new);
     }
 
-    public void execute_sorting() {
+    public void execute_sorting(Integer[] sample_sizes) {
         final Runtime rt = Runtime.getRuntime();
         System.out.printf("Total Memory: %,d\n Free Memory: %,d\n Max Memory: %,d\n", rt.totalMemory(), rt.freeMemory(),
                 rt.maxMemory());
         //final Stream<Integer> sizess = Stream.of(20_000, 200_000, 2_000_000, 20_000_000);
-        final Stream<Integer> sizess = Stream.of(200_000);
+        final Stream<Integer> sizess = sample_sizes == null ? Stream.of(20_000) : Stream.of(sample_sizes);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
             for (int shuffler = 1; shuffler <= 3; shuffler++) {
@@ -51,6 +54,14 @@ public class Sorting {
             }
 
         });
+
+        System.out.printf("--------- %d sorted measurements (speed) ------- \n", timings.size());
+        for(String line : timings.stream().sorted().map(Timing::toString).toArray(String[]::new)) 
+            System.out.printf(line);
+        
+        System.out.printf("--------- %d sorted measurements (memory) ------- \n", timings.size());
+        for(String line : timings.stream().sorted((a,b) -> a.getMem().compareTo(b.getMem())).map(Timing::toString).toArray(String[]::new)) 
+            System.out.printf(line);
     }
 
     private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size,
@@ -206,7 +217,7 @@ public class Sorting {
                 for (int j = 0; j < value; j++)
                     array[idx++] = i;
         }
-    }    
+    }
 
     /**
      * Prints an snapshot of 8 shuffles from :Integer[] array:
@@ -263,54 +274,72 @@ public class Sorting {
         __assert_sorted(array, array.length - limit, array.length);
     }
 
-    private void __assert_sorted(final Integer[] array, int start, int end) {        
+    private void __assert_sorted(final Integer[] array, int start, int end) {
         Predicate<Integer> isNotSorted = i -> 0 < i - 1 && i < array.length
-                && ((Integer) array[i - 1]).compareTo((Integer) array[i]) > 0;        
-        if (IntStream.range(start, end).mapToObj(i -> array[i]).anyMatch(isNotSorted)) {            
-            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));         
-            IntStream.range(end - 6, end).forEach(i -> System.out.printf(" %,d\t", array[i]));         
+                && ((Integer) array[i - 1]).compareTo((Integer) array[i]) > 0;
+        if (IntStream.range(start, end).mapToObj(i -> array[i]).anyMatch(isNotSorted)) {
+            IntStream.range(start, start + 6).forEach(i -> System.out.printf(" %,d\t", array[i]));
+            IntStream.range(end - 6, end).forEach(i -> System.out.printf(" %,d\t", array[i]));
             System.out.println("\n======================");
         }
     }
 
+    private static List<Timing> timings;    
     private static AtomicBoolean isFirstMessage;
     static {
         isFirstMessage = new AtomicBoolean(false);
+        timings = new ArrayList<Timing>();        
     }
 
     /**
      * It provides an AutoCloseable, to be used with try(new Timing()), for duration and memory usage logging
      */
-    public class Timing implements AutoCloseable {
+    public class Timing implements AutoCloseable, Comparable<Timing> {
+        private final long elements;
+        private final String name;
+        private final String dataKind;
+        private final String message;        
+
         private long lstart;
         private long lend;
-        private long elements;
-        private String name;
-        private String dataKind;
-        private String message;
         private Instant start;
         private Instant end;
+        private Duration duration;
         private long memUsedBefore;
         private long memUsedAfter;
         private String formatHeader;
         private String formatValue;
-        private int[] valuesFormatWidth;
+        private int[] valuesFormatWidth;        
+
+        public Long getMillis() {
+            return lend - lstart;
+        }
+
+        public Long getMem() {
+            return memUsedAfter - memUsedBefore;
+        }
 
         public Timing(String message) {
+            this.elements = 0;
+            this.name = "";
+            this.dataKind = "";
             this.message = message;
             this.start = Instant.now();
             this.lstart = System.currentTimeMillis();
+            timings.add(this);
         }
 
         private String repeat(int count, String with) {
             return new String(new char[count]).replace("\0", with);
-        }
+        }        
 
         public Timing(String name, String dataKind, int elements) {
-            this.message = null;
-            this.name = name;
-            this.dataKind = dataKind;
             this.elements = elements;
+            this.dataKind = dataKind;
+            this.name = name;
+            this.message = "";
+
+            // Formating
             this.formatHeader = " %-30s | \t %-8s | \t %-12s | \t %-12s | \t %-12s | \t %-12s | \t %-10s \n";
             this.formatValue = " %-30s | \t %-8s | \t %-,12d | \t %,-12d | \t %,-12d | \t %,-12d | \t %,-10d \n";
             this.valuesFormatWidth = new int[] { 30, 8, 12, 12, 12, 12, 10 };
@@ -323,7 +352,8 @@ public class Sorting {
 
             // Memory
             Runtime r = Runtime.getRuntime();
-            long memUsedBefore = r.totalMemory() - r.freeMemory();
+            memUsedBefore = r.totalMemory() - r.freeMemory();
+            timings.add(this);
         }
 
         private void printHeader() {
@@ -351,18 +381,51 @@ public class Sorting {
         public void close() {
             this.end = Instant.now();
             this.lend = System.currentTimeMillis();
-            java.time.Duration dura = Duration.between(start, end);
+            this.duration = Duration.between(start, end);
             // Memory
             Runtime r = Runtime.getRuntime();
             memUsedAfter = r.totalMemory() - r.freeMemory();
-            if (message == null) {
-                Duration dur = Duration.between(this.start, this.end);
-                System.out.printf(this.formatValue, name, dataKind, elements, (lend - lstart), dur.getSeconds(),
-                        dur.getNano(), (memUsedAfter - memUsedBefore));
+            if (message.equals("")) {                
+                System.out.printf(toString());
             } else {
-                System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", message, dura.getSeconds(),
-                        dura.getNano(), (lend - lstart));
+                System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", message, duration.getSeconds(),
+                        duration.getNano(), (lend - lstart));
 
+            }
+        }
+
+        @Override
+        public String toString() {
+            return String.format(this.formatValue, name, dataKind, elements, (lend - lstart), duration.getSeconds(),
+                    duration.getNano(), (memUsedAfter - memUsedBefore));
+        }
+
+        @Override
+        public int hashCode() {             
+            int hash = 1;
+            hash = (int)elements;
+            hash = (hash << 5) + name.hashCode();
+            hash = (hash << 5) + dataKind.hashCode();
+            hash = (hash << 5) + message.hashCode();
+            return hash;
+        }
+
+        @Override
+        public int compareTo(Timing other) {
+            if (other == null)
+                throw new NullPointerException();
+            return this.getMillis().compareTo(other.getMillis());
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            Thread.currentThread().dumpStack();
+            if (other == null || other.getClass() != getClass()) {
+                return false;
+            } else if (other == this) {
+                return true;
+            } else {
+                return this.hashCode() == other.hashCode();
             }
         }
     }
