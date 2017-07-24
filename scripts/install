@@ -3,13 +3,34 @@
 # Installs and executes several development environments
 ###
 
-if  ! which realpath >/dev/null; then
-    SCRIPT_PATH=$0       
-    ROOT_PATH = $SCRIPT_PATH/..
-else
-    SCRIPT_PATH=$(realpath $(dirname $0))
-    ROOT_PATH=$(realpath $SCRIPT_PATH/..)    
-fi
+function set_env() {
+    if  ! which realpath >/dev/null; then
+        echo  'coreutils is not installed, realpath and dirname are not available'
+        export SCRIPT_PATH=${BASH_SOURCE%/*}
+        export ROOT_PATH=${SCRIPT_PATH%/*}
+        export REQUIREMENTS_JAVA_PATH=$ROOT_PATH/requirements_java
+
+        echo BASH_SOURCE: $BASH_SOURCE
+        echo \$0\: $0
+        echo SCRIPT_PATH: $SCRIPT_PATH 
+        echo ROOT_PATH: $ROOT_PATH  
+        echo REQUIREMENTS_JAVA_PATH: $REQUIREMENTS_JAVA_PATH
+        echo --------------------------
+    else
+        export SCRIPT_PATH=$(realpath $(dirname $BASH_SOURCE))
+        export ROOT_PATH=$(realpath $SCRIPT_PATH/..)
+        export REQUIREMENTS_JAVA_PATH=$ROOT_PATH/requirements_java
+
+        echo BASH_SOURCE: $(realpath $BASH_SOURCE)
+        echo \$0\: $(realpath $0)
+        echo SCRIPT_PATH: $SCRIPT_PATH 
+        echo ROOT_PATH: $ROOT_PATH  
+        echo REQUIREMENTS_JAVA_PATH: $REQUIREMENTS_JAVA_PATH
+        echo --------------------------
+    fi
+}
+
+set_env
 
 if  ! which umake > /dev/null; then
     sudo apt install umake
