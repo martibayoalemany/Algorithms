@@ -9,7 +9,7 @@ class binary_gap {
     /**
     * Returns the length of the biggest gap of zeros between two ones
     */
-    public function execute(float $value) : int {
+    public function execute(float $value) {
         
         while (rem_norm($value) > 0) {
             $value = $value / 2;        
