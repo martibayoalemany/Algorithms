@@ -6,12 +6,6 @@ execute_with_perf() {
     #time -f "real %E\tuser %U\t sys %S\t$2" $3
 }
 
-execute() { 
-    cd $ROOT_PATH/$1 
-    echo $2
-   `$2`   
-}
-
 chmod +x $SCRIPT_PATH/install $SCRIPT_PATH/compile
 $SCRIPT_PATH/install
 $SCRIPT_PATH/compile
@@ -28,4 +22,4 @@ execute_with_perf "src/main/py" "python" "python3 binary_gap.py"
 execute_with_perf "src/main/matlab" "matlab" "./binary_gap.m"
 execute_with_perf "src/main/php7" "php7" "./binary_gap.php"
 execute_with_perf "src/main/ruby" "ruby" "./BinaryGap.rb"
-execute "src/main/java/basics" "javac -cp . Sorting && java Sorting" 
+execute_with_perf "src/main/java/basics" "java sorting" "javac -cp . Sorting && java Sorting" 
