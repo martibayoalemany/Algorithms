@@ -27,7 +27,5 @@ execute_with_perf "src/main/java/basics" "javac_sorting" "javac -cp . Sorting.ja
 execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 20000" 
 execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 200000" 
 execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 2000000" 
-execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 20000000" 
-execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 200000000" 
 
 
