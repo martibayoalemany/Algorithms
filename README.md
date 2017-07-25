@@ -5,7 +5,7 @@
 
 ### Binary gap stats 
 ```
-scripts/stats_binary_search.sh
+scripts/stat_algs.sh
 ```
 
 ```
