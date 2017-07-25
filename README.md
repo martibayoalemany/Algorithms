@@ -2,34 +2,7 @@
 
 # Algorithms 
 ## Results
- name                           | 	 shuffle  | 	 elements     | 	 duration_ms  | 	 p_duration_s | 	 p_duration_ns | 	 memory 
-merge sort                     | 	 / 2      | 	 20,000       | 	 2            | 	 0            | 	 2,626,000    | 	 0          
- Arrays.sort                    | 	 / 2      | 	 20,000       | 	 5            | 	 0            | 	 4,053,000    | 	 0          
- Linked Hashmap                 | 	 / 3      | 	 20,000       | 	 5            | 	 0            | 	 5,120,000    | 	 2,097,152  
- Arrays.parallelSort            | 	 / 2      | 	 20,000       | 	 6            | 	 0            | 	 6,882,000    | 	 522,240    
- Arrays.sort                    | 	 / 3      | 	 20,000       | 	 6            | 	 0            | 	 5,971,000    | 	 0          
- merge sort                     | 	 / 3      | 	 20,000       | 	 8            | 	 0            | 	 7,384,000    | 	 0          
- Arrays.parallelSort            | 	 / 3      | 	 20,000       | 	 8            | 	 0            | 	 8,378,000    | 	 0          
- Linked Hashmap                 | 	 / 2      | 	 20,000       | 	 10           | 	 0            | 	 10,066,000   | 	 1,574,912  
- merge sort                     | 	 / 1      | 	 20,000       | 	 14           | 	 0            | 	 14,255,000   | 	 80,024     
- Stream + parallel + sort       | 	 / 3      | 	 20,000       | 	 15           | 	 0            | 	 15,340,000   | 	 880,824    
- Stream + parallel + sort       | 	 / 2      | 	 20,000       | 	 18           | 	 0            | 	 18,589,000   | 	 1,048,576  
- Arrays.sort                    | 	 / 1      | 	 20,000       | 	 27           | 	 0            | 	 26,756,000   | 	 126,696    
- Linked Hashmap                 | 	 / 1      | 	 20,000       | 	 32           | 	 0            | 	 32,378,000   | 	 1,729,792  
- Arrays.parallelSort            | 	 / 1      | 	 20,000       | 	 48           | 	 0            | 	 48,001,000   | 	 1,139,600  
- Stream + parallel + sort       | 	 / 1      | 	 20,000       | 	 48           | 	 0            | 	 48,803,000   | 	 752,272    
- insertion                      | 	 / 3      | 	 20,000       | 	 49           | 	 0            | 	 49,816,000   | 	 0          
- shell                          | 	 / 3      | 	 20,000       | 	 54           | 	 0            | 	 54,655,000   | 	 0          
- shell                          | 	 / 2      | 	 20,000       | 	 122          | 	 0            | 	 121,619,000  | 	 0          
- insertion                      | 	 / 2      | 	 20,000       | 	 142          | 	 0            | 	 142,802,000  | 	 0          
- bubble                         | 	 / 3      | 	 20,000       | 	 301          | 	 0            | 	 301,062,000  | 	 0          
- selection                      | 	 / 3      | 	 20,000       | 	 312          | 	 0            | 	 312,092,000  | 	 0          
- selection                      | 	 / 1      | 	 20,000       | 	 435          | 	 0            | 	 434,716,000  | 	 0          
- selection                      | 	 / 2      | 	 20,000       | 	 440          | 	 0            | 	 439,951,000  | 	 0          
- bubble                         | 	 / 2      | 	 20,000       | 	 471          | 	 0            | 	 471,216,000  | 	 0          
- insertion                      | 	 / 1      | 	 20,000       | 	 602          | 	 0            | 	 602,514,000  | 	 0          
- shell                          | 	 / 1      | 	 20,000       | 	 713          | 	 0            | 	 712,871,000  | 	 0          
- bubble                         | 	 / 1      | 	 20,000       | 	 1,292        | 	 1            | 
+
 ### Binary gap stats 
 ```
 scripts/stat_algs.sh
