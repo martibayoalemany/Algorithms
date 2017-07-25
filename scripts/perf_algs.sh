@@ -24,7 +24,7 @@ execute_with_perf "src/main/php7" "php7" "./binary_gap.php"
 execute_with_perf "src/main/ruby" "ruby" "./BinaryGap.rb"
 # Splitting the line in two, there seems to be an issue in travis
 execute_with_perf "src/main/java/basics" "javac_sorting" "javac -cp . Sorting.java" 
-execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 20000" 
+#execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 20000" 
 #execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 200000" 
 #execute_with_perf "src/main/java/basics" "java_sorting" "java Sorting 2000000" 
 
