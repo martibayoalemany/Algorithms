@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-function rem_norm(float $value) {
+function rem_norm(/*float*/ $value) /*: int*/  {
         return round($value/2 - floor($value /2),0);
     } 
     
@@ -9,7 +9,7 @@ class binary_gap {
     /**
     * Returns the length of the biggest gap of zeros between two ones
     */
-    public function execute(float $value) {
+    public function execute(/*float*/ $value) /*:  int*/ {
         
         while (rem_norm($value) > 0) {
             $value = $value / 2;        
@@ -33,6 +33,6 @@ class binary_gap {
 
 $value = 654345;
 $app = new binary_gap;
-echo $app->execute($value);
+echo $app->execute(floatval($value));
 
 ?>

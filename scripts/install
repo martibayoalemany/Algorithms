@@ -67,6 +67,10 @@ if ! which php > /dev/null; then
     sudo apt install php7.0-cli
 fi
 
+if ! which hhvm > /dev/null; then
+    sudo apt install hhvm
+fi
+
 if [ $(php --version | head -1 | cut -d' ' -f2 | cut -d'.' -f1) -lt 7 ]; then
     sudo apt install php7.0-cli
 fi
