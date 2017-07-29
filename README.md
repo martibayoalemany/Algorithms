@@ -52,7 +52,7 @@ Removing 10,000 elements 200,000 -> 210,000  [658,547,000 ns]
 #### LinkedList
 Implementation wise is not a single linked list, it takes the same time to remove
 elements from the beginning than from the end
-* TODO * Check the code, timings might be wrong there
+* *TODO*  Check the code, timings might be wrong there
 ```
 initialization [122,772,000 ns]
 Removing 10,000 elements 10,000 -> 20,000  [351,818,000 ns]
