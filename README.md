@@ -50,7 +50,7 @@ Removing 10,000 elements 200,000 -> 210,000  [658,547,000 ns]
 ```
 
 #### LinkedList
-Implementation wised is not a single linked list, it takes the same time to removed
+Implementation wise is not a single linked list, it takes the same time to remove
 elements from the beginning than from the end
 ```
 initialization [122,772,000 ns]
