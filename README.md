@@ -1,6 +1,9 @@
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai) [![PayPal](https://img.shields.io/badge/PayPal-Donate%20a%20beer-blue.svg)](https://paypal.me/martibayoalemany)
 
-# Algorithms 
+# Algorithms / programming languages
+
+[Laguages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
+
 ## Results
 
 ### Binary gap stats 
