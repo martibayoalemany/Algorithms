@@ -2,7 +2,7 @@
 
 # Algorithms / programming languages
 
-[Laguages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
+[Languages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
 
 ## Results
 
