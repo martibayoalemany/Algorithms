@@ -3,5 +3,6 @@ before_script:
     - add-apt-repository ppa:ubuntu-desktop/ubuntu-make
     - ./scripts/install
 
-script:
-    - ./scripts/stats_algs.sh
+stats_algs:
+    script:
+        - ./scripts/stats_algs.sh
