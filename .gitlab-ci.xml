@@ -1,0 +1,8 @@
+before_script:
+    - apt-get update -y
+    - add-apt-repository ppa:ubuntu-desktop/ubuntu-make
+    - ./scripts/install
+
+stats_algs:
+    script:
+        - ./scripts/stats_algs.sh

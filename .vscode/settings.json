@@ -4,7 +4,8 @@
     "code-runner.executorMap": {
         "c": "gcc $fullFileName -lm && ./a.out",
         "go": "~/.local/share/umake/go/go-lang/bin/go $fileNameWithoutExt",
-        "java": "cd $dir && javac -source 1.8 -target 1.8 -bootclasspath /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar $fileName && java $fileNameWithoutExt"                
+        "java": "cd $dir && javac -source 1.8 -target 1.8 $fileName && java $fileNameWithoutExt"                
+        // "java": "cd $dir && javac -source 1.8 -target 1.8 -bootclasspath /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar $fileName && java $fileNameWithoutExt"                
         //"java": "cd $dir && javac -source 1.9 -target 1.9 $fileName && java  $fileNameWithoutExt"
     },
     

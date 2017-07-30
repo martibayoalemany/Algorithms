@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Sorting {
     private Integer[] tmp_array;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {        
         Integer[] sample_sizes = null;
         if (args != null && args.length > 0)
             sample_sizes = Stream.of(args).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
@@ -28,7 +28,7 @@ public class Sorting {
         final Stream<Integer> sizess = sample_sizes == null ? Stream.of(20_000) : Stream.of(sample_sizes);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
-            for (int shuffler = 1; shuffler <= 3; shuffler++) {
+            for (int shuffler = 1; shuffler <= 1; shuffler++) {
                 check_sorting("selection ", (s) -> selection_sort(s), size, shuffler);
                 check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler);
                 check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler);
@@ -203,6 +203,7 @@ public class Sorting {
         int minValue = Integer.MAX_VALUE;
         int maxValue = Integer.MIN_VALUE;
         for (int i = 0; i < array.length; i++) {
+            // Increases the count of one
             Integer result = map.computeIfPresent(array[i], (k, v) -> v + 1);
             if (result == null)
                 map.put(array[i], 1);
