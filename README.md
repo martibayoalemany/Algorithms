@@ -4,6 +4,10 @@
 
 [Languages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
 
+## Continuous integration
+* .travis.yml for travis in github
+* .gitlab-ci.xml for gitlab
+
 ## Results
 
 ### Binary gap stats 
