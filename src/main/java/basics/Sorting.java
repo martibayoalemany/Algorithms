@@ -10,14 +10,34 @@ public class Sorting {
 
     public static void main(String[] args) {        
         Integer[] sample_sizes = null;
-        if (args != null && args.length > 0)
-            sample_sizes = Stream.of(args).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
-
+        for(String arg : args)
+            System.out.println(arg);
+        if (args != null && args.length > 0) {
+            switch(args[0]) {
+                case "range":
+                    int step = Integer.parseInt(args[1]);
+                    int size = Integer.parseInt(args[2]);
+                    sample_sizes = newIntegerArray(step, step, size);
+                    break;
+                default:
+                    sample_sizes = Stream.of(args).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
+                    System.out.println(args[0]);
+                    break;
+            }
+        }
+        if(sample_sizes != null)
+            for(int size : sample_sizes)
+                System.out.printf("%d\t", size);
+        System.out.println("------------------");
         new Sorting().execute_sorting(sample_sizes);
     }
 
-    public Integer[] newIntegerArray(int size) {
+    public static Integer[] newIntegerArray(int size) {
         return Stream.iterate(1, n -> n + 1).limit(size).toArray(Integer[]::new);
+    }
+
+    public static Integer[] newIntegerArray(final int start, final int step, int size) {
+        return Stream.iterate(start, n -> n + step).limit(size / step).toArray(Integer[]::new);
     }
 
     public void execute_sorting(Integer[] sample_sizes) {
@@ -276,6 +296,8 @@ public class Sorting {
     }
 
     private void __assert_sorted(final Integer[] array, int start, int end) {
+        // there is no definition for sorting only one element
+        if(start == end) return;
         Predicate<Integer> isNotSorted = i -> 0 < i - 1 && i < array.length
                 && ((Integer) array[i - 1]).compareTo((Integer) array[i]) > 0;
         if (IntStream.range(start, end).mapToObj(i -> array[i]).anyMatch(isNotSorted)) {
