@@ -4,6 +4,17 @@
 
 [Languages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
 
+# Statistics with jupyter
+
+```
+source scripts/activate
+# Setups the python environment accordingly
+py_env 
+cd stats
+jupyter notebook
+
+```
+
 ## Continuous integration
 * *.travis.yml* for travis in github
 * *.gitlab-ci.xml* for gitlab
@@ -125,6 +136,11 @@ There seems to be some issues with tgetent which get solved by installing libnat
 ```
 usr/lib/jni/libnative-platform-curses.so: undefined symbol: tgetent
 sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
+```
+
+Otherwise this command should update to the latest version of gradle. This solved the previous error in a clean system.
+```
+gradlew
 ```
 
 ### Setting maven (if needed)
