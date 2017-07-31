@@ -34,5 +34,6 @@ branches:
   except: 
     - gh-pages
 script:
+  - source /home/travis/build/martibayoalemany/Algorithms/scripts/activate && java_sorting_check
   - /home/travis/build/martibayoalemany/Algorithms/scripts/stats_algs.sh /home/travis/build/martibayoalemany/Algorithms/scripts
   - echo $? 
