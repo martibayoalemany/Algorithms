@@ -4,6 +4,24 @@ function idem() {
   echo $1
 }
 
+function java_sorting_check() {
+    cd $ROOT_PATH/src/java/basics && \
+    javac Sorting.java && \
+    java Sorting range 10000 2000000
+}
+
+function docker_build() {
+   sudo -s docker build -t registry.gitlab.com/martibayoalemany/algorithms:latest $ROOT_PATH   
+}
+
+function docker_push() {
+   sudo -s docker build -t registry.gitlab.com/martibayoalemany/algorithms:latest $ROOT_PATH   
+}
+
+function docker_run_java_sorting() {
+   sudo -s docker run -it registry.gitlab.com/martibayoalemany/algorithms:latest bash -c "source /git/scripts/activate && java_sorting_check"
+}
+
 #
 # Travis does not has coreutils/realpath
 ######
