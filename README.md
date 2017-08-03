@@ -15,7 +15,7 @@ jupyter notebook
 
 ```
 
-[Pyplot stats for java and sorting](stats/Java_sorting.md)
+[Pyplot stats for java and sorting](stats/Java_sorting.html)
 
 ## Continuous integration
 * *.travis.yml* for travis in github
