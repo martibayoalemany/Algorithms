@@ -16,6 +16,10 @@ public class Sorting {
         if (args != null && args.length > 0) {
             switch(args[0]) {
                 case "range":
+                    if(args.length < 2) {
+                        System.out.println("Parameters step and size are required");
+                        return;
+                    }
                     int step = Integer.parseInt(args[1]);
                     int size = Integer.parseInt(args[2]);
                     sample_sizes = newIntegerArray(step, step, size);
@@ -50,31 +54,32 @@ public class Sorting {
         final Stream<Integer> sizess = sample_sizes == null ? Stream.of(20_000) : Stream.of(sample_sizes);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
-            for (int shuffler = 1; shuffler <= 1; shuffler++) {
-                if(long_running) {
-                    check_sorting("selection ", (s) -> selection_sort(s), size, shuffler);
-                    check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler);
-                    check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler);
-                    check_sorting("shell ", (s) -> shell_sort(s), size, shuffler);
+            for (int shuffler = 1; shuffler <= 1; shuffler+=1) {                
+                for(boolean shuffle_constant : new boolean[]{false, true}) {
+                    if(long_running) {
+                        check_sorting("selection ", (s) -> selection_sort(s), size, shuffler, shuffle_constant);
+                        check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler, shuffle_constant);
+                        check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler, shuffle_constant);
+                        check_sorting("shell ", (s) -> shell_sort(s), size, shuffler, shuffle_constant);
+                    }                
+                
+                    check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler, shuffle_constant);
+                    check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler, shuffle_constant);
+                    check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler, shuffle_constant);
+                    check_sorting("Linked Hashmap", (s) -> linked_hash_map_sort(s), size, shuffler, shuffle_constant);
+                
+                    // Stream + parallel + Sort
+                    Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
+                        public void accept(Integer[] arrays) {
+                            LinkedList<Integer> list = new LinkedList<>();
+                            Stream.of(arrays).parallel().sorted().forEachOrdered(list::add);
+                            int i = 0;
+                            for (Integer item : list)
+                                arrays[i++] = item;
+                        }
+                    };
+                    check_sorting("Stream + parallel + sort", stream_parallel_sort, size, shuffler, shuffle_constant);
                 }
-                check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler);
-                check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler);
-                check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler);
-                check_sorting("Linked Hashmap", (s) -> linked_hash_map_sort(s), size, shuffler);
-
-                // Stream + parallel + Sort
-                Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
-                    public void accept(Integer[] arrays) {
-                        LinkedList<Integer> list = new LinkedList<>();
-                        Stream.of(arrays).parallel().sorted().forEachOrdered(list::add);
-                        int i = 0;
-                        for (Integer item : list)
-                            arrays[i++] = item;
-                    }
-                };
-
-                check_sorting("Stream + parallel + sort", stream_parallel_sort, size, shuffler);
-
             }
 
         });
@@ -87,14 +92,16 @@ public class Sorting {
         for(String line : timings.stream().sorted((a,b) -> a.getMem().compareTo(b.getMem())).map(Timing::toString).toArray(String[]::new)) 
             System.out.printf(line);
     }
-
-    private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size,
-            final int shuffler_factor) {
+    
+    private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size, final int shuffler_factor, final boolean shuffle_constant) {        
         Integer[] array = newIntegerArray(size);
-        String dataKind = String.format("/ %d", shuffler_factor);
-
-        shuffle(array, shuffler_factor);
-
+        String dataKind = String.format("/ %d (%s) ", shuffler_factor, shuffle_constant? "const":"n_const");
+        
+        if(shuffle_constant)
+            shuffle_constant(array, shuffler_factor);      
+        else
+            shuffle(array, shuffler_factor);      
+        
         try (Timing t = new Timing(msg, dataKind, size)) {
             consumer.accept(array);
         }
@@ -292,6 +299,29 @@ public class Sorting {
             array[index] = array[i];
             array[i] = tmp;
         }
+    }
+
+    private static LinkedList<Integer> random_list;
+    static {
+        random_list = new LinkedList<>();
+    }
+
+    /**
+     * It does keep the already generated shuffled list
+     */
+    private void shuffle_constant(Integer[] array, int partial_factor) {
+        if(random_list.size() == 0) {
+            shuffle(array, partial_factor);
+            Stream.of(array).forEach(random_list::add);
+        }
+
+        Integer increment = random_list.size() - array.length;
+        if(increment > 0) {
+            Integer[] newValues = newIntegerArray(increment);
+            shuffle(newValues, partial_factor);
+            Stream.of(newValues).forEach(random_list::add);
+        }
+        array = random_list.toArray(new Integer[0]);
     }
 
     private void assert_sorted(final Integer[] array, int limit) {

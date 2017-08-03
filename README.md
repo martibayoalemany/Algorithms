@@ -67,9 +67,8 @@ Removing 10,000 elements 200,000 -> 210,000  [658,547,000 ns]
 ```
 
 #### LinkedList
-Implementation wise is not a single linked list, it takes the same time to remove
-elements from the beginning than from the end
-* *TODO*  Check the code, timings might be wrong there
+Acording to the documentation a LinkedList is a doubly linked list
+
 ```
 initialization [122,772,000 ns]
 Removing 10,000 elements 10,000 -> 20,000  [351,818,000 ns]
@@ -133,18 +132,6 @@ gradlew build
 gradlew clean test
 ```
 
-### Gradle and ubuntu 17
-There seems to be some issues with tgetent which get solved by installing libnative-jni manually
-```
-usr/lib/jni/libnative-platform-curses.so: undefined symbol: tgetent
-sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
-```
-
-Otherwise this command should update to the latest version of gradle. This solved the previous error in a clean system.
-```
-gradlew
-```
-
 ### Setting maven (if needed)
 ```
 cat ~/.mavenrc
@@ -155,4 +142,16 @@ export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
 ```
 mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato.cms.weka:weka-stable:3.8.1:jar:sources
 gradle getRequirements
+```
+
+### Gradle and ubuntu 17
+There seems to be some issues with tgetent which get solved by installing libnative-jni manually
+```
+usr/lib/jni/libnative-platform-curses.so: undefined symbol: tgetent
+sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
+```
+
+Otherwise this command should update to the latest version of gradle. This solved the previous error in a clean system.
+```
+gradlew
 ```

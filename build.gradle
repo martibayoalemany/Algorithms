@@ -30,7 +30,7 @@ dependencies {
     testCompile 'org.hamcrest:hamcrest-library:1.3'
 }
 
-task downloadDependencies(type: Copy) {
+task download_requirements(type: Copy) {
     from sourceSets.main.runtimeClasspath
     into 'requirements_java/'
 }

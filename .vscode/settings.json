@@ -8,7 +8,9 @@
         // "java": "cd $dir && javac -source 1.8 -target 1.8 -bootclasspath /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar $fileName && java $fileNameWithoutExt"                
         //"java": "cd $dir && javac -source 1.9 -target 1.9 $fileName && java  $fileNameWithoutExt"
     },
-    
+    "files.exclude": {
+        "build.gradle": true
+    },    
     "code-runner.cwd": "/home/username/src/src-custom/Algorithms/src/main/java",
     "code-runner.enableAppInsights": true,
     "code-runner.saveFileBeforeRun": true,
@@ -17,9 +19,14 @@
     /*"files.exclude": {
         ".java_8_src": true
     },*/
+    "editor.codeLens" : false,
     "EndOfLineFormatting": {
     "regexpPattern" : "\\\\r\\\\n",
     "replaceChar" : "\n"
-    }    
-
+    },
+    "java.externalDependencies": [     
+        "com.google.guava:guava:21.0",
+        "nz.ac.waikato.cms.weka:weka-stable:3.8.1",
+        "junit:junit:4.12" 
+    ]
 }
