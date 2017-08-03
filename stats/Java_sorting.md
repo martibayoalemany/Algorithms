@@ -175,7 +175,7 @@ py.iplot(fig)
 
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/104.embed" height="525px" width="100%"></iframe>
-![fig 104](https://plot.ly/~martibayoalemany/104.embed)
+![fig 104](figures/104_stream_parallel_sort.png)
 
 
 
