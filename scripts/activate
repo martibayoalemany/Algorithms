@@ -5,6 +5,36 @@ function idem() {
 }
 
 #
+# Performance checks
+######
+function java_sorting_check() {
+    export stats_file=$ROOT_PATH/stats/java_sorting_`hostname -i`_`date -u | tr ' ' '_'`.txt
+    echo --- $stats_file ---
+    cd $ROOT_PATH/src/main/java/basics && \
+    javac Sorting.java && \
+    java Sorting range 10000 20000000 | tee -a $stats_file
+}
+
+#
+# Docker / gitlab
+######
+function docker_build() {
+   sudo -s docker build -t registry.gitlab.com/martibayoalemany/algorithms:latest $ROOT_PATH   
+}
+
+function docker_push() {
+   sudo -s docker build -t registry.gitlab.com/martibayoalemany/algorithms:latest $ROOT_PATH   
+}
+
+function docker_run_bash() {
+   sudo -s docker run -v $ROOT_PATH/stats:/git/stats -it registry.gitlab.com/martibayoalemany/algorithms:latest bash 
+}
+
+function docker_run_java_sorting() {
+   sudo -s docker run -v $ROOT_PATH/stats:/git/stats -it registry.gitlab.com/martibayoalemany/algorithms:latest bash -c "source /git/scripts/activate && java_sorting_check"
+}
+
+#
 # Travis does not has coreutils/realpath
 ######
 

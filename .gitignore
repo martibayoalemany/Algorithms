@@ -31,3 +31,4 @@ src/main/nodejs/node_modules
 .venv3
 .venv35
 target/*
+*.ipynb

@@ -4,7 +4,7 @@
 
 [Languages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
 
-# Statistics with jupyter
+## Statistics with jupyter
 
 ```
 source scripts/activate
@@ -14,6 +14,8 @@ cd stats
 jupyter notebook
 
 ```
+
+[Pyplot stats for java and sorting](stats/Java_sorting.md)
 
 ## Continuous integration
 * *.travis.yml* for travis in github
