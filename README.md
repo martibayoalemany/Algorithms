@@ -14,6 +14,7 @@ cd stats
 jupyter notebook
 
 ```
+[Languages ranking](stats/java_sorting.md)
 
 ## Continuous integration
 * *.travis.yml* for travis in github
@@ -36,7 +37,7 @@ real 0:00.11    user 0.08        sys 0.02       c_sharp
 real 0:00.13    user 0.11        sys 0.00       nodejs
 real 0:00.13    user 0.10        sys 0.02       java
 real 0:00.39    user 0.33        sys 0.04       perl6
-real 0:00.31    user 0.23        sys 0.15       matlab
+real 0:00.31    user 0.23        sys 0.15       octave
 real 0:00.61    user 0.58        sys 0.01       nodejs_slow
 ```
 
