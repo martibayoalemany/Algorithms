@@ -91,7 +91,7 @@ py.iplot(fig)
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/96.embed" height="525px" width="100%"></iframe>
 
-![](https://plot.ly/~martibayoalemany/96.embed)
+![96](https://plot.ly/~martibayoalemany/96.embed)
 
 
 ```python
@@ -113,7 +113,7 @@ py.iplot(fig)
 
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/98.embed" height="525px" width="100%"></iframe>
-![](https://plot.ly/~martibayoalemany/98.embed)
+![98][https://plot.ly/~martibayoalemany/98.embed]
 
 
 
@@ -134,8 +134,7 @@ py.iplot(fig)
 
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/100.embed" height="525px" width="100%"></iframe>
-![](https://plot.ly/~martibayoalemany/100.embed)
-
+![100][https://plot.ly/~martibayoalemany/100.embed]
 
 
 ```python
