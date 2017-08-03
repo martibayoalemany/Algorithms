@@ -154,7 +154,7 @@ py.iplot(fig)
 
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/102.embed" height="525px" width="100%"></iframe>
-![fig 102](https://plot.ly/~martibayoalemany/102.embed)
+![fig 102](figures/102_arrays_parallel_sort.png)
 
 
 
