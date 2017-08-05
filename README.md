@@ -59,7 +59,7 @@ Removing 10,000 elements 200,000 -> 210,000  [658,547,000 ns]
 ```
 
 #### LinkedList
-Acording to the documentation a LinkedList is a doubly linked list
+According to the documentation a LinkedList is a doubly linked list
 
 ```
 initialization [122,772,000 ns]
