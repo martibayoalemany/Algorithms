@@ -15,6 +15,9 @@ jupyter notebook
 
 ```
 
+## Sorting algorithms and java
+![Comparison](https://plot.ly/~martibayoalemany/298.embed)
+
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
 
 ## Continuous integration
@@ -42,20 +45,6 @@ real 0:00.31    user 0.23        sys 0.15       octave
 real 0:00.61    user 0.58        sys 0.01       nodejs_slow
 ```
 
-#### Sorting (Java)
-```
---- Initialization                                          ---	 [0 s / 264,000,000 ns / 263 ms]
---- Convert to array                                        ---	 [0 s / 1,000,000 ns / 1 ms]
---- Java Arrays.sort of size 20000                          ---	 [0 s / 78,000,000 ns / 78 ms]
---- Custom insertion sort of size 20000                     ---	 [0 s / 926,000,000 ns / 926 ms]
---- Custom insertion sort 1 of size 20000                   ---	 [0 s / 645,000,000 ns / 645 ms]
---- Custom insertion sort 2 of size 20000                   ---	 [0 s / 671,000,000 ns / 671 ms]
---- Custom selection sort of size 20000 - full              ---	 [1 s / 288,000,000 ns / 1,288 ms]
---- Custom bubble sort of size 20000 - full                 ---	 [2 s / 511,000,000 ns / 2,511 ms]
---- Custom bubble sort of size 20000 - partial              ---	 [0 s / 212,000,000 ns / 212 ms]
---- Custom selection sort of size 20000 - partial           ---	 [1 s / 134,000,000 ns / 1,134 ms]
---- Shell sort 20000 - partial                              ---	 [0 s / 53,000,000 ns / 53 ms]
-```
 
 ### ArrayList vs LinkedList (Java)
 ####  ArrayList
@@ -84,18 +73,6 @@ ext install code-runner
 * ctrl-alt-m - stop execution 
 * ctrl-alt-k - run custom command 
 
-
-### Code navigation
-```
-sudo apt install exuberant-ctags
-ctags -R -f .tags /usr/include
-sudo apt install openjdk-9-source
-sudo mkdir -p /usr/lib/jvm/openjdk-9/lib/src/
-sudo unzip /usr/lib/jvm/openjdk-9/lib/src.zip -d /usr/lib/jvm/openjdk-9/lib/src/
-ctags -R -fa .tags  /usr/lib/jvm/openjdk-8/src
-ctags -R -fa .tags /usr/lib/jvm/openjdk-9/lib/src
-sudo -s ln -s  /usr/lib/jvm/openjdk-8/src .java_8_src
-```
 
 ### Compile  (C)
 ```
