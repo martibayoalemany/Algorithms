@@ -4,3 +4,4 @@ jupyter-client==5.1.0
 jupyter-console==5.1.0
 jupyter-core==4.3.0
 scipy==0.19.1
+plotly==2.0.12
