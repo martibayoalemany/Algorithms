@@ -14,6 +14,7 @@ cd stats
 jupyter notebook
 
 ```
+![sort comparison](stats/figures/sort_comparison.png)
 
 ## Sorting algorithms and java
 ![Comparison](https://plot.ly/~martibayoalemany/298.embed)
