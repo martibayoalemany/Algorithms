@@ -1,3 +1,4 @@
+
 ### Initial code to strip the fields with Regex
 ```
 import re
@@ -20,29 +21,28 @@ data = filter_data(data)
 ```python
 # Using strip to filter the values in the txt
 import pandas as pd
+import numpy as np
+def read_stats(data_file):
+    data = pd.read_csv(data_file, sep="|")
+    data.columns = [ x.strip() for x in data.columns]
 
-data_file = "java_sorting_127.0.1.1_Di_1._Aug_07:39:03_UTC_2017"
-data = pd.read_csv(data_file + ".txt", sep="|")
-data.columns = [ x.strip() for x in data.columns]
+    # Filter integer indexes
+    str_idxs = [idx for idx,dtype in zip(range(0,len(data.dtypes)), data.dtypes) if dtype != 'int64' ]
 
-# Filter integer indexes
-str_idxs = [idx for idx,dtype in zip(range(0,len(data.dtypes)), data.dtypes) if dtype != 'int64' ]
+    # Strip fields
+    for i in str_idxs:    
+        key = data.columns[i]
+        if data[key].dtype == np.dtype('str'):
+            data.loc[:,key] = [ x.strip() for x in data.loc[:, key]]
+    return data
 
-# Strip fields
-for i in str_idxs:    
-    data.loc[:,data.columns[i]] = [ x.strip() for x in data.loc[:, data.columns[i]]]
-
+data = read_stats("java_sorting_127.0.1.1_Di_1._Aug_07:39:03_UTC_2017.txt")
+data.to_csv("java_sorting_127.0.1.1_Di_1._Aug_07:39:03_UTC_2017.csv")
 ```
 
 
 ```python
-data.to_csv(data_file + ".csv")
-```
-
-
-```python
- [x for x in zip(range(0, len(data.columns)),data.columns)]
-    
+ [x for x in zip(range(0, len(data.columns)),data.columns)]   
 ```
 
 
@@ -89,9 +89,9 @@ py.iplot(fig)
 
 
 
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/96.embed" height="525px" width="100%"></iframe>
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/154.embed" height="525px" width="100%"></iframe>
 
-![96](https://plot.ly/~martibayoalemany/96.embed)
+
 
 
 ```python
@@ -112,8 +112,8 @@ py.iplot(fig)
 
 
 
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/98.embed" height="525px" width="100%"></iframe>
-![98](https://plot.ly/~martibayoalemany/98.embed)
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/156.embed" height="525px" width="100%"></iframe>
+
 
 
 
@@ -133,28 +133,8 @@ py.iplot(fig)
 
 
 
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/100.embed" height="525px" width="100%"></iframe>
-![100](https://plot.ly/~martibayoalemany/100.embed)
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/158.embed" height="525px" width="100%"></iframe>
 
-
-```python
-alg = algorithms.pop()
-idxs = filter_by(data, 'name', alg)
-X = data.loc[idxs, 'elements']
-Y = data.loc[idxs, 'duration_ms']
-plot_data = [Bar(x = X, y = Y, name=alg)]
-layout = Layout(title= alg + ' performance (java) ',
-                xaxis=dict(title='Elements'),
-                yaxis=dict(title='Time'))
-fig = Figure(data=plot_data, layout=layout)
-py.iplot(fig)
-```
-
-
-
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/102.embed" height="525px" width="100%"></iframe>
-![fig 102](figures/102_arrays_parallel_sort.png)
 
 
 
@@ -174,9 +154,116 @@ py.iplot(fig)
 
 
 
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/104.embed" height="525px" width="100%"></iframe>
-![fig 104](figures/104_stream_parallel_sort.png)
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/160.embed" height="525px" width="100%"></iframe>
 
+
+
+
+```python
+alg = algorithms.pop()
+idxs = filter_by(data, 'name', alg)
+X = data.loc[idxs, 'elements']
+Y = data.loc[idxs, 'duration_ms']
+plot_data = [Bar(x = X, y = Y, name=alg)]
+layout = Layout(title= alg + ' performance (java) ',
+                xaxis=dict(title='Elements'),
+                yaxis=dict(title='Time'))
+fig = Figure(data=plot_data, layout=layout)
+py.iplot(fig)
+```
+
+
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/162.embed" height="525px" width="100%"></iframe>
+
+
+
+## The same stats as before but with 9 Million data
+
+
+```python
+data2 = read_stats("java_sorting_127.0.1.1_Fr_4._Aug_23:59:33_UTC_2017.txt")
+algorithms = set(data2.loc[:, 'name'])
+alg = algorithms.pop()
+idxs = filter_by(data2, 'name', alg)
+X = data2.loc[idxs, 'elements']
+Y = data2.loc[idxs, 'duration_ms']
+plot_data = [Bar(x = X, y = Y, name=alg)]
+layout = Layout(title= alg + ' performance (java) ',
+                xaxis=dict(title='Elements'),
+                yaxis=dict(title='Time'))
+fig = Figure(data=plot_data, layout=layout)
+py.iplot(fig)
+```
+
+
+```python
+alg = algorithms.pop()
+idxs = filter_by(data2, 'name', alg)
+X = data2.loc[idxs, 'elements']
+Y = data2.loc[idxs, 'duration_ms']
+plot_data = [Bar(x = X, y = Y, name=alg)]
+layout = Layout(title= alg + ' performance (java) ',
+                xaxis=dict(title='Elements'),
+                yaxis=dict(title='Time'))
+fig = Figure(data=plot_data, layout=layout)
+py.iplot(fig)
+```
+
+
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/166.embed" height="525px" width="100%"></iframe>
+
+
+
+
+```python
+alg = algorithms.pop()
+idxs = filter_by(data2, 'name', alg)
+X = data2.loc[idxs, 'elements']
+Y = data2.loc[idxs, 'duration_ms']
+plot_data = [Bar(x = X, y = Y, name=alg)]
+layout = Layout(title= alg + ' performance (java) ',
+                xaxis=dict(title='Elements'),
+                yaxis=dict(title='Time'))
+fig = Figure(data=plot_data, layout=layout)
+py.iplot(fig)
+```
+
+
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/168.embed" height="525px" width="100%"></iframe>
+
+
+
+
+```python
+alg = algorithms.pop()
+idxs = filter_by(data2, 'name', alg)
+X = data2.loc[idxs, 'elements']
+Y = data2.loc[idxs, 'duration_ms']
+plot_data = [Bar(x = X, y = Y, name=alg)]
+layout = Layout(title= alg + ' performance (java) ',
+                xaxis=dict(title='Elements'),
+                yaxis=dict(title='Time'))
+fig = Figure(data=plot_data, layout=layout)
+py.iplot(fig)
+```
+
+
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/170.embed" height="525px" width="100%"></iframe>
+
+
+
+
+```python
+
+```
 
 
 ```python

@@ -55,7 +55,7 @@ public class Sorting {
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
             for (int shuffler = 1; shuffler <= 1; shuffler+=1) {                
-                for(boolean shuffle_constant : new boolean[]{true}) {
+                for(boolean shuffle_constant : new boolean[]{false}) {
                     if(long_running) {
                         check_sorting("selection ", (s) -> selection_sort(s), size, shuffler, shuffle_constant);
                         check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler, shuffle_constant);
