@@ -14,6 +14,7 @@ cd stats
 jupyter notebook
 
 ```
+![sort comparison](stats/figures/sort_comparison.png)
 
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
 
