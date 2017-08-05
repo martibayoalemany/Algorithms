@@ -16,6 +16,7 @@ jupyter notebook
 ```
 
 ## Sorting algorithms and java
+![Comparison](stats/figures/sort_comparison.png)
 ![Comparison](https://plot.ly/~martibayoalemany/298.embed)
 
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
