@@ -16,7 +16,7 @@ jupyter notebook
 ```
 
 ## Sorting algorithms and java
-![Comparison](https://plot.ly/~martibayoalemany/298gi.embed)
+![Comparison](stats/figures/sort_comparison.png) 
 
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
 
@@ -64,15 +64,6 @@ Removing 10,000 elements 10,000 -> 20,000  [351,818,000 ns]
 Removing 10,000 elements 100,000 -> 110,000  [139,877,000 ns]
 Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
 ```
-
-### Code runner (Visual Studio Code)
-```
-ext install code-runner
-```
-* ctrl-alt-n - run 
-* ctrl-alt-m - stop execution 
-* ctrl-alt-k - run custom command 
-
 
 ### Compile  (C)
 ```
