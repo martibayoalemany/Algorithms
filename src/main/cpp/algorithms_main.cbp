@@ -93,6 +93,9 @@
 		<Unit filename="/home/username/src/src-gitlab/Algorithms/src/main/cpp/basics/Sorting.cpp">
 			<Option target="algorithms_main"/>
 		</Unit>
+		<Unit filename="/home/username/src/src-gitlab/Algorithms/src/main/cpp/basics/Sorting.h">
+			<Option target="algorithms_main"/>
+		</Unit>
 		<Unit filename="/home/username/src/src-gitlab/Algorithms/src/main/cpp/utils/Utils.cpp">
 			<Option target="algorithms_main"/>
 		</Unit>
