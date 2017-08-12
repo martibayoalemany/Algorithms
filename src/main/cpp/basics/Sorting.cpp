@@ -1,18 +1,18 @@
 
 #include "Sorting.h"
 #include <regex>
-#include <iostream>
 #include <fstream>
 #include <chrono>
 #include <boost/filesystem.hpp>
 #include <codecvt>
+#include <algorithm>
 #include "../utils/Utils.h"
 
 using namespace std;
 using namespace chrono;
 
-vector<int> Sorting::read_numbers_file() {
-    vector<int> vector;
+void Sorting::read_numbers_file() {
+
     const string & txt_data = Utils::getCurrentDir();
     cout << " Opening file for " << txt_data << endl;
     using tl_point = high_resolution_clock::time_point;
@@ -29,7 +29,7 @@ vector<int> Sorting::read_numbers_file() {
         string line;
         while(getline(dataFile, line)) {
             cout << line << endl;
-            vector.push_back(std::atoi(line.c_str()));
+            m_vector.push_back(atoi(line.c_str()));
         }
 
         tl_point end = hrc::now();
@@ -37,9 +37,36 @@ vector<int> Sorting::read_numbers_file() {
     } catch(std::runtime_error & ex) {
         cout << ex.what() << endl;
     }
-    return vector;
-}
-int main(int argc, char * argv[]) {
-    vector<int> numbers = read_numbers_file();
 
+}
+
+int main(int argc, char * argv[]) {
+    unique_ptr<Sorting> sorting = make_unique<Sorting>();
+    vector<int>& v = sorting.get()->getVector();
+    using cl = chrono::high_resolution_clock;
+    using cl_point = cl::time_point;
+    cl_point start = cl::now();
+
+    {
+        // Print the first 20 elements read from the file
+        vector<int>::iterator it = v.begin();
+        for (int j = 0; j < 20 && it < v.end(); j++, it++)
+            cout << *it << "\t";
+    }
+
+    cout << "===========" << endl;
+    {
+        sort(v.begin(), v.end(), less_equal<int>());
+        cl_point end = cl::now();
+        cout << duration_cast<milliseconds>(end - start).count() << " ms" << endl;
+
+        for (int i = 10000; i < 100000; i += 10000) {
+            auto start = v.cbegin();
+            cout << i << endl;
+            for (int j = 0; j < 20 && start != v.cend(); j++, start++) {
+                cout << *start << "\t";
+            }
+            cout << " ------------- " << endl;
+        }
+    }
 }

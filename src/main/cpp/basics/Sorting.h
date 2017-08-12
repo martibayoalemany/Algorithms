@@ -1,14 +1,26 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
+#include <memory>
+
 using namespace std;
 
 class Sorting {
-
+private:
+    vector<int> m_vector;
+    void read_numbers_file();
 public:
-    static string getCurrentDir();
+    Sorting() {
+        read_numbers_file();
+    }
 
-    static const string getDataFile(basic_string<char> binary_path);
+    virtual ~Sorting() {
+        cout << "Sorting destructor" << endl;
+    }
 
-    static const string getDataFile();
+    vector<int> & getVector()  {
+        return m_vector;
+    }
+
 };
