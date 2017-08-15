@@ -8,8 +8,7 @@
 
 ```
 source scripts/activate
-# Setups the python environment accordingly
-py_env 
+# Setups the python environment accordingly 
 cd stats
 jupyter notebook
 
