@@ -16,6 +16,7 @@ jupyter notebook
 
 ## Sorting algorithms and java
 TO-FIX: Stream + Parallel + Sort - timing is not the real one 
+
 TO-DO: sqlite3 with an index sorts faster than java in memory, check the basics for data and in-memory solutions
 
 ![Comparison](stats/figures/sort_comparison.png) 
