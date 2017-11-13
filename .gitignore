@@ -34,3 +34,4 @@ target/*
 *.ipynb
 *.jar
 data/random_numbers.txt
+src/.idea
