@@ -2,8 +2,6 @@
 
 # Algorithms / programming languages
 
-[Languages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
-
 ## Statistics with jupyter
 
 ```
