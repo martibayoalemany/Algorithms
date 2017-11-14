@@ -23,6 +23,7 @@
     "EndOfLineFormatting": {
     "regexpPattern" : "\\\\r\\\\n",
     "replaceChar" : "\n"
+<<<<<<< HEAD
     },
     "java.externalDependencies": [     
         "com.google.guava:guava:21.0",
@@ -54,4 +55,8 @@
         "type_traits": "cpp",
         "typeinfo": "cpp"
     }
+=======
+    }    
+
+>>>>>>> 3537cc7cb8ed7a65767fc70657d78c4c7be1a04b
 }

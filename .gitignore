@@ -32,3 +32,4 @@ target/*
 *.jar
 data/random_numbers.txt
 .idea
+.idea/*
