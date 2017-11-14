@@ -1,4 +1,4 @@
-[![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai) 
+[![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai)
 # Algorithms / programming languages
 
 [Languages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
@@ -15,7 +15,11 @@ jupyter notebook
 ```
 
 ## Sorting algorithms and java
-![Comparison](stats/figures/sort_comparison.png) 
+TO-FIX: Stream + Parallel + Sort - timing is not the real one
+
+TO-DO: sqlite3 with an index sorts faster than java in memory, check the basics for data and in-memory solutions
+
+![Comparison](stats/figures/sort_comparison.png)
 
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
 

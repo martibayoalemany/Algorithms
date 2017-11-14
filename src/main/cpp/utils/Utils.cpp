@@ -5,6 +5,9 @@
 
 using namespace std;
 
+/**
+ * @return /home/username/src/src-gitlab/Algorithms/src/main/cpp/bin/algorithms_main
+ */
 string Utils::getCurrentDir() {
     int len = 10000;
     char* pBuf = new char[len];
@@ -22,7 +25,8 @@ const string Utils::getDataFile() {
 
 const string Utils::getDataFile(string binary_path) {
     // Cut binary path one level
-    regex pieces_regex("(.*)\\/(.*)\\/(.*)", regex_constants::icase);
+    // /home/username/src/src-gitlab/Algorithms/src/main/cpp/bin/algorithms_main
+    regex pieces_regex("(.*)\\/(.*)\\/(.*)\\/(.*)\\/(.*)\\/(.*)", regex_constants::icase);
     cmatch pieces_match;
     if (regex_match(binary_path.c_str(), pieces_match, pieces_regex)) {
         for (size_t i = 0; i < pieces_match.size(); ++i) {
