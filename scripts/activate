@@ -3,14 +3,12 @@
 function idem() {
   echo $1
 }
-#
-# Travis does not has coreutils/realpath
-######
 
 function set_env() {
     export PYTHON_27=0
     export PYTHON_35=1
 
+    #  Travis does not has coreutils/realpath
     if  ! which realpath >/dev/null; then
         echo  'coreutils is not installed, realpath and dirname are not available'
         export SCRIPT_PATH=${BASH_SOURCE%/*}
@@ -35,39 +33,43 @@ function set_env() {
         echo REQUIREMENTS_JAVA_PATH: $REQUIREMENTS_JAVA_PATH
         echo --------------------------
     fi
+
+    export UID=`date -u | tr ' ' '_'`
 }
 
 ##
-#  Dependencies (pip, grape, mvn)
+#  Dependencies
 ####
 function py_init() {
 
-    touch ${ROOT_PATH}/requirements.txt
+    cd $ROOT_PATH
+
+    # ------------ python 3 -------------------
     touch ${ROOT_PATH}/requirements_3_5.txt
 
-    if ! which python3  && PYTHON_35 > /dev/null; then
+    if ! which python3  && [[ $PYTHON_35 ]] > /dev/null; then
        sudo apt install python3 -y
     fi
     
-    if ! which pyvenv && PYTHON_35 > /dev/null; then
+    if ! which pyvenv && [[ $PYTHON_35 ]] > /dev/null; then
        sudo apt install python3-venv
     fi
 
-    if ! which pip > /dev/null; then
-       sudo apt install python-pip -y
-    fi
-
-    cd $ROOT_PATH
-    # python 3
-    if ! -e ~/.venv3 && PYTHON_35; then
-        python3 -m venv ~/.venv3 
+    if ! -e ~/.venv3 && [[ $PYTHON_35 ]]; then
+        python3 -m venv ~/.venv3
     fi
     source ~/.venv3/bin/activate
     pip install --upgrade pip
     pip install -r requirements_3_5.txt
 
-    if -e ${ROOT_PATH}/requirements.txt && PYTHON_27 >/dev/null; then
-        # python 2.7
+
+    # ------------ python 2.7 -------------------
+    touch ${ROOT_PATH}/requirements.txt
+    if ! which pip > /dev/null; then
+           sudo apt install python-pip -y
+        fi
+
+    if -e ${ROOT_PATH}/requirements.txt &&  [[ $PYTHON_27 ]] >/dev/null; then
         if [ ! -e ~/.venv27 ]; then
             virtualenv ~/.venv27
         fi

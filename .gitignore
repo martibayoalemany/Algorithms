@@ -31,5 +31,6 @@ target/*
 *.ipynb
 *.jar
 data/random_numbers.txt
+data/random_numbers.db
 .idea
 .idea/*

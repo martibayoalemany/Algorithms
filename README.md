@@ -1,4 +1,5 @@
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai)
+
 # Algorithms / programming languages
 
 [Languages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
@@ -6,6 +7,7 @@
 ## Statistics with jupyter
 
 ```
+# It loads some functions and sets PYTHON_35 = 1
 source scripts/activate
 # Setups the python environment accordingly
 py_env 
@@ -19,15 +21,10 @@ TO-FIX: Stream + Parallel + Sort - timing is not the real one
 
 TO-DO: sqlite3 with an index sorts faster than java in memory, check the basics for data and in-memory solutions
 
-<<<<<<< HEAD
+
 ![Comparison](stats/figures/sort_comparison.png)
 
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
-=======
-```
-usr/lib/jni/libnative-platform-curses.so: undefined symbol: tgetent
-sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
-```
 
 ### Dependency management (java)
 ```
