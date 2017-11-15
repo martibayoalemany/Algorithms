@@ -1,2 +1,0 @@
---- selection  - Partial of 20,000 elements                    ---	 [1 s / 400,000,000 ns / 1,399 ms]
---- selection  - Partial of 200,000 elements                   ---	 [184 s / 46,000,000 ns / 184,046 ms]
