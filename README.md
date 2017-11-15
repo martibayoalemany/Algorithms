@@ -7,10 +7,10 @@
 ## Statistics with jupyter
 
 ```
-# It loads some functions and sets PYTHON_35 = 1
-source scripts/activate
-# Setups the python environment accordingly
-py_env 
+python3 -m venv ~/.venv3
+source ~/.venv3/bin/activate
+pip install --upgrade pip
+pip install -r requirements_3_5.txt
 cd stats
 jupyter notebook
 
