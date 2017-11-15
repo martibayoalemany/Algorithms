@@ -91,6 +91,7 @@ py.iplot(fig)
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/154.embed" height="525px" width="100%"></iframe>
 
+![Plot 154](https://plot.ly/~martibayoalemany/154.embed")
 
 
 
