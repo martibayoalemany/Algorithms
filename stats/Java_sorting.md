@@ -89,10 +89,6 @@ py.iplot(fig)
 
 
 
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/154.embed" height="525px" width="100%"></iframe>
-
-
-
 
 ```python
 alg = algorithms.pop()
@@ -112,10 +108,6 @@ py.iplot(fig)
 
 
 
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/156.embed" height="525px" width="100%"></iframe>
-
-
-
 
 ```python
 alg = algorithms.pop()
@@ -129,11 +121,6 @@ layout = Layout(title= alg + ' performance (java) ',
 fig = Figure(data=plot_data, layout=layout)
 py.iplot(fig)
 ```
-
-
-
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/158.embed" height="525px" width="100%"></iframe>
 
 
 

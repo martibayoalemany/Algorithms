@@ -1,4 +1,4 @@
-,name,shuffle,elements,duration_ms,p_duration_s,p_duration_ns,memory
+idx,name,shuffle,elements,duration_ms,p_duration_s,p_duration_ns,memory
 0, merge sort                     , 	 / 1      ," 	 10,000       ", 	 90           ,0," 	 88,381,000   ", 	 0          
 1, Arrays.sort                    , 	 / 1      ," 	 10,000       ", 	 22           ,0," 	 22,709,000   ", 	 0          
 2, Arrays.parallelSort            , 	 / 1      ," 	 10,000       ", 	 25           ,0," 	 25,605,000   "," 	 652,768    "
