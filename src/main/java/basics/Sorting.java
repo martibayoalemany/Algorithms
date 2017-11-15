@@ -1,5 +1,3 @@
-package basics;
-
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -11,7 +9,7 @@ public class Sorting {
     private Integer[] tmp_array;
     private boolean long_running;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {        
         Integer[] sample_sizes = null;
         for(String arg : args)
             System.out.println(arg);
@@ -56,20 +54,20 @@ public class Sorting {
         final Stream<Integer> sizess = sample_sizes == null ? Stream.of(20_000) : Stream.of(sample_sizes);
         final List<Integer> sizes = sizess.collect(Collectors.toList());
         sizes.stream().forEach((size) -> {
-            for (int shuffler = 1; shuffler <= 1; shuffler+=1) {
-                for(boolean shuffle_constant : new boolean[]{true}) {
+            for (int shuffler = 1; shuffler <= 1; shuffler+=1) {                
+                for(boolean shuffle_constant : new boolean[]{false}) {
                     if(long_running) {
                         check_sorting("selection ", (s) -> selection_sort(s), size, shuffler, shuffle_constant);
                         check_sorting("insertion ", (s) -> insertion_sort(s), size, shuffler, shuffle_constant);
                         check_sorting("bubble ", (s) -> bubble_sort(s), size, shuffler, shuffle_constant);
                         check_sorting("shell ", (s) -> shell_sort(s), size, shuffler, shuffle_constant);
-                    }
-
+                    }                
+                
                     check_sorting("merge sort ", (s) -> merge_sort(s, 0, s.length), size, shuffler, shuffle_constant);
                     check_sorting("Arrays.sort ", (s) -> Arrays.sort(s), size, shuffler, shuffle_constant);
                     check_sorting("Arrays.parallelSort ", (s) -> Arrays.parallelSort(s), size, shuffler, shuffle_constant);
                     check_sorting("Linked Hashmap", (s) -> linked_hash_map_sort(s), size, shuffler, shuffle_constant);
-
+                
                     // Stream + parallel + Sort
                     Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
                         public void accept(Integer[] arrays) {
@@ -87,23 +85,23 @@ public class Sorting {
         });
 
         System.out.printf("--------- %d sorted measurements (speed) ------- \n", timings.size());
-        for(String line : timings.stream().sorted().map(Timing::toString).toArray(String[]::new))
+        for(String line : timings.stream().sorted().map(Timing::toString).toArray(String[]::new)) 
             System.out.printf(line);
-
+        
         System.out.printf("--------- %d sorted measurements (memory) ------- \n", timings.size());
-        for(String line : timings.stream().sorted((a,b) -> a.getMem().compareTo(b.getMem())).map(Timing::toString).toArray(String[]::new))
+        for(String line : timings.stream().sorted((a,b) -> a.getMem().compareTo(b.getMem())).map(Timing::toString).toArray(String[]::new)) 
             System.out.printf(line);
     }
-
-    private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size, final int shuffler_factor, final boolean shuffle_constant) {
+    
+    private void check_sorting(final String msg, Consumer<Integer[]> consumer, Integer size, final int shuffler_factor, final boolean shuffle_constant) {        
         Integer[] array = newIntegerArray(size);
         String dataKind = String.format("/ %d (%s) ", shuffler_factor, shuffle_constant? "const":"n_const");
-
+        
         if(shuffle_constant)
-            shuffle_constant(array, shuffler_factor);
+            shuffle_constant(array, shuffler_factor);      
         else
-            shuffle(array, shuffler_factor);
-
+            shuffle(array, shuffler_factor);      
+        
         try (Timing t = new Timing(msg, dataKind, size)) {
             consumer.accept(array);
         }
@@ -113,7 +111,7 @@ public class Sorting {
 
     /**
      * It swaps the item with the smallest one in the array, iterating once from 0 to n
-     */
+    */
     private void selection_sort(Integer[] array) {
         int n = array.length;
         for (int i = 0; i < n; i++) {
@@ -144,7 +142,7 @@ public class Sorting {
 
     /**
      * - It iterates from 0 to n and per each iteration from i to n
-     * - It swaps consecutive elements pairwise from i to n
+     * - It swaps consecutive elements pairwise from i to n 
      * - It stops iteration if no element was swapped
      */
     private void bubble_sort(Integer[] array) {
@@ -185,8 +183,8 @@ public class Sorting {
     }
 
     /**
-     * It swaps consecutive items iterating from start to end and in each iteration from i to 0
-     */
+    * It swaps consecutive items iterating from start to end and in each iteration from i to 0 
+    */
     private void insertion_sort(Integer[] array, int start, int end) {
         for (int i = start; i <= end; i++) {
             for (int k = i; k >= 1 && array[k] < array[k - 1]; k--) {
@@ -276,7 +274,7 @@ public class Sorting {
     }
 
     /**
-     * Prints an snapshot of a number of 8 elements from the middle of a :Integer[] array:
+     * Prints an snapshot of a number of 8 elements from the middle of a :Integer[] array: 
      */
     private void snapshot(Integer[] array) {
         try (Timing t = new Timing("Snapshot 8 elements")) {
@@ -302,9 +300,9 @@ public class Sorting {
             array[i] = tmp;
         }
     }
+    
 
-
-
+    
 
     private static LinkedList<Integer> random_list;
     static {
@@ -346,11 +344,11 @@ public class Sorting {
         }
     }
 
-    private static List<Timing> timings;
+    private static List<Timing> timings;    
     private static AtomicBoolean isFirstMessage;
     static {
         isFirstMessage = new AtomicBoolean(false);
-        timings = new ArrayList<Timing>();
+        timings = new ArrayList<Timing>();        
     }
 
     /**
@@ -360,7 +358,7 @@ public class Sorting {
         private final long elements;
         private final String name;
         private final String dataKind;
-        private final String message;
+        private final String message;        
 
         private long lstart;
         private long lend;
@@ -371,7 +369,7 @@ public class Sorting {
         private long memUsedAfter;
         private String formatHeader;
         private String formatValue;
-        private int[] valuesFormatWidth;
+        private int[] valuesFormatWidth;        
 
         public Long getMillis() {
             return lend - lstart;
@@ -393,7 +391,7 @@ public class Sorting {
 
         private String repeat(int count, String with) {
             return new String(new char[count]).replace("\0", with);
-        }
+        }        
 
         public Timing(String name, String dataKind, int elements) {
             this.elements = elements;
@@ -422,7 +420,7 @@ public class Sorting {
             System.out.printf(formatHeader, "name", "shuffle", "elements", "duration_ms", "p_duration_s",
                     "p_duration_ns", "memory");
 
-            // initialize
+            // initialize            
             int i = 0;
             String[] seps = new String[valuesFormatWidth.length];
             for (int length : valuesFormatWidth)
@@ -447,7 +445,7 @@ public class Sorting {
             // Memory
             Runtime r = Runtime.getRuntime();
             memUsedAfter = r.totalMemory() - r.freeMemory();
-            if (message.equals("")) {
+            if (message.equals("")) {                
                 System.out.printf(toString());
             } else {
                 System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", message, duration.getSeconds(),
@@ -463,7 +461,7 @@ public class Sorting {
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode() {             
             int hash = 1;
             hash = (int)elements;
             hash = (hash << 5) + name.hashCode();

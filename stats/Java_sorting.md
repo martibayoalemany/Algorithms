@@ -86,7 +86,12 @@ py.iplot(fig)
 
 ```
 
-[Plot](https://plot.ly/~martibayoalemany/154.embed)
+
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/154.embed" height="525px" width="100%"></iframe>
+
+
 
 
 ```python
@@ -104,7 +109,12 @@ py.iplot(fig)
 
 ```
 
-[Plot](https://plot.ly/~martibayoalemany/156.embed)
+
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/156.embed" height="525px" width="100%"></iframe>
+
+
 
 
 ```python
@@ -121,7 +131,10 @@ py.iplot(fig)
 ```
 
 
-[Plot](https://plot.ly/~martibayoalemany/158.embed)
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/158.embed" height="525px" width="100%"></iframe>
+
 
 
 
@@ -158,7 +171,12 @@ layout = Layout(title= alg + ' performance (java) ',
 fig = Figure(data=plot_data, layout=layout)
 py.iplot(fig)
 ```
-[Plot](https://plot.ly/~martibayoalemany/162.embed)
+
+
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/162.embed" height="525px" width="100%"></iframe>
+
 
 
 ## The same stats as before but with 9 Million data
@@ -193,23 +211,12 @@ fig = Figure(data=plot_data, layout=layout)
 py.iplot(fig)
 ```
 
-[Plot](https://plot.ly/~martibayoalemany/166.embed)
 
 
-```python
-alg = algorithms.pop()
-idxs = filter_by(data2, 'name', alg)
-X = data2.loc[idxs, 'elements']
-Y = data2.loc[idxs, 'duration_ms']
-plot_data = [Bar(x = X, y = Y, name=alg)]
-layout = Layout(title= alg + ' performance (java) ',
-                xaxis=dict(title='Elements'),
-                yaxis=dict(title='Time'))
-fig = Figure(data=plot_data, layout=layout)
-py.iplot(fig)
-```
 
-[Plot](https://plot.ly/~martibayoalemany/168.embed)
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/166.embed" height="525px" width="100%"></iframe>
+
+
 
 
 ```python
@@ -227,7 +234,30 @@ py.iplot(fig)
 
 
 
-[Plot](https://plot.ly/~martibayoalemany/170.embed)
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/168.embed" height="525px" width="100%"></iframe>
+
+
+
+
+```python
+alg = algorithms.pop()
+idxs = filter_by(data2, 'name', alg)
+X = data2.loc[idxs, 'elements']
+Y = data2.loc[idxs, 'duration_ms']
+plot_data = [Bar(x = X, y = Y, name=alg)]
+layout = Layout(title= alg + ' performance (java) ',
+                xaxis=dict(title='Elements'),
+                yaxis=dict(title='Time'))
+fig = Figure(data=plot_data, layout=layout)
+py.iplot(fig)
+```
+
+
+
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/170.embed" height="525px" width="100%"></iframe>
+
 
 
 
