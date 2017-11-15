@@ -15,13 +15,20 @@
         <jvm.options>-DXms=2048m -DXmx=4098 -XX:+UseG1GC</jvm.options>
         <downloadSources>true</downloadSources>
         <downloadJavadocs>true</downloadJavadocs>
+        <jmh.version>1.11.2</jmh.version>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-core</artifactId>
-            <version>3.5.0</version>
-        </dependency>    
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
+            <scope>provided</scope>
+        </dependency>
    </dependencies>
     <build>
         <plugins>
