@@ -9,7 +9,6 @@ CMakeFiles
 CMakeFiles/*
 .gradle
 .idea
-*.ipynb
 .java_8_src
 java.base
 MakeFile
@@ -31,3 +30,6 @@ target/*
 .venv3
 .venv35
 .vscode
+gradle/
+src/algorithms.iml
+stats/.ipynb_checkpoints/

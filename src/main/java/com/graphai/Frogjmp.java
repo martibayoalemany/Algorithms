@@ -1,3 +1,5 @@
+package com.graphai;
+
 class Frogjmp {
 
     public static void main(String[] args) {

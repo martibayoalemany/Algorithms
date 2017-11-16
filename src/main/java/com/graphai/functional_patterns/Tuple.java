@@ -1,3 +1,5 @@
+package com.graphai.functional_patterns;
+
 public class Tuple<T, U> {
     public T _1;
     public U _2;

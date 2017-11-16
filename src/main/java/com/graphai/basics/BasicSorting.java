@@ -1,49 +1,67 @@
+package com.graphai.basics;
+
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 import java.util.concurrent.*;
 
 
-public class LinkedListPerf  {
-    
+public class BasicSorting  {       
+
     public static void main(String[] args) {        
-        new LinkedListPerf().execute();                
+        long result = new BasicSorting().execute();                
+        System.out.printf("%s: %d ", BasicSorting.class.getName(), result);
     }
 
     public long execute() {
         List<Integer> list = new LinkedList<>();        
         try(Timing t = new Timing("Initialization")) {            
             IntStream range = IntStream.rangeClosed(1, 520_000);
-            range.forEach(list::add);
+            range.forEach(list::add);             
         }
-                
-        remove(list, 10_000, 10_000);
-        remove(list, 100_000, 10_000);
-        remove(list, 200_000, 10_000);
-        snapshot(list,100_000, 50);
-
+                        
         Integer[] array = null;
         try(Timing t = new Timing("Convert to array")) {            
             array = list.toArray(new Integer[1]);            
         }         
-
+        
         int[] arrayUnboxed = null;
         try(Timing t = new Timing("Convert to unboxed array")) {            
             arrayUnboxed = list.stream().mapToInt(Integer::intValue).toArray();
-        }        
+        }
+
+        shuffle_snapshot(array);
+        try(Timing t = new Timing("sort an array of size " + array.length)) {
+            Arrays.sort(array);
+        }                
 
         return list.size();
     }
-    
-    private void remove(List<Integer> list, int start_idx, int elements) {                               
-        int end_idx = start_idx + elements;             
-        try(Timing t = new Timing(String.format("Removing %,d elements %,d -> %,d ", elements, start_idx, end_idx))) {                            
-            for(int i=start_idx; i < end_idx; i++)
-                list.remove(i);                
+
+    private void shuffle_snapshot(Integer[] array) {
+        shuffle(array);
+        snapshot(array);
+    }               
+
+    private void shuffle(Integer[] array) {
+        try(Timing t = new Timing("Shuffle array of size " + array.length)) {
+            Random rnd = ThreadLocalRandom.current();
+            for(int i = array.length - 1; i > 0; i--) {
+                int index = rnd.nextInt(i+1);
+                int tmp = array[index];
+                array[index] = array[i];
+                array[i] = tmp;                
+            }
         }
-        catch(Exception e) {
-            e.printStackTrace();
-        }        
+    }
+    
+    private void snapshot(Integer[] array) {
+        try(Timing t = new Timing("Snapshot 50 elements")) {
+            int size = array.length;
+            for(int i = size / 2; i < size / 2 + 50; i++) 
+                    System.out.printf("%d\t", array[i]);
+                System.out.println("\n");
+        }
     }
 
     private void snapshot(List<Integer> list, int start_idx, int elements) {
@@ -53,9 +71,9 @@ public class LinkedListPerf  {
                 System.out.printf("%d\t", list.get(i));
             System.out.println("\n");
         }
-    }
+    }  
     
-    public class Timing implements AutoCloseable {
+    private class Timing implements AutoCloseable {
         private long lstart;
         private long lend;
         private Instant start;        
@@ -74,15 +92,11 @@ public class LinkedListPerf  {
                 this.end = Instant.now();
                 this.lend = System.currentTimeMillis();                
                 java.time.Duration dura = Duration.between(start, end);                
-                System.out.printf("--- %-58s ---\t [%,d s / %,d ns / %,d ms]\n", 
-                                    message, 
-                                    dura.getSeconds(), 
-                                    dura.getNano(), (
-                                        lend -lstart));
+                System.out.printf("--- %-55s ---\t [%,d s / %,d ns / %,d ms]\n", message, dura.getSeconds(), dura.getNano(), (lend -lstart));
             }
             catch(Exception e) {
                 e.printStackTrace();
             }
         }
-    }    
+    }           
 }

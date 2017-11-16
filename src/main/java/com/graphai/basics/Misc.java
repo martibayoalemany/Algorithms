@@ -1,4 +1,4 @@
-package basics;
+package com.graphai.basics;
 
 public class Misc {
 

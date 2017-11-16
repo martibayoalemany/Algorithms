@@ -1,3 +1,5 @@
+package com.graphai;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -6,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-class OddOccurrencesInArray {
+class L2_OddOccurrencesInArray {
     public static void main(String[] args) {
 
         {
