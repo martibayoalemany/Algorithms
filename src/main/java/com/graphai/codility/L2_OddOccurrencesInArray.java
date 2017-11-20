@@ -1,14 +1,11 @@
-package com.graphai;
+package com.graphai.codility;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-class L2_OddOccurrencesInArray {
+public class L2_OddOccurrencesInArray {
     public static void main(String[] args) {
 
         {
@@ -25,7 +22,7 @@ class L2_OddOccurrencesInArray {
             int half_count = 1000000;
             int[] origin = new int[half_count];
             int[] target = new int[2 * half_count + 1];
-            Arrays.setAll(origin, s -> ThreadLocalRandom.current().nextInt(0, 1000000000));
+            Arrays.setAll(origin, s -> ThreadLocalRandom.current().nextInt(0, 1_000_000_000));
             System.arraycopy(origin, 0, target, 0, origin.length);
             System.arraycopy(origin, 0, target, half_count, origin.length);
             target[2 * half_count] = origin[0];
