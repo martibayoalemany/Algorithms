@@ -232,3 +232,5 @@ function functs_ls() {
 
 declare -F | cut -d' ' -f3 | egrep --invert-match '^(?_)'
 set_env
+
+alias mvn_arch_jmh= "mvn archetype:generate -DarchetypeGroupId=org.openjdk.jmh -DarchetypeGroupId=org.openjdk.jmh -DarchetypeArtifactId=jmh-java-benchmark-archetype"
