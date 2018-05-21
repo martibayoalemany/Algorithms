@@ -74,15 +74,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>benchmarks</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>com.algorithms.benchmarks.BenchmarkMain</mainClass>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>default-cli</id>
                         <phase>integration-test</phase>
                         <goals>

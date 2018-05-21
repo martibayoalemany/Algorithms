@@ -1,3 +1,4 @@
+#!.venv3/bin/python
 """ BinaryGap algorithm """
 
 #!/usr/bin/env python3

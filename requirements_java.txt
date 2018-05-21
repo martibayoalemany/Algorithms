@@ -1,2 +1,0 @@
-junit:junit:4.12
-nz.ac.waikato.cms.weka:weka-stable:3.8.1
