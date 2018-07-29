@@ -1,9 +1,14 @@
+.*
 bin
-bin/*
+target
 build
 class
+CMakeFiles
+CMakeCache.txt
+!.gitignore
 *.class
 *.cmake
+<<<<<<< HEAD
 CMakeCache.txt
 CMakeFiles
 CMakeFiles/*
@@ -34,3 +39,6 @@ gradle/
 src/algorithms.iml
 stats/.ipynb_checkpoints/
 .idea
+=======
+*.o
+>>>>>>> gitlab-github

@@ -2,8 +2,6 @@
 
 # Algorithms / programming languages
 
-[Languages ranking](http://spectrum.ieee.org/static/interactive-the-top-programming-languages-2017)
-
 ## Statistics with jupyter
 
 ```
@@ -17,7 +15,13 @@ jupyter notebook
 
 ## Sorting algorithms and java
 ![Comparison](stats/figures/sort_comparison.png) 
+<<<<<<< HEAD
 ![Display in interactive mode in pyplot](https://plot.ly/~martibayoalemany/298.embed)
+=======
+
+
+![Display in interactive mode with plotly](https://plot.ly/~martibayoalemany/298.embed)
+>>>>>>> gitlab-github
 
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
 
@@ -57,7 +61,7 @@ Removing 10,000 elements 200,000 -> 210,000  [658,547,000 ns]
 ```
 
 #### LinkedList
-Acording to the documentation a LinkedList is a doubly linked list
+According to the documentation a LinkedList is a doubly linked list
 
 ```
 initialization [122,772,000 ns]
