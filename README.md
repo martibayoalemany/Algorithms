@@ -16,9 +16,21 @@ jupyter notebook
 ## Sorting algorithms and java
 ![Comparison](stats/figures/sort_comparison.png) 
 
-
-
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
+
+## Sorting, java code available, without additional implementation
+```
+Arrays.sort(s)
+Arrays.parallelSort(s)
+                                    
+// Stream + parallel + Sort
+Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
+    public void accept(Integer[] arrays) {
+        LinkedList<Integer> list = new LinkedList<>();
+        Stream.of(arrays).parallel().sorted().forEachOrdered(list::add);        
+    }
+};
+```
 
 ## Continuous integration
 * *.travis.yml* for travis in github
