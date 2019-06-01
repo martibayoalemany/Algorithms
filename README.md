@@ -1,6 +1,6 @@
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/graphai/graphai) 
 
-# Algorithms / programming languages
+# Algorithms / development languages
 
 ## Statistics with jupyter
 
