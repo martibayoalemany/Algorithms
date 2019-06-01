@@ -15,13 +15,8 @@ jupyter notebook
 
 ## Sorting algorithms and java
 ![Comparison](stats/figures/sort_comparison.png) 
-<<<<<<< HEAD
-![Display in interactive mode in pyplot](https://plot.ly/~martibayoalemany/298.embed)
-=======
-
-
 ![Display in interactive mode with plotly](https://plot.ly/~martibayoalemany/298.embed)
->>>>>>> gitlab-github
+
 
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
 
