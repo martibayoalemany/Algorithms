@@ -19,7 +19,7 @@ jupyter notebook
 [Pyplot stats for java and sorting](stats/Java_sorting.md)
 
 ## Sorting available through the java sdk
-```
+```java
 Arrays.sort(s)
 Arrays.parallelSort(s)
                                     
