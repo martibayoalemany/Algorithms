@@ -32,6 +32,36 @@ Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
 };
 ```
 
+```java
+    /**
+     * - It divides the problem in small arrays
+     * - Each small arrays is divided by left and right and merged in order
+     */
+    private void merge_sort(Integer[] array, int lowerIndex, int higherIndex) {
+        if (lowerIndex >= higherIndex)
+            return;
+        int tmp_size = higherIndex - lowerIndex + 1;
+        if (tmp_size > 0 && (tmp_array == null || tmp_array.length < tmp_size))
+            tmp_array = new Integer[higherIndex - lowerIndex + 1];
+
+        int middle = (lowerIndex + higherIndex) / 2;
+        merge_sort(array, lowerIndex, middle);
+        merge_sort(array, middle + 1, higherIndex);
+
+        // Copy up tho the middle
+        for (int i = lowerIndex, j = 0; i <= middle && i < array.length; i++, j++)
+            this.tmp_array[i] = array[i];
+
+        // Compare the copy from 0..length with the elements from m.length and swap accordingly
+        int i = lowerIndex, j = middle + 1, k = lowerIndex;
+        while (i <= middle && j <= higherIndex && j < array.length)
+            array[k++] = tmp_array[i] <= array[j] ? tmp_array[i++] : array[j++];
+
+        while (i <= middle)
+            array[k++] = tmp_array[i++];
+    }
+```
+
 ## Continuous integration
 * *.travis.yml* for travis in github
 * *.gitlab-ci.xml* for gitlab
@@ -39,7 +69,7 @@ Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
 ## Results
 
 ### Binary gap stats 
-```
+```bash
 scripts/stat_algs.sh
 ```
 
@@ -99,7 +129,7 @@ make
 ```
 
 ### Compile (dotnet)
-```
+```bash
 sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list'
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
 sudo apt-get update
@@ -109,7 +139,7 @@ sudo apt install dotnet-dev-2.0.0-preview1-005977
 ```
 
 ### Creates a new app (dotnet)
-```
+```bash
 dotnet new console -o src/main/cs
 dotnet restore
 dotnet run
