@@ -107,14 +107,6 @@ Removing 10,000 elements 100,000 -> 110,000  [139,877,000 ns]
 Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
 ```
 
-### Code runner (Visual Studio Code)
-```
-ext install code-runner
-```
-* ctrl-alt-n - run 
-* ctrl-alt-m - stop execution 
-* ctrl-alt-k - run custom command 
-
 
 ### Compile  (C)
 ```
@@ -146,19 +138,19 @@ dotnet run
 ```
 
 ### Compile (java / gradle)
-```
+```bash
 gradlew build
 gradlew clean test
 ```
 
 ### Setting maven (if needed)
-```
+```bash
 cat ~/.mavenrc
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
 ```
 
 ### Dependency management (java)
-```
+```bash
 mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato.cms.weka:weka-stable:3.8.1:jar:sources
 gradle getRequirements
 ```
