@@ -140,12 +140,6 @@ py.iplot(fig)
 
 
 
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/160.embed" height="525px" width="100%"></iframe>
-
-
-
-
 ```python
 alg = algorithms.pop()
 idxs = filter_by(data, 'name', alg)
@@ -159,10 +153,6 @@ fig = Figure(data=plot_data, layout=layout)
 py.iplot(fig)
 ```
 
-
-
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/162.embed" height="525px" width="100%"></iframe>
 
 
 
@@ -200,12 +190,6 @@ py.iplot(fig)
 
 
 
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/166.embed" height="525px" width="100%"></iframe>
-
-
-
-
 ```python
 alg = algorithms.pop()
 idxs = filter_by(data2, 'name', alg)
@@ -220,13 +204,6 @@ py.iplot(fig)
 ```
 
 
-
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/168.embed" height="525px" width="100%"></iframe>
-
-
-
-
 ```python
 alg = algorithms.pop()
 idxs = filter_by(data2, 'name', alg)
@@ -239,13 +216,6 @@ layout = Layout(title= alg + ' performance (java) ',
 fig = Figure(data=plot_data, layout=layout)
 py.iplot(fig)
 ```
-
-
-
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plot.ly/~martibayoalemany/170.embed" height="525px" width="100%"></iframe>
-
-
 
 
 ```python
