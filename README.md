@@ -2,16 +2,6 @@
 
 # Algorithms / development languages
 
-## Statistics with jupyter
-
-```
-source scripts/activate
-# Setups the python environment accordingly
-py_env 
-cd stats
-jupyter notebook
-
-```
 
 ## Sorting algorithms and java
 ![Comparison](stats/figures/sort_comparison.png) 
@@ -62,11 +52,6 @@ Consumer<Integer[]> stream_parallel_sort = new Consumer<Integer[]>() {
     }
 ```
 
-## Continuous integration
-* *.travis.yml* for travis in github
-* *.gitlab-ci.xml* for gitlab
-
-## Results
 
 ### Binary gap stats 
 ```bash
@@ -106,64 +91,3 @@ Removing 10,000 elements 10,000 -> 20,000  [351,818,000 ns]
 Removing 10,000 elements 100,000 -> 110,000  [139,877,000 ns]
 Removing 10,000 elements 200,000 -> 210,000  [423,006,000 ns]
 ```
-
-
-### Compile  (C)
-```
-gcc BinaryGap.c -o BinaryGap -lm
-```
-
-```
-sudo apt install cmake
-cd main/c
-cmake .
-make
-```
-
-### Compile (dotnet)
-```bash
-sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list'
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
-sudo apt-get update
-```
-```
-sudo apt install dotnet-dev-2.0.0-preview1-005977
-```
-
-### Creates a new app (dotnet)
-```bash
-dotnet new console -o src/main/cs
-dotnet restore
-dotnet run
-```
-
-### Compile (java / gradle)
-```bash
-gradlew build
-gradlew clean test
-```
-
-### Setting maven (if needed)
-```bash
-cat ~/.mavenrc
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
-```
-
-### Dependency management (java)
-```bash
-mvn dependency:copy -DoutputDirectory=requirements_mvn -Dartfifact=nz.ac.waikato.cms.weka:weka-stable:3.8.1:jar:sources
-gradle getRequirements
-```
-
-### Gradle and ubuntu 17
-There seems to be some issues with tgetent which get solved by installing libnative-jni manually
-```
-usr/lib/jni/libnative-platform-curses.so: undefined symbol: tgetent
-sudo -s dpkg -i libnative-platform-jni_0.11-5_amd64.deb
-```
-
-Otherwise this command should update to the latest version of gradle. This solved the previous error in a clean system.
-```
-gradlew
-```
-..
