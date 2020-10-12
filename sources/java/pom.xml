@@ -21,7 +21,7 @@
         <rxjava.version>2.1.14-RC1</rxjava.version>
         <javaparser-core.version>3.6.6</javaparser-core.version>
         <mockito-all.version>2.0.2-beta</mockito-all.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <uberjar.name>common-0.1-SNAPSHOT</uberjar.name>
     </properties>
